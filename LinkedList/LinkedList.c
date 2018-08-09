@@ -1,21 +1,20 @@
 // LinkedList.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
 #include<stdio.h>
 #include<stdlib.h>
 
 typedef struct Node{
 	int value;
 	struct Node *next;
-}Node_t;
+}DLLNode;
 
-typedef Node_t* NodePtr;
+typedef DLLNode* NodePtr;
 
 int InsertNode(NodePtr* ptrHead, int value)
 {
 	printf("Insert Node:: %d\n",value);
-	NodePtr tempNode = (NodePtr)malloc(sizeof(Node_t));
+	NodePtr tempNode = (NodePtr)malloc(sizeof(DLLNode));
 	if(!tempNode)
 		return -1;
 	tempNode->value=value;
@@ -123,7 +122,7 @@ void PrintList(NodePtr head)
 int SortedInsert(NodePtr* ptrHead,int value)
 {
 	NodePtr head=*ptrHead;
-	NodePtr tempNode = (NodePtr)malloc(sizeof(Node_t));
+	NodePtr tempNode = (NodePtr)malloc(sizeof(DLLNode));
 	printf("Insert element %d \n",value);
 	if(!tempNode)
 		return -1;
@@ -148,7 +147,7 @@ int InsertAtEnd(NodePtr* ptrHead, int value)
 {
 	printf("insert element %d \n",value);
 	NodePtr head=*ptrHead;
-	NodePtr tempNode = 	 	 	 	 (NodePtr)malloc(sizeof(Node_t));
+	NodePtr tempNode = 	 	 	 	 (NodePtr)malloc(sizeof(DLLNode));
 	if(!tempNode)
 		return -1;
 	tempNode->value=value;
@@ -170,7 +169,7 @@ int InsertAtEnd(NodePtr* ptrHead, int value)
 int InsertNodeEnd2(NodePtr* ptrHead, NodePtr* ptrTail, int value)
 {
 	printf("Insert Node:: %d",value);
-	NodePtr tempPtr= (NodePtr)malloc(sizeof(Node_t));
+	NodePtr tempPtr= (NodePtr)malloc(sizeof(DLLNode));
 	if(!tempPtr)
 		return -1;
 	tempPtr->value=value;
@@ -394,7 +393,7 @@ void CopyListReversed(NodePtr head, NodePtr* ptrHead2)
 	NodePtr tempNode2=NULL;
 	while(head)
 	{
-		tempNode2 = (NodePtr)malloc( sizeof(Node_t));
+		tempNode2 = (NodePtr)malloc( sizeof(DLLNode));
 		tempNode2->value=head->value;
 		tempNode2->next=tempNode;
 		tempNode=tempNode2;
@@ -411,7 +410,7 @@ void CopyList(NodePtr head, NodePtr* ptrHead2)
 
 	if(head==NULL)
 		return;
-	headNode=(NodePtr)malloc(sizeof(Node_t));
+	headNode=(NodePtr)malloc(sizeof(DLLNode));
 	tailNode=headNode;
 	headNode->value=head->value;
 	headNode->next=NULL;
@@ -419,7 +418,7 @@ void CopyList(NodePtr head, NodePtr* ptrHead2)
 
 	while(head)
 	{
-		tempNode=(NodePtr)malloc( sizeof(Node_t));
+		tempNode=(NodePtr)malloc( sizeof(DLLNode));
 		tempNode->value=head->value;
 		tempNode->next=NULL;
 		tailNode->next=tempNode;
@@ -581,27 +580,14 @@ NodePtr findIntersecton(NodePtr head, NodePtr head2)
 	return head;
 }
 
-int main()
-{
-	NodePtr head = NULL;
-	NodePtr tail = NULL;
-	int arr[5] = { 1, 2, 3, 4, 5 };
-	int i;
-	for (i = 0; i < 5; i++)
-	{
-		InsertNode(&head, &tail, arr[i]);
-	}
-	return 0;
-}
 
-int _tmain(int argc, _TCHAR* argv[])
+int main()
 {
 
 	int arr[5]={1,2,3,4,5};
 	NodePtr head=NULL;
 	int i;
 	
-	/*
 	for(i=0;i<5;i++)
 	{
 		InsertNode(&head, arr[i]);
@@ -621,9 +607,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
     NodePtr intersection = findIntersecton(head,head2);
 	printf("\nvalue at the intersection is %d \n",intersection->value);
-	*/
-	/*
-
+	
 	for(i=0;i<5;i++)
 	{
 	InsertNode(&head, arr[i]);
@@ -686,7 +670,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	PrintList(head);
 
-	NodePtr head2;
 	CopyList(head,&head2);
 	PrintList(head2);
 
@@ -716,6 +699,6 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	RemoveLoop(&head);
 	PrintList(head);
-	*/
+	
 	return 0;
 }
