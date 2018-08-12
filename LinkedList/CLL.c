@@ -14,50 +14,73 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node
+typedef struct listNode
 {
     int value;
-    struct Node *next;
-} CLNode;
+    struct listNode *next;
+} Node;
 
-int insertNode(CLNode **ptrHead, CLNode **ptrTail, int value)
+int insertAtStart(Node **ptrTail, int value)
 {
-    CLNode *temp = (CLNode *)malloc(sizeof(CLNode));
+    Node *temp = (Node *)malloc(sizeof(Node));
     if (!temp)
     {
         printf("Memory Allocation Error");
         return 0;
     }
 
-    CLNode *head = *ptrHead;
-    CLNode *tail = *ptrTail;
+    Node *tail = *ptrTail;
 
-    if (!head)
+    if (!tail)
     {
         temp->value = value;
         temp->next = temp;
         *ptrTail = temp;
-        *ptrHead = temp;
     }
     else
     {
         temp->value = value;
-        temp->next = head;
+        temp->next = tail->next;
         tail->next = temp;
-        *ptrHead = temp;
     }
     return 1;
 }
 
-void printList(CLNode *head)
+int insertAtEnd(Node **ptrTail, int value)
 {
-    CLNode *currNode = head;
-
-    if (currNode != NULL)
+    Node *temp = (Node *)malloc(sizeof(Node));
+    if (!temp)
     {
-        printf(" %d  ", currNode->value);
-        currNode = currNode->next;
+        printf("Memory Allocation Error");
+        return 0;
     }
+
+    Node *tail = *ptrTail;
+
+    if (!tail)
+    {
+        temp->value = value;
+        temp->next = temp;
+        *ptrTail = temp;
+    }
+    else
+    {
+        temp->value = value;
+        temp->next = tail->next;
+        tail->next = temp;
+        *ptrTail = temp;
+    }
+    return 1;
+}
+
+void printList(Node *tail)
+{
+    if (!tail)
+        return;
+    
+    Node *head = tail->next;
+    printf(" %d  ", head->value);
+    Node* currNode = head->next;
 
     while (currNode != head)
     {
@@ -66,68 +89,43 @@ void printList(CLNode *head)
     }
 }
 
-void deleteList(CLNode** ptrHead, CLNode **ptrTail)
+void deleteList(Node **ptrTail)
 {
-    CLNode *head = *ptrHead;
-    CLNode *currNode = *ptrHead;
-    CLNode *nextNode;
+    Node *tail = *ptrTail;
+    Node *curr;
+    Node *next;
+    if (!tail)
+        return;
 
-    if (currNode != NULL)
+    curr = tail->next;
+    free(tail);
+    
+    while (curr != tail)
     {
-        nextNode = currNode->next;
-        free(currNode);
-        currNode = nextNode;
+        next = curr->next;
+        free(curr);
+        curr = next;
     }
-
-    while (currNode != head)
-    {
-        nextNode = currNode->next;
-        free(currNode);
-        currNode = nextNode;
-    }
-    *ptrHead = NULL;
     *ptrTail = NULL;
 }
 
 /* Delete a node given its pointer */
-void deleteNodePtr(CLNode **ptrHead, CLNode **ptrTail, CLNode *ptrDel)
+void deleteNodePtr(Node **ptrTail, Node *ptrDel)
 {
-    CLNode *head = *ptrHead;
-    CLNode *tail = *ptrTail;
-    CLNode *curr = head;
-    CLNode *prev = NULL;
-    CLNode *deleteMe;
+    Node *tail = *ptrTail;
+    Node *curr = tail;
+    Node *prev = NULL;
+    Node *deleteMe;
 
-    if (ptrDel == NULL || !head)
+    if (ptrDel == NULL || !tail)
         return;
 
-    if (curr == ptrDel) /* one element and first element case */
-    {
-        if (curr->next == curr)
-        {
-            *ptrHead = NULL;
-            *ptrTail = NULL;
-            free(curr);
-            return;
-        }
-        else
-        {
-            deleteMe = curr;
-            curr = curr->next;
-            *ptrHead = curr;
-            tail->next = curr;
-            free(deleteMe);
-            return;
-        }
-    }
     prev = curr;
     curr = curr->next;
-    while (curr != head)
+    while (curr != tail)
     {
         if (curr == ptrDel)
         {
-            if (curr == tail) /* tail change case */
-                *ptrTail = prev;
             prev->next = curr->next;
             free(curr);
             return;
@@ -135,118 +133,39 @@ void deleteNodePtr(CLNode **ptrHead, CLNode **ptrTail, CLNode *ptrDel)
         prev = curr;
         curr = curr->next;
     }
-}
-
-/* REMOVE DUPLICATE */
-void removeDuplicate(CLNode *head)
-{
-    CLNode *deleteMe;
-    CLNode *curr = head;
-
-    while (curr && curr->next != head)
+    if(curr == ptrDel)
     {
-        if (curr->value == curr->next->value)
-        {
-            deleteMe = curr->next;
-            curr->next = deleteMe->next;
-            free(deleteMe);
-        }
-        else
-        {
-            curr = curr->next;
-        }
+        prev->next = curr->next;
+        free(curr);
+        *ptrTail = prev;
     }
 }
 
-/* COPY LIST */
-CLNode* copyListReversed(CLNode *head)
-{
-    CLNode *head2 = NULL;
-    CLNode *tempNode = NULL;
-    CLNode *curr = head;
-
-    if (curr)
-    {
-        head2 = (CLNode *)malloc(sizeof(CLNode));
-        head2->value = curr->value;
-        head2->next = head2;
-        curr = curr->next;
-    }
-
-    while (head != curr)
-    {
-        tempNode = (CLNode *)malloc(sizeof(CLNode));
-        tempNode->value = curr->value;
-        tempNode->next = head2;
-        head2 = tempNode;
-        curr = curr->next;
-    }
-    return head2;
-}
-
-CLNode* copyList(CLNode *head)
-{
-    CLNode *curr = head;
-    CLNode *head2 = NULL;
-    CLNode *tail2 = NULL;
-    CLNode *tempNode = NULL;
-
-    if (curr)
-    {
-        head2 = (CLNode *)malloc(sizeof(CLNode));
-        head2->value = curr->value;
-        head2->next = head2;
-        tail2 = head2;
-        curr = curr->next;
-    }
-
-    while (curr != head)
-    {
-        tempNode = (CLNode *)malloc(sizeof(CLNode));
-        tempNode->value = curr->value;
-        tempNode->next = head2;
-        tail2->next = tempNode;
-        tail2 = tempNode;
-        curr = curr->next;
-    }
-    return head2;
-}
-
-/* COMPARE LIST */
-int compareList(CLNode *head1, CLNode *head2)
-{
-    if (head1 == NULL && head2 == NULL)
-        return 1;
-
-    if (head1 == NULL || head2 == NULL)
-        return 0;
-
-    CLNode *curr1 = head1;
-    CLNode *curr2 = head2;
-
-    if (curr1->value != curr2->value)
-        return 0;
-
-    curr1 = curr1->next;
-    curr2 = curr2->next;
-
-    while (curr1 != head1 && curr2 != head2)
-    {
-        if (curr1->value != curr2->value)
-            return 0;
-        curr1 = curr1->next;
-        curr2 = curr2->next;
-    }
-
-    if (curr1 == head1 && curr2 == head2)
-        return 1;
-    else
-        return 0;
-}
 
 int main()
 {
-    CLNode *head;
-    CLNode *tail;
+    Node *head = NULL;
+    Node **ptrHead = &head;
+
+    insertAtStart(ptrHead, 1);
+    insertAtStart(ptrHead, 2);
+    insertAtStart(ptrHead, 3);
+    insertAtStart(ptrHead, 4);
+    insertAtStart(ptrHead, 5);
+    insertAtStart(ptrHead, 6);
+    insertAtStart(ptrHead, 7);
+    printList(*ptrHead);
+
+    Node *head2 = NULL;
+    Node **ptrHead2 = &head2;
+
+    insertAtEnd(ptrHead2, 1);
+    insertAtEnd(ptrHead2, 2);
+    insertAtEnd(ptrHead2, 3);
+    insertAtEnd(ptrHead2, 4);
+    insertAtEnd(ptrHead2, 5);
+    insertAtEnd(ptrHead2, 6);
+    insertAtEnd(ptrHead2, 7);
+    printList(*ptrHead2);
     return 0;
 }

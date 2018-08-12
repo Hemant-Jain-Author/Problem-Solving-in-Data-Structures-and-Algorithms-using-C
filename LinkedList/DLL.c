@@ -11,352 +11,333 @@
    4> last element (tail case)
  */
 
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-typedef struct listNode{
-	int value;
-	struct listNode *next;
-	struct listNode *prev;
-}listNode_t;
-
-typedef listNode_t* listPtr;
-
-
-/* INSERT VALUE IN FRONT */
-
-int insertNode(listPtr* ptrHead,listPtr* ptrTail,int value)
+typedef struct listNode
 {
-	listPtr temp=(listPtr)malloc(sizeof(listNode_t));
-	if(!temp)
-		return 0;
+    int value;
+    struct listNode *next;
+    struct listNode *prev;
+} Node;
 
-	listPtr head=*ptrHead;
-	if(!head)
-	{
-		temp->value=value;
-		temp->next=NULL;
-		temp->prev=NULL;
-		*ptrTail=temp;
-		*ptrHead=temp;
-	}
-	else
-	{
-		temp->value=value;
-		temp->next=head;
-		temp->prev=NULL;
-		head->prev=temp;
-		*ptrHead=temp;
-	}
-	return 1;
+int insertNode(Node **ptrHead, int value)
+{
+    Node *temp = (Node *)malloc(sizeof(Node));
+    if (!temp)
+    {
+        printf("Memory Allocation Error");
+        return 0;
+    }
+
+    Node *head = *ptrHead;
+    if (!head)
+    {
+        temp->value = value;
+        temp->next = NULL;
+        temp->prev = NULL;
+        *ptrHead = temp;
+    }
+    else
+    {
+        temp->value = value;
+        temp->prev = NULL;
+        temp->next = head;
+        head->prev = temp;
+        *ptrHead = temp;
+    }
+    return 1;
 }
 
-
-/* SORTED INSERT DECREASING ORDER */
-int sortedInsert(listPtr* ptrHead,listPtr* ptrTail,int value)
+int sortedInsert(Node **ptrHead, int value)
 {
-	listPtr temp=(listPtr)malloc(sizeof(listNode_t));
-	if(!temp)
-		return 0;
-	temp->value=value;
+    Node *temp = (Node *)malloc(sizeof(Node));
+    if (!temp)
+    {
+        printf("Memory Allocation Error");
+        return 0;
+    }
 
-	listPtr head=*ptrHead;
+    temp->value = value;
+    Node *curr = *ptrHead;
 
-	if(!head)/*first element*/
-	{
-		temp->next=NULL;
-		temp->prev=NULL;
-		*ptrHead=temp;
-		*ptrTail=temp;
-		return 1;	
-	}
-	if(head->value <= value)/*at the begining*/
-	{
-		temp->next=head;
-		temp->prev=NULL;
-		head->prev=temp;
-		*ptrHead=temp;
-		return 1;	
-	}
+    if (!curr) /*first element*/
+    {
+        temp->next = NULL;
+        temp->prev = NULL;
+        *ptrHead = temp;
+        return 1;
+    }
+    if (curr->value <= value) /*at the begining*/
+    {
+        temp->next = curr;
+        temp->prev = NULL;
+        curr->prev = temp;
+        *ptrHead = temp;
+        return 1;
+    }
 
-	while(head->next && head->next->value > value)/*treversal*/
-	{
-		head=head->next;
-	}
+    while (curr->next && curr->next->value > value) /*treversal*/
+    {
+        curr = curr->next;
+    }
 
-
-	if(!head->next)/*at the end*/
-	{
-		*ptrTail=temp;
-		temp->next=NULL;
-		temp->prev=head;
-		head->next=temp;
-	}
-	else/*all other*/
-	{
-
-		temp->next=head->next;
-		temp->prev=head;
-		head->next=temp;
-		temp->next->prev=temp;
-	}
-	return 1;
+    if (!curr->next) /*at the end*/
+    {
+        temp->next = NULL;
+        temp->prev = curr;
+        curr->next = temp;
+    }
+    else /*all other*/
+    {
+        temp->next = curr->next;
+        temp->next->prev = temp;
+        temp->prev = curr;
+        curr->next = temp;
+    }
+    return 1;
 }
 
 /* Print A singly linked list */
-void printList(listPtr head)
+void printList(Node *head)
 {
-	printf("List is :: ");
-	while(head!=NULL)
-	{
-		printf(" %d  ",head->value);
-		head=head->next;
-	}
-	printf("\n");
+    while (head != NULL)
+    {
+        printf(" %d  ", head->value);
+        head = head->next;
+    }
+    printf("\n");
 }
 
+void printReverseList(Node *head)
+{
+    if (!head)
+        return;
 
-/* While traversing a linked list be cautious for checking end of list . */
-void printBackList(listPtr head)
-{	
-	if(!head)
-		return;
-
-	printBackList(head->next);
-	printf("%d,",head->value);
-
+    printReverseList(head->next);
+    printf(" %d ", head->value);
 }
 
 /* Reverse a doubly linked List iteratively */
-void reverseList(listNode_t **ptrHead,listNode_t **ptrTail)
+void reverseList(Node **ptrHead)
 {
-	listPtr head=*ptrHead;
-	listPtr tempNode;
+    Node *curr = *ptrHead;
+    Node *tempNode;
 
-	while(head)
-	{
-		tempNode=head->next;
-		head->next=head->prev;
-		head->prev=tempNode;
+    while (curr)
+    {
+        tempNode = curr->next;
+        curr->next = curr->prev;
+        curr->prev = tempNode;
 
-		if(!head->prev)
-		{
-			*ptrTail=*ptrHead;
-			*ptrHead=head;
-			return; 
-		}
-		head=head->prev;
-	}
-	return;
+        if (!curr->prev)
+        {
+            *ptrHead = curr;
+            return;
+        }
+        curr = curr->prev;
+    }
+    return;
 }
 
 /* Delete a singly linked list */
-void deleteList(listPtr* ptrHead,listPtr* ptrTail)
+void deleteList(Node **ptrHead)
 {
-	listPtr deleteMe=*ptrHead;
-	listPtr nextNode;
-	while(deleteMe!=NULL)
-	{
-		nextNode=deleteMe->next;	
-		free(deleteMe);
-		deleteMe=nextNode;
-	}
-
-	*ptrTail=NULL;
-	*ptrHead=NULL;
+    Node *curr = *ptrHead;
+    Node *next;
+    while (curr != NULL)
+    {
+        next = curr->next;
+        free(curr);
+        curr = next;
+    }
+    *ptrHead = NULL;
 }
-
-
 
 /* Delete a node given its pointer */
-void deleteNodePtr(listPtr* ptrHead,listPtr* ptrTail,listPtr ptrDel)
+void deleteNodePtr(Node **ptrHead, Node *ptrDel)
 {
-	listPtr currNode=*ptrHead;
-	listPtr nextNode;
+    Node *curr = *ptrHead;
+    Node *next;
 
-	if(ptrDel==NULL)
-		return;
+    if (ptrDel == NULL)
+        return;
 
-	if(currNode==ptrDel)/*first node*/
-	{
-		*ptrHead=currNode->next;
-		currNode->next->prev=NULL;
-		if(currNode==*ptrTail)/*only node*/
-			*ptrTail=currNode->prev;
-		free(currNode);
-	}
-	while(currNode!=NULL)
-	{
-		nextNode=currNode->next;	
-		if(nextNode==ptrDel)/*node to be deleated*/
-		{
-			currNode->next=nextNode->next;
-			nextNode->next->prev=currNode;
-			if(nextNode==*ptrTail)
-				*ptrTail=nextNode->prev;/*last node*/
-			free(nextNode);
-		}
-		else
-		{
-			/*check for tail*/
-			currNode=nextNode;
-		}
-	}
+    if (curr == ptrDel) /*first node*/
+    {
+        *ptrHead = curr->next;
+        curr->next->prev = NULL;
+        free(curr);
+        return;
+    }
+    while (curr != NULL)
+    {
+        next = curr->next;
+        if (next == ptrDel) /*node to be deleated*/
+        {
+            curr->next = next->next;
+            next->next->prev = curr;
+            free(next);
+            return;
+        }
+        curr = next;
+    }
 }
 
-/* REMOVE DUPLICATE */
-void removeDuplicate(listNode_t *head)
+void removeDuplicates(Node *head)
 {
-	listPtr deleteMe;
-	while(head)
-	{
-		if((head->next) && head->value==head->next->value)
-		{
-			deleteMe=head->next;
-			head->next=deleteMe->next;
-			head->next->prev=head;
-			free(deleteMe);
-		}
-		else
-		{
-
-			/*check for tail*/
-			head=head->next;
-		}
-	}
-
+    Node *deleteMe;
+    while (head)
+    {
+        if ((head->next) && head->value == head->next->value)
+        {
+            deleteMe = head->next;
+            head->next = deleteMe->next;
+            if(head->next)
+                head->next->prev = head;
+            free(deleteMe);
+        }
+        else
+        {
+            head = head->next;
+        }
+    }
 }
 
-
-/* COPY LIST */
-void copyListReversed(listPtr head,listPtr* ptrHead2)
+Node *copyListReversed(Node *head)
 {
-	printf("copy list");
-	listPtr tempNode=NULL;
-	listPtr tempNode2=NULL;
-	while(head)
-	{
-		tempNode2=(listPtr)malloc(sizeof(listNode_t));
-		tempNode2->value=head->value;
-		tempNode2->next=tempNode;
-		tempNode2->prev=NULL;
-
-
-		tempNode=tempNode2;
-		head=head->next;
-	}
-
-	*ptrHead2=tempNode;
+    Node *temp = NULL;
+    Node *head2 = NULL;
+    Node *curr = head;
+    while (curr)
+    {
+        temp = (Node *)malloc(sizeof(Node));
+        temp->value = curr->value;
+        temp->next = head2;
+        temp->prev = NULL;
+        if (head2)
+            head2->prev = temp;
+        head2 = temp;
+        curr = curr->next;
+    }
+    return head2;
 }
 
-/* COPY LIST */
-void copyList(listPtr head,listPtr* ptrHead2)
+Node *copyList(Node *head)
 {
-	printf("copy list");
-	listPtr headNode=NULL;
-	listPtr tailNode=NULL;
-	listPtr tempNode=NULL;
+    Node *head2 = NULL;
+    Node *tail2 = NULL;
+    Node *tempNode = NULL;
 
-	if(head==NULL)
-		return;
-	headNode=(listPtr)malloc(sizeof(listNode_t));
-	tailNode=headNode;
-	headNode->value=head->value;
-	headNode->next=NULL;
-	headNode->prev=NULL;
+    if (!head)
+        return NULL;
 
-	head=head->next;
+    head2 = (Node *)malloc(sizeof(Node));
+    tail2 = head2;
+    head2->value = head->value;
+    head2->next = NULL;
+    head2->prev = NULL;
+    head = head->next;
 
-	while(head)
-	{
-		tempNode=(listPtr)malloc(sizeof(listNode_t));
-		tempNode->value=head->value;
-		tempNode->next=NULL;
+    while (head)
+    {
+        tempNode = (Node *)malloc(sizeof(Node));
+        tempNode->value = head->value;
+        tempNode->next = NULL;
+        tail2->next = tempNode;
+        tempNode->prev = tail2;
+        tail2 = tail2->next;
+        head = head->next;
+    }
 
-		tailNode->next=tempNode;
-		tempNode->prev=tailNode;
-
-		tailNode=tailNode->next;
-
-		head=head->next;
-	}
-
-	*ptrHead2=headNode;
+    return head2;
 }
 
-
-
-/* COMPARE LIST */
-int compareList(listPtr head1,listPtr head2)
+int compareList(Node *head1, Node *head2)
 {
-	printf("compare list");
-	if( head1==NULL && head2==NULL )
-		return 1;
-	else if( (head1==NULL) ||(head2==NULL) || (head1->value!=head2->value) )
-		return 0;
-	else
-		return compareList(head1->next,head2->next);
-
+    if (head1 == NULL && head2 == NULL)
+        return 1;
+    else if ((head1 == NULL) || (head2 == NULL) || (head1->value != head2->value))
+        return 0;
+    else
+        return compareList(head1->next, head2->next);
 }
 
-/* COMPARE LIST */
-int compareList2(listPtr head1,listPtr head2)
+int compareList2(Node *head1, Node *head2)
 {
-	while( head1!=NULL && head2!=NULL )
-	{
-		if(head1->value!=head2->value)
-			return 0;
-		head1=head1->next;
-		head2=head2->next;
+    while (head1 != NULL && head2 != NULL)
+    {
+        if (head1->value != head2->value)
+            return 0;
+        head1 = head1->next;
+        head2 = head2->next;
+    }
+    if (head1 == head2)
+        return 1;
+    else
+        return 0;
+}
 
+int main2()
+{
+    Node *head = NULL;
+    Node **ptrHead = &head;
 
-	}
-	if(head1==head2)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
+    insertNode(ptrHead, 1);
+    insertNode(ptrHead, 2);
+    insertNode(ptrHead, 3);
+    insertNode(ptrHead, 4);
+    insertNode(ptrHead, 5);
+    insertNode(ptrHead, 6);
+    insertNode(ptrHead, 7);
+    printList(*ptrHead);
 
+    Node *head2 = NULL;
+    Node **ptrHead2 = &head2;
+
+    sortedInsert(ptrHead2, 1);
+    sortedInsert(ptrHead2, 2);
+    sortedInsert(ptrHead2, 3);
+    sortedInsert(ptrHead2, 4);
+    sortedInsert(ptrHead2, 5);
+    sortedInsert(ptrHead2, 6);
+    sortedInsert(ptrHead2, 7);
+    printList(*ptrHead2);
+    printf("comparision result %d ", compareList(head, head2));
+    printf("comparision result %d ", compareList2(head, head2));
+
+    return 0;
 }
 
 int main()
 {
-	listPtr head=NULL;
-	listPtr tail=NULL;
-	listPtr* ptrHead=&head;
-	listPtr* ptrTail=&tail;
+    Node *head = NULL;
+    Node **ptrHead = &head;
 
-	insertNode(ptrHead,ptrTail,1);
-	insertNode(ptrHead,ptrTail,2);
-	insertNode(ptrHead,ptrTail,3);
-	insertNode(ptrHead,ptrTail,4);
-	insertNode(ptrHead,ptrTail,5);
-	insertNode(ptrHead,ptrTail,6);
-	insertNode(ptrHead,ptrTail,7);
-	printList(*ptrHead);
-
-	listPtr head2=NULL;
-	listPtr tail2=NULL;
-	listPtr* ptrHead2=&head2;
-	listPtr* ptrTail2=&tail2;
-
-	sortedInsert(ptrHead2,ptrTail2,1);
-	sortedInsert(ptrHead2,ptrTail2,2);
-	sortedInsert(ptrHead2,ptrTail2,3);
-	sortedInsert(ptrHead2,ptrTail2,4);
-	sortedInsert(ptrHead2,ptrTail2,5);
-	sortedInsert(ptrHead2,ptrTail2,6);
-	sortedInsert(ptrHead2,ptrTail2,7);
-
-	printList(*ptrHead2);
-
-	printf("comparision result %d ", compareList(head,head2));
-
-	return 0;
-
+    sortedInsert(ptrHead, 1);
+    sortedInsert(ptrHead, 7);
+    sortedInsert(ptrHead, 3);
+    sortedInsert(ptrHead, 4);
+    sortedInsert(ptrHead, 6);
+    sortedInsert(ptrHead, 5);
+    sortedInsert(ptrHead, 2);
+    sortedInsert(ptrHead, 1);
+    sortedInsert(ptrHead, 7);
+    sortedInsert(ptrHead, 3);
+    sortedInsert(ptrHead, 4);
+    sortedInsert(ptrHead, 6);
+    sortedInsert(ptrHead, 5);
+    sortedInsert(ptrHead, 2);
+    printList(*ptrHead);
+    reverseList(ptrHead);
+    printList(*ptrHead);
+    removeDuplicates(*ptrHead);
+    printList(*ptrHead);
+    
+    Node *head3 = copyList(*ptrHead);
+    printList(head3);
+    printf("comparision result %d ", compareList2(head, head3));
+    Node *head4 = copyListReversed(*ptrHead);
+    printList(head4);
+    return 0;
 }
-
-

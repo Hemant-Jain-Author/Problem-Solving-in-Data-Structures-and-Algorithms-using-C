@@ -1,0 +1,70 @@
+
+Question.Graphs 
+/*
+ * Graphs can be implemented using adjacency matrix or adjacency list(array of list)
+ *
+ * Adjacency matrix is sparse so adjacency graph is used 
+ *
+ * 1)Single source shortest path with each edje having equal cost can be solved using "QUEUE"  linear O(n)
+ * 
+ * 2)DIJAKSTRA's ALGO:: Single source shortest path with each edje having different "POSSITIVE COST" can 
+ * be solved using "PRIORITUY QUEUE" linear O(|E|log|V|) All edjes are inserted into the heap obviously 
+ * multiple values for same node while retriving check of alreaDY TRAVERSED if not then insert.
+ *
+ **3)in case of unweighted graph just use a queue and do bredth first search to traverse the nodes.
+ **4)use A* if you want to traverse fasrter and have a well known destination.
+ **
+ **
+ **
+ **
+ **
+ * If ask to implement implement O(|v|*|V|) algo 
+ *				1) find the least value not visited node.........first O|V| 
+ *				2) make its known = true
+ *				3) for each w adjacent to v update tw if is smaller then its prev value........second O|V|
+ *
+ *
+ * data_manipulation_table format< <INDEX>   <KNOWN> <DISTANCE>   <PREVIOUS> >
+ *									1         0       inf(-999)      0
+ *								    2         0		  inf(-999)	     0
+ *								    3         0            0         0   (this is the start node no incoming edges)
+ * 
+ * 
+ * 3)If want All pair shorted path use above |V| times for each edge
+ * 
+ *
+ * 4)MINIMAL SPPANNING :: PRIM's ALGORITHM::  same as DIJAKSTRA's just update function is changed and initial node
+ *
+ *
+ *
+ * 5)NP-Complete :: i)Some problems which are equivalent in complaxity(One can be mapped to other) 
+ *					
+ *				   ii)There exect complaxity is not known
+ *
+ *				  iii)Either all have polynomial sol or nither will have(research)
+ *
+ *
+ *				HARD:: undecidable solution ...... While loop  !
+ *				
+ *				EASY:: Rest All other which have solution
+ *						|_Polynomial Sol
+ *						|_NP-Complete(Have Sol can taly)
+ *						|_NP-Hard(Have Sol)
+ *
+ *						
+ *  NP -- Non-decidable Polynomial-time algorithms
+ *  
+ *  NP-Complete :: They dont have a polynomial time solution .....but if given a solution we can say in polynomial 
+ *  time it is correct..Traveling salesman problem , hamaltonian path etc..
+ *
+ *  Bin Packing -----------what we had done is appriximate  bin packing
+ *  KNAPSACK---------------what we had done 0/1 Knapsack
+ *  
+ *
+ *  NP-Hard ::   Even there sol cant be varified in leniar time.
+ *  
+ *
+ * 
+ */
+
+s

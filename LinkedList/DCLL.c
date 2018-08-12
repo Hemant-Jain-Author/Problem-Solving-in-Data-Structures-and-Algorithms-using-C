@@ -1,226 +1,192 @@
+#include <stdio.h>
+#include <stdlib.h>
 
-typedef struct DoublyCircularLinkedList
+typedef struct listNode
 {
-    Node *head = nullptr;
-	Node *tail = nullptr;
-	int list_size = 0;
-} DCLL;
+    int value;
+    struct listNode *next;
+    struct listNode *prev;
+} Node;
 
+int insertAtStart(Node **ptrHead, int value)
+{
+    Node *temp = (Node *)malloc(sizeof(Node));
+    if (!temp)
+    {
+        printf("Memory Allocation Error");
+        return 0;
+    }
 
-	struct Node
-	{
-		int value;
-		Node *next;
-		Node *prev;
-		Node(int v, Node *nxt, Node *prv);
-		Node(int v);
-	};
+    Node *head = *ptrHead;
 
-	Node *head = nullptr;
-	Node *tail = nullptr;
-	int list_size = 0;
+    if (!head)
+    {
+        temp->value = value;
+        temp->next = temp;
+        temp->prev = temp;
+        *ptrHead = temp;
+    }
+    else
+    {
+        temp->value = value;
+        temp->prev = head->prev;
+        temp->prev->next = temp;
+        temp->next = head;
+        head->prev = temp;
+        *ptrHead = temp;
+    }
+    return 1;
+}
 
-public:
-	DoublyCircularLinkedList();
-	virtual int size();
-	virtual bool isEmpty();
-	virtual int peekHead();
-	virtual void addHead(int value);
-	virtual int removeHead();
-	// Other Methods.
+int insertAtEnd(Node **ptrHead, int value)
+{
+    Node *temp = (Node *)malloc(sizeof(Node));
+    if (!temp)
+    {
+        printf("Memory Allocation Error");
+        return 0;
+    }
 
-	virtual void addTail(int value);
+    Node *head = *ptrHead;
 
-	virtual int removeTail();
-	virtual bool isPresent(int key);
-	virtual void freeList();
-	virtual void print();
-};
+    if (!head)
+    {
+        temp->value = value;
+        temp->next = temp;
+        temp->prev = temp;
+        *ptrHead = temp;
+    }
+    else
+    {
+        temp->value = value;
+        temp->prev = head->prev;
+        temp->prev->next = temp;
+        temp->next = head;
+        head->prev = temp;
+    }
+    return 1;
+}
+
+int removeFromStart(Node **ptrHead)
+{
+    Node *head = *ptrHead;
+
+    if (!head)
+        printf("EmptyListError");
+
+    int value = head->value;
+
+    if (head->next == head)
+    {
+        free(head);
+        *ptrHead = NULL;
+        return value;
+    }
+    Node *tail = head->prev;
+    Node *next = head->next;
+
+    next->prev = tail;
+    tail->next = next;
+    free(head);
+    *ptrHead = next;
+    return value;
+}
+
+int removeFromEnd(Node **ptrHead)
+{
+    Node *head = *ptrHead;
+
+    if (!head)
+        printf("EmptyListError");
+
+    Node *tail = head->prev;
+    int value = tail->value;
+
+    if (tail->next == tail)
+    {
+        free(tail);
+        *ptrHead = NULL;
+        return value;
+    }
+
+    Node *prev = tail->prev;
+    prev->next = head;
+    head->prev = prev;
+    free(tail);
+    return value;
+}
+
+int isPresent(Node **ptrHead, int key)
+{
+    Node *head = *ptrHead;
+    Node *curr = head;
+    if (!head)
+        return 0;
+
+    do
+    {
+        if (curr->value == key)
+        {
+            return 1;
+        }
+        curr = curr->next;
+    } while (curr != head);
+
+    return 0;
+}
+
+void freeList(Node **ptrHead)
+{
+    Node *head = *ptrHead;
+    if (!head)
+        return;
+
+    Node *curr = head->next;
+    Node *next;
+    while (curr != head)
+    {
+        next = curr->next;
+        free(curr);
+        curr = next;
+    }
+    free(head);
+    *ptrHead = NULL;
+}
+
+int printList(Node *head)
+{
+    Node *curr = head;
+    if (!head)
+        return 0;
+
+    do
+    {
+        printf(" %d ", curr->value);
+        curr = curr->next;
+    } while (curr != head);
+
+    return 0;
+}
 
 int main()
 {
-	DoublyCircularLinkedList *ll;
-	ll->addHead(1);
-	ll->addHead(2);
-	ll->addHead(3);
-	ll->addHead(1);
-	ll->addHead(2);
-	ll->addHead(3);
-	ll->print();
-	return 0;
-}
-
-Node::Node(int v, Node *nxt, Node *prv)
-{
-	value = v;
-	next = nxt;
-	prev = prv;
-}
-
-Node::Node(int v)
-{
-	value = v;
-	next = this;
-	prev = this;
-}
-
-DoublyCircularLinkedList()
-{
-	list_size = 0;
-}
-
-int size()
-{
-	return list_size;
-}
-
-bool isEmpty()
-{
-	return list_size == 0;
-}
-
-int peekHead()
-{
-	if (isEmpty())
-	{
-		throw std::exception("EmptyListException");
-	}
-	return head->value;
-}
-
-void addHead(int value)
-{
-	Node *newNode = new Node(value);
-	if (list_size == 0)
-	{
-		tail = head = newNode;
-		newNode->next = newNode;
-		newNode->prev = newNode;
-	}
-	else
-	{
-		newNode->next = head;
-		newNode->prev = head->prev;
-		head->prev = newNode;
-		newNode->prev->next = newNode;
-		head = newNode;
-	}
-	list_size++;
-}
-
-void addTail(int value)
-{
-	Node *newNode = new Node(value, nullptr, nullptr);
-	if (list_size == 0)
-	{
-		head = tail = newNode;
-		newNode->next = newNode;
-		newNode->prev = newNode;
-	}
-	else
-	{
-		newNode->next = tail->next;
-		newNode->prev = tail;
-		tail->next = newNode;
-		newNode->next->prev = newNode;
-		tail = newNode;
-	}
-	list_size++;
-}
-
-int removeHead()
-{
-	if (list_size == 0)
-		throw std::exception("EmptyListException");
-
-	int value = head->value;
-	list_size--;
-
-	if (list_size == 0)
-	{
-		delete head;
-		head = nullptr;
-		tail = nullptr;
-		return value;
-	}
-
-	Node *next = head->next;
-	next->prev = tail;
-	tail->next = next;
-	delete head;
-	head = next;
-	return value;
-}
-
-int removeTail()
-{
-	if (list_size == 0)
-		throw std::exception("EmptyListException");
-
-	int value = tail->value;
-	list_size--;
-
-	if (list_size == 0)
-	{
-		delete tail;
-		head = tail = nullptr;
-		return value;
-	}
-
-	Node *prev = tail->prev;
-	prev->next = head;
-	head->prev = prev;
-	delete tail;
-	tail = prev;
-	return value;
-}
-
-bool isPresent(int key)
-{
-	Node *temp = head;
-	if (head == nullptr)
-		return false;
-
-	do
-	{
-		if (temp->value == key)
-		{
-			return true;
-		}
-		temp = temp->next;
-	} while (temp != head);
-
-	return false;
-}
-
-void freeList()
-{
-	if (head == nullptr)
-		return;
-
-	Node* curr = head->next;
-	Node* next;
-	while (curr != head)
-	{
-		next = curr->next;
-		delete curr;
-		curr = next;
-	}
-	delete head;
-	head = nullptr;
-	tail = nullptr;
-	list_size = 0;
-}
-
-void print()
-{
-	if (isEmpty())
-		return;
-
-	Node *temp = head;
-	do
-	{
-		std::cout << temp->value << " ";
-		temp = temp->next;
-	} while (temp != nullptr);
+    Node *head = NULL;
+    Node **ptrHead = &head;
+    insertAtStart(ptrHead, 1);
+    insertAtStart(ptrHead, 2);
+    insertAtStart(ptrHead, 3);
+    insertAtStart(ptrHead, 4);
+    insertAtStart(ptrHead, 5);
+    insertAtStart(ptrHead, 6);
+    insertAtStart(ptrHead, 7);
+    insertAtEnd(ptrHead, 9);
+    printList(*ptrHead);
+    removeFromEnd(ptrHead);
+    removeFromStart(ptrHead);
+    printList(*ptrHead);
+    printf("\n %d \n",isPresent(ptrHead,5));
+    printf("\n %d \n",isPresent(ptrHead,9));
+    freeList(ptrHead);
+    printList(*ptrHead);
+    return 0;
 }
