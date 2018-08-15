@@ -9,6 +9,10 @@
         "vector": "c",
         "xstring": "c",
         "xutility": "c",
-        "xlocale": "c"
+        "xlocale": "c",
+        "system_error": "c",
+        "xfunctional": "c",
+        "xstddef": "c",
+        "xtr1common": "c"
     }
 }

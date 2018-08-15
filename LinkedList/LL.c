@@ -200,7 +200,7 @@ void deleteNode(ListNode **ptrHead, int delValue)
     ListNode *currNode = *ptrHead;
     ListNode *nextNode;
 
-    if (currNode->value == delValue) /*first node */
+    if (currNode && currNode->value == delValue) /*first node */
     {
         *ptrHead = currNode->next;
         free(currNode);
