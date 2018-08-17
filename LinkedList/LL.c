@@ -1,6 +1,3 @@
-// LinkedList.cpp : Defines the entry point for the console application.
-//
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -105,7 +102,7 @@ ListNode *nthNodeFromEnd3(ListNode *head, int index)
 
 void printList(ListNode *head)
 {
-    printf("PrintLIst: ");
+    printf("printList: ");
     while (head)
     {
         printf(" %d ", head->value);
@@ -194,6 +191,21 @@ int searchList(ListNode *head, int value)
     printf("\nThe value not found\n");
     return 0;
 }
+
+void deleteFirstNodes(ListNode **ptrHead, int delValue)
+{
+    ListNode *currNode = *ptrHead;
+    ListNode *nextNode;
+
+    if (currNode == NULL)
+        return;
+
+    nextNode = currNode->next;
+    free(currNode);
+
+    *ptrHead = nextNode;
+}
+
 void deleteNode(ListNode **ptrHead, int delValue)
 {
     printf("\nDelete Node \n");
@@ -221,20 +233,6 @@ void deleteNode(ListNode **ptrHead, int delValue)
             currNode = nextNode;
         }
     }
-}
-
-void deleteFirstNodes(ListNode **ptrHead, int delValue)
-{
-    ListNode *currNode = *ptrHead;
-    ListNode *nextNode;
-
-    if (currNode == NULL)
-        return;
-
-    nextNode = currNode->next;
-    free(currNode);
-
-    *ptrHead = nextNode;
 }
 
 void deleteNodes(ListNode **ptrHead, int delValue)
@@ -266,7 +264,7 @@ void deleteNodes(ListNode **ptrHead, int delValue)
     }
 }
 
-void deleteNodePtr(ListNode **ptrHead, ListNode *ptrDel)
+void deleteListPtr(ListNode **ptrHead, ListNode *ptrDel)
 {
     ListNode *currNode = *ptrHead;
     ListNode *nextNode;
@@ -305,6 +303,7 @@ void deleteList(ListNode **ptrHead)
     }
     *ptrHead = NULL;
 }
+
 void reverseList(ListNode **ptrHead)
 {
     ListNode *tempNode = *ptrHead;
@@ -330,6 +329,7 @@ void reverseList(ListNode **ptrHead)
     }
     *ptrHead = prevNode;
 }
+
 ListNode *reverseRecurse2(ListNode *currentNode, ListNode *nextNode)
 {
     ListNode *ret;
@@ -349,7 +349,7 @@ ListNode *reverseRecurse2(ListNode *currentNode, ListNode *nextNode)
 
 void reverseRecurse(ListNode **ptrHead)
 {
-    *ptrHead = ReverseRecurse2(*ptrHead, NULL);
+    *ptrHead = reverseRecurse2(*ptrHead, NULL);
 }
 
 void removeDuplicate(ListNode *head)
@@ -412,6 +412,16 @@ void copyList(ListNode *head, ListNode **ptrHead2)
     *ptrHead2 = headNode;
 }
 
+int compareList(ListNode *head1, ListNode *head2)
+{
+    if (head1 == NULL && head2 == NULL)
+        return 1;
+    else if ((head1 == NULL) || (head2 == NULL) || (head1->value != head2->value))
+        return 0;
+    else
+        return compareList(head1->next, head2->next);
+}
+
 int loopDetect(ListNode *head)
 {
     printf("loop detect");
@@ -433,6 +443,23 @@ int loopDetect(ListNode *head)
     return 0;
 }
 
+int reverseListloopDetect(ListNode *head)
+{
+    ListNode **ptrHead = &head;
+    ListNode *head2 = head;
+    reverseList(ptrHead);
+    if (*ptrHead == head2)
+    {
+        reverseList(ptrHead);
+        return 1;
+    }
+    else
+    {
+        reverseList(ptrHead);
+        return 0;
+    }
+}
+
 int loopTypeDetect(ListNode *const head)
 {
     ListNode *slowPtr;
@@ -441,7 +468,6 @@ int loopTypeDetect(ListNode *const head)
     slowPtr = fastPtr = head;
     while (fastPtr->next && fastPtr->next->next)
     {
-
         if (head == fastPtr->next || head == fastPtr->next->next)
         {
             printf("circular list detected\n");
@@ -565,40 +591,47 @@ ListNode *findIntersecton(ListNode *head, ListNode *head2)
 int main()
 {
 
-    int arr[5] = {1, 2, 3, 4, 5};
     ListNode *head = NULL;
+    insertNode(&head, 1);
+    insertNode(&head, 1);
+    insertNode(&head, 1);
+    insertNode(&head, 1);
+    insertNode(&head, 1);
+    printList(head);
+
+    int arr[5] = {1, 2, 3, 4, 5};
     int i;
 
     for (i = 0; i < 5; i++)
     {
-        InsertNode(&head, arr[i]);
+        insertNode(&head, arr[i]);
     }
     ListNode *head2 = head;
     for (i = 0; i < 3; i++)
     {
-        InsertNode(&head, 10);
+        insertNode(&head, 10);
     }
     for (i = 0; i < 5; i++)
     {
-        InsertNode(&head2, 20);
+        insertNode(&head2, 20);
     }
 
-    PrintList(head);
-    PrintList(head2);
+    printList(head);
+    printList(head2);
 
     ListNode *intersection = findIntersecton(head, head2);
     printf("\nvalue at the intersection is %d \n", intersection->value);
 
     for (i = 0; i < 5; i++)
     {
-        InsertNode(&head, arr[i]);
+        insertNode(&head, arr[i]);
     }
 
-    PrintList(head);
+    printList(head);
 
-    DeleteList(&head);
+    deleteList(&head);
 
-    PrintList(head);
+    printList(head);
 
     int arr2[5] = {1, 5, 3, 2, 4};
 
@@ -606,80 +639,80 @@ int main()
 
     for (i = 0; i < 5; i++)
     {
-        SortedInsert(&head, arr2[i]);
+        sortedInsert(&head, arr2[i]);
     }
-    PrintList(head);
+    printList(head);
 
-    SearchList(head, 6);
-    SearchList(head, 5);
+    searchList(head, 6);
+    searchList(head, 5);
 
-    DeleteNode(&head, 5);
-    PrintList(head);
+    deleteNode(&head, 5);
+    printList(head);
 
-    DeleteNode(&head, 3);
-    PrintList(head);
+    deleteNode(&head, 3);
+    printList(head);
 
     for (i = 0; i < 5; i++)
     {
-        SortedInsert(&head, arr2[i]);
+        sortedInsert(&head, arr2[i]);
     }
-    PrintList(head);
+    printList(head);
 
-    RemoveDuplicate(head);
-    PrintList(head);
+    removeDuplicate(head);
+    printList(head);
 
-    ReverseList(&head);
-    PrintList(head);
+    reverseList(&head);
+    printList(head);
 
     reverseRecurse(&head);
-    PrintList(head);
+    printList(head);
 
-    DeleteNode(&head, 1);
-    PrintList(head);
+    deleteNode(&head, 1);
+    printList(head);
 
-    DeleteNode(&head, 5);
-    PrintList(head);
+    deleteNode(&head, 5);
+    printList(head);
 
-    DeleteNode(&head, 3);
-    PrintList(head);
+    deleteNode(&head, 3);
+    printList(head);
 
     for (i = 0; i < 5; i++)
     {
-        InsertNode(&head, arr[i]);
-        InsertNode(&head, arr[i]);
-        InsertNode(&head, arr[i]);
+        insertNode(&head, arr[i]);
+        insertNode(&head, arr[i]);
+        insertNode(&head, arr[i]);
     }
-    PrintList(head);
+    printList(head);
 
-    CopyList(head, &head2);
-    PrintList(head2);
+    copyList(head, &head2);
+    printList(head2);
 
     ListNode *head3;
-    CopyListReversed(head, &head3);
-    PrintList(head3);
+    copyListReversed(head, &head3);
+    printList(head3);
 
-    DeleteNodes(&head, 5);
-    PrintList(head);
+    deleteNodes(&head, 5);
+    printList(head);
 
-    DeleteNodes(&head, 1);
-    PrintList(head);
+    deleteNodes(&head, 1);
+    printList(head);
 
-    DeleteNodes(&head, 4);
-    PrintList(head);
+    deleteNodes(&head, 4);
+    printList(head);
 
-    LoopDetect(head);
-    LoopTypeDetect(head);
+    loopDetect(head);
+    loopTypeDetect(head);
 
-    MakeLoop(head);
+    makeLoop(head);
     for (i = 0; i < 5; i++)
     {
-        InsertNode(&head, arr[i]);
+        insertNode(&head, arr[i]);
     }
-    LoopDetect(head);
-    LoopTypeDetect(head);
+    loopDetect(head);
+    loopTypeDetect(head);
 
-    RemoveLoop(&head);
-    PrintList(head);
+    removeLoop(&head);
+    printList(head);
 
     return 0;
 }

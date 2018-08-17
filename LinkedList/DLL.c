@@ -154,6 +154,25 @@ void deleteList(Node **ptrHead)
     *ptrHead = NULL;
 }
 
+void deleteFirstNode(Node **ptrHead)
+{
+    Node *head = *ptrHead;
+    Node *deleteMe;
+
+    if(head == NULL)
+        return;
+    
+    deleteMe = head;
+    head = head->next;
+    *ptrHead = head;
+
+    if (head != NULL)
+        head->prev = NULL;
+
+    free(deleteMe);
+}
+
+
 /* Delete a node given its pointer */
 void deleteNodePtr(Node **ptrHead, Node *ptrDel)
 {
@@ -181,6 +200,41 @@ void deleteNodePtr(Node **ptrHead, Node *ptrDel)
             return;
         }
         curr = next;
+    }
+}
+
+void deleteNode(Node **ptrHead, int value)
+{
+    Node *curr = *ptrHead;
+    Node *next;
+    Node *deleteMe;
+    if(curr == NULL)
+        return;
+
+    if (curr->value == value) /*first node*/
+    {
+        deleteMe = curr;
+        curr = curr->next;
+        if(curr)
+            curr->prev = NULL;
+        
+        *ptrHead = curr;
+        free(deleteMe);
+        return;
+    }
+    next = curr->next;
+    while (next != NULL)
+    {
+        if (next->value == value)
+        {
+            curr->next = next->next;
+            if (curr->next)
+                curr->next->prev = curr;
+            free(next);
+            return;
+        }
+        curr = next;
+        next = next->next;
     }
 }
 
@@ -276,37 +330,6 @@ int compareList2(Node *head1, Node *head2)
         return 1;
     else
         return 0;
-}
-
-int main2()
-{
-    Node *head = NULL;
-    Node **ptrHead = &head;
-
-    insertNode(ptrHead, 1);
-    insertNode(ptrHead, 2);
-    insertNode(ptrHead, 3);
-    insertNode(ptrHead, 4);
-    insertNode(ptrHead, 5);
-    insertNode(ptrHead, 6);
-    insertNode(ptrHead, 7);
-    printList(*ptrHead);
-
-    Node *head2 = NULL;
-    Node **ptrHead2 = &head2;
-
-    sortedInsert(ptrHead2, 1);
-    sortedInsert(ptrHead2, 2);
-    sortedInsert(ptrHead2, 3);
-    sortedInsert(ptrHead2, 4);
-    sortedInsert(ptrHead2, 5);
-    sortedInsert(ptrHead2, 6);
-    sortedInsert(ptrHead2, 7);
-    printList(*ptrHead2);
-    printf("comparision result %d ", compareList(head, head2));
-    printf("comparision result %d ", compareList2(head, head2));
-
-    return 0;
 }
 
 int main()

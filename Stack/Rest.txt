@@ -1,0 +1,166 @@
+
+/*
+int WaterJug(int maxX, int maxY, int target)
+{
+Stack stk;
+StackInitialize(&stk);
+parent = {};
+cost = {};
+path = [];
+start = (0, 0);
+StackPush(&stk, start);
+parent[start] = start;
+cost[start] = 0;
+ans = None;
+ansCost = sys.maxint;
+
+while (StackSize(&stk) != 0)
+{
+top = StackPop(&stk);
+if ((top == (target, 0) || top == (0, target)) && (cost[top] < ansCost))
+{
+ans = top;
+ansCost = cost[top];
+}
+X = top[0];
+Y = top[1];
+currCost = cost[top];
+if (X < maxX)
+child = (maxX, Y);
+if (child not in parent || currCost + 1 < cost[child])
+{
+StackPush(&stk, child);
+parent[child] = top;
+cost[child] = currCost + 1;
+}
+if (Y < maxY)
+{
+child = (X, maxY);
+if (child not in parent || currCost + 1 < cost[child])
+{
+StackPush(&stk, child);
+parent[child] = top;
+cost[child] = currCost + 1;
+}
+}
+if (X > 0)
+{
+child = (0, Y);
+if (child not in parent || currCost + 1 < cost[child])
+{
+StackPush(&stk, child);
+parent[child] = top;
+cost[child] = currCost + 1;
+}
+}
+if (Y > 0)
+{
+child = (X, 0);
+if (child not in parent || currCost + 1 < cost[child])
+{
+StackPush(&stk, child);
+parent[child] = top;
+cost[child] = currCost + 1;
+}
+} // min(x + y, maxX), max(0, x + y - maxX)) if y > 0
+if (Y > 0)
+{
+child = (min(X + Y, maxX), max(0, X + Y - maxX));
+if (child not in parent || currCost + 1 < cost[child])
+{
+StackPush(&stk, child);
+parent[child] = top;
+cost[child] = currCost + 1;
+}
+}
+// max(0, x + y - maxY), min(x + y, maxY)) if x > 0
+if (X > 0)
+{
+child = (max(0, X + Y - maxY), min(X + Y, maxY));
+if
+child not in parent || currCost + 1 < cost[child]
+{
+StackPush(&stk, child);
+parent[child] = top;
+cost[child] = currCost + 1;
+}
+}
+}
+if (ans == None)
+{
+printf("target not found");
+return[];
+}
+path.append(ans);
+while (parent[ans] != ans)
+{
+path.insert(0, parent[ans]);
+ans = parent[ans];
+}
+return path;
+}
+
+int main()
+{
+printf("%d", WaterJug(4, 3, 2));
+return 0;
+}
+*/
+
+
+
+
+/*
+int decode(char *text, int size)
+{
+int i = 0;
+int value = 0;
+char output[100];
+Stack stk;
+StackInitialize(&stk);
+while (i < size)
+{
+if (text[i] > '0' && text[i] < '9')
+value = value * 10 + (int)(text[i] - '0');
+else if (text[i] == '[')
+{
+if (output != "")
+{
+StackPush(&stk, output);
+output = ""
+}
+StackPush(&stk, value);
+value = 0;
+StackPush(&stk, '[');
+}
+else if (text[i] == ']')
+{
+temp = StackPop(&stk);
+while (temp != '[')
+{
+temp += StackPop(&stk);
+}
+count = StackPop(&stk);
+output = "";
+for (_ in range(count))
+{
+output += temp;
+}
+}
+else
+output = output + text[i];
+i += 1;
+}
+while (StackSize(&stk) != 0)
+{
+output = StackPop(&stk) + output;
+}
+return output;
+}
+int main()
+{
+char* str = '1[x4[y]]13[Z]1[a]';
+printf("", decode(str, strlen(str));
+}
+
+*/

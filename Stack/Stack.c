@@ -504,70 +504,7 @@ int IsMaxHeap(int arr[], int size)
     return 1;
 }
 
-/*
-typedef struct stack{
-	int top;
-	int * data;
-	int max;
-}Stack;
 
-void init(Stack* stk, int size)
-{
-	stk->data = (int*)malloc(size * sizeof(int));
-	stk->top = -1;
-	stk->max = size;
-}
-void push(Stack* stk, int value)
-{
-	if (stk->top < stk->max - 1)
-	{
-		stk->top++;
-		stk->data[stk->top] = value;
-		printf("value push : %d \n", value);
-	}
-	else
-	{
-		stk->max = stk->max * 2;
-		stk->data = (int*)realloc(stk->data, stk->max * sizeof(int));
-		printf("stack size doubled");
-		push(stk, value);
-	}
-}
-int pop(Stack* stk)
-{
-	if (stk->top >= 0)
-	{
-		int value = stk->data[stk->top];
-		stk->top--;
-		if (stk->top < (stk->max / 2) && stk->max > stk->min)
-		{
-			stk->max = stk->max / 2;
-			stk->data = (int*)realloc(stk->data, stk->max * sizeof(int));
-			printf("stack size halfed");
-		}
-		printf("value pop : %d \n", value);
-		return value;
-	}
-	printf("stack empty\n");
-}
-
-int main()
-{
-	Stack stk;
-	StackInitialize(&stk);
-	int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; { 6, 2, 5, 4, 5, 1, 6 };
-	int* stockRange = StockSpanRange(arr, 10);
-	for (int i = 0; i < 10; i++)
-	{
-	printf("Value : %d , Stock Range: %d\n", arr[i], stockRange[i]);
-	}
-
-	printf("max area is %d\n", GetMaxArea(arr, 8));
-	printf("max area is %d\n", GetMaxArea2(arr, 8));
-	return 0;
-}
-
-*/
 int main()
 {
     Stack stk;

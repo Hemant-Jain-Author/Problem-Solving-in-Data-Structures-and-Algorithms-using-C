@@ -77,16 +77,34 @@ void printList(Node *tail)
 {
     if (!tail)
         return;
-    
+
     Node *head = tail->next;
-    printf(" %d  ", head->value);
-    Node* currNode = head->next;
+    printf("\n%d ", head->value);
+    Node *currNode = head->next;
 
     while (currNode != head)
     {
-        printf(" %d  ", currNode->value);
+        printf("%d ", currNode->value);
         currNode = currNode->next;
     }
+}
+
+int searchList(Node *tail, int value)
+{
+    if (!tail)
+        return 0;
+
+    if (tail->value == value)
+        return 1;
+
+    Node *curr = tail->next;
+    while (curr != tail)
+    {
+        if (curr->value == value)
+            return 1;
+        curr = curr->next;
+    }
+    return 0;
 }
 
 void deleteList(Node **ptrTail)
@@ -99,7 +117,7 @@ void deleteList(Node **ptrTail)
 
     curr = tail->next;
     free(tail);
-    
+
     while (curr != tail)
     {
         next = curr->next;
@@ -133,7 +151,7 @@ void deleteNodePtr(Node **ptrTail, Node *ptrDel)
         prev = curr;
         curr = curr->next;
     }
-    if(curr == ptrDel)
+    if (curr == ptrDel)
     {
         prev->next = curr->next;
         free(curr);
@@ -141,6 +159,58 @@ void deleteNodePtr(Node **ptrTail, Node *ptrDel)
     }
 }
 
+int deleteNode(Node **ptrTail, int value)
+{
+    Node *tail = *ptrTail;
+    Node *curr = tail;
+    Node *prev = NULL;
+    Node *deleteMe;
+
+    if (!tail)
+        return 0;
+
+    prev = curr;
+    curr = curr->next;
+    while (curr != tail)
+    {
+        if (curr->value == value)
+        {
+            prev->next = curr->next;
+            free(curr);
+            return 1;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+    if (curr->value == value)
+    {
+        prev->next = curr->next;
+        free(curr);
+        *ptrTail = prev;
+        return 1;
+    }
+    return 0;
+}
+
+int deleteHeadNode(Node **ptrTail)
+{
+    Node *tail = *ptrTail;
+    Node *deleteMe;
+
+    if (!tail)
+        return 0;
+
+    if (tail->next == tail)
+    {
+        free(tail);
+        *ptrTail = NULL;
+        return 1;
+    }
+    deleteMe = tail->next;
+    tail->next = deleteMe->next;
+    free(deleteMe);
+    return 1;
+}
 
 int main()
 {
@@ -154,6 +224,8 @@ int main()
     insertAtStart(ptrHead, 5);
     insertAtStart(ptrHead, 6);
     insertAtStart(ptrHead, 7);
+    printList(*ptrHead);
+    deleteNode(ptrHead, 6);
     printList(*ptrHead);
 
     Node *head2 = NULL;
