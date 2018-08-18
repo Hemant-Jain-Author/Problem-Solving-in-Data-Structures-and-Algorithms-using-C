@@ -1,57 +1,82 @@
-#!/usr/bin/env python
-import heapq
-import sys
-from collections import deque
 
-class Graph(object):
-    def __init__(self, cnt):
-        self.count = cnt
-        self.adj = [[0 for _ in range(cnt)] for _ in range(cnt)]
-        
-    def AddDirectedEdge(self, source, destination, cost=1):
-        self.adj[source][destination] = cost
-    
-    def AddUndirectedEdge(self, source, destination, cost=1):
-        self.AddDirectedEdge(source, destination, cost)
-        self.AddDirectedEdge(destination, source, cost)
+#include <stdio.h>
+#include <stdlib.h>
 
-    def Print(self):
-        for i in range(self.count):
-            print "Vertex " , i , " is connected to : ",
-            for j in range(self.count):
-                if self.adj[i][j] != 0:
-                    print j ,""
-            print("")
+typedef struct graph
+{
+	int count;
+	int **adj;
+} Graph;
 
-graph = Graph(4)
-graph.AddUndirectedEdge(0, 1)
-graph.AddUndirectedEdge(0, 2)
-graph.AddUndirectedEdge(1, 2)
-graph.AddUndirectedEdge(2, 3)
-graph.Print()
-"""
+void graphInit(Graph *gph, int count)
+{
+	gph->count = count;
+    gph->adj = (int**)malloc(count*sizeof(int*));
+	for(int i=0;i<count;i++)
+    {
+        gph->adj[i] = (int*)malloc(count*sizeof(int));
+        gph->adj[i] = 0;
+    }
+}
+
+void addDirectedEdge(Graph *gph, int src, int dst, int cost)
+{
+    gph->adj[src][dst] = cost;
+}
+
+void addUndirectedEdge(Graph *gph, int src, int dst, int cost)
+{
+    addDirectedEdge(gph, src, dst, cost);
+    addDirectedEdge(gph, dst, src, cost);
+}
+
+void graphPrint(Graph *gph)
+{
+    int count = gph->count;
+    for(int i=0;i<count;i++)
+    {
+        for(int j=0;j<count;j++)
+        {
+            printf("%d ", gph->adj[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main()
+{
+    Graph graph; 
+    graphInit(&graph, 4);
+    addUndirectedEdge(&graph, 0, 1, 1);
+    addUndirectedEdge(&graph, 0, 2, 1);
+    addUndirectedEdge(&graph, 1, 2, 1);
+    addUndirectedEdge(&graph, 2, 3, 1);
+    graphPrint(&graph);
+}
+/*
 Vertex  0  is connected to :  1 2
 Vertex  1  is connected to :  0 2
 Vertex  2  is connected to :  0 1 3
 Vertex  3  is connected to :  2
-"""
+*/
+/*
 class PriorityQueue(object):
     def __init__(self):
-        self.pQueue = []
-        self.count = 0
+        pQueue = []
+        count = 0
     
     def Add(self, key, value):
-        heapq.heappush(self.pQueue, (key, value))
+        heapq.heappush(pQueue, (key, value))
     
     def UpdateKey(self, key, value):
-        heapq.heappush(self.pQueue, (key, value))
+        heapq.heappush(pQueue, (key, value))
 
     def Pop(self):
-        val = heapq.heappop(self.pQueue)
+        val = heapq.heappop(pQueue)
         return val
 
     def Size(self):
-        return len(self.pQueue)
+        return len(pQueue)
     
 def printPath(count, previous, dist):
     for i in range(count):
@@ -115,26 +140,28 @@ def Prims(gph):
     
     printPath(graph.count, previous,dist)
 
-"""
+int main()
+{
 graph = Graph(9)
-graph.AddUndirectedEdge(0, 1, 4)
-graph.AddUndirectedEdge(0, 7, 8)
-graph.AddUndirectedEdge(1, 2, 8)
-graph.AddUndirectedEdge(1, 7, 11)
-graph.AddUndirectedEdge(2, 3, 7)
-graph.AddUndirectedEdge(2, 8, 2)
-graph.AddUndirectedEdge(2, 5, 4)
-graph.AddUndirectedEdge(3, 4, 9)
-graph.AddUndirectedEdge(3, 5, 14)
-graph.AddUndirectedEdge(4, 5, 10)
-graph.AddUndirectedEdge(5, 6, 2)
-graph.AddUndirectedEdge(6, 7, 1)
-graph.AddUndirectedEdge(6, 8, 6)
-graph.AddUndirectedEdge(7, 8, 7)
+addUndirectedEdge(&graph,0, 1, 4)
+addUndirectedEdge(&graph,0, 7, 8)
+addUndirectedEdge(&graph,1, 2, 8)
+addUndirectedEdge(&graph,1, 7, 11)
+addUndirectedEdge(&graph,2, 3, 7)
+addUndirectedEdge(&graph,2, 8, 2)
+addUndirectedEdge(&graph,2, 5, 4)
+addUndirectedEdge(&graph,3, 4, 9)
+addUndirectedEdge(&graph,3, 5, 14)
+addUndirectedEdge(&graph,4, 5, 10)
+addUndirectedEdge(&graph,5, 6, 2)
+addUndirectedEdge(&graph,6, 7, 1)
+addUndirectedEdge(&graph,6, 8, 6)
+addUndirectedEdge(&graph,7, 8, 7)
 #Dijkstra(graph, 0)
 Prims(graph)
 # graph.Print()
-"""
+}
+
 def HamiltonianCycleUtil(graph , path, added):
     # Base case: full length path is found 
     # this last check can be modified to make it a path.
@@ -196,7 +223,9 @@ def HamiltonianPath(graph):
         return True
     print "Hamiltonian Path not found"
     return False
-"""
+
+int main2()
+{
 graph = Graph(5)
 graph.adj = [ [0, 1, 0, 1, 0], 
                 [1, 0, 1, 1, 0], 
@@ -204,6 +233,7 @@ graph.adj = [ [0, 1, 0, 1, 0],
                 [1, 1, 0, 0, 1], 
                 [0, 1, 1, 1, 0] ]
 print HamiltonianPath(graph)
+
 
 g2 = Graph(5)
 g2.adj = [ [0, 1, 0, 1, 0], 
@@ -213,4 +243,5 @@ g2.adj = [ [0, 1, 0, 1, 0],
             [0, 1, 1, 0, 0] ]
  
 print HamiltonianPath(g2)
-"""
+}
+*/

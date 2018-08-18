@@ -1,0 +1,39 @@
+void convertXY(int src, int dst)
+{
+    Queue que;
+    QueueInitialize(&que);
+    visited = {};
+    QueueAdd(&que, (src, 0));
+    while (QueueSize(&que) != 0)
+    {
+        node = QueueRemove(&que);
+        visited[node[0]] = 1;
+        value = node[0];
+        steps = node[1];
+        if (value == dst)
+            return steps;
+        if (value < dst && (value * 2) not in visited)
+            QueueAdd(&que, (value * 2, steps + 1));
+        if (value > 0 && (value - 1) not in visited)
+            QueueAdd(&que, (value - 1, steps + 1));
+    }
+    return -1;
+}
+
+def maxSlidingWindows(arr, k):
+	size = len(arr)
+	que = deque()
+	for i in range(size):
+		# Remove out of range elements
+		if que and que[0] <= i - k:
+			que.popleft()
+		# Remove smaller values at left.
+		while que and arr[que[-1]] <= arr[i] :
+			que.pop()
+
+		que.append(i)
+		# Largest value in window of size k is at index que[0]
+		# It is displayed to the screen.  
+		if i >= (k - 1):
+			print(arr[que[0]])
+
