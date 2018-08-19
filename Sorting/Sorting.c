@@ -120,11 +120,11 @@ void QuickSortUtil(int arr[], int lower, int upper)
 
     while (lower < upper)
     {
-        while (arr[lower] <= pivot)
+        while (lower < upper && arr[lower] <= pivot)
         {
             lower++;
         }
-        while (arr[upper] > pivot)
+        while (lower <= upper && arr[upper] > pivot)
         {
             upper--;
         }
@@ -133,8 +133,8 @@ void QuickSortUtil(int arr[], int lower, int upper)
             swap(arr, upper, lower);
         }
     }
-    swap(arr, upper, start); //upper is the pivot position
 
+    swap(arr, upper, start);              //upper is the pivot position
     QuickSortUtil(arr, start, upper - 1); //pivot -1 is the upper for left sub array.
     QuickSortUtil(arr, upper + 1, stop);  // pivot + 1 is the lower for right sub array.
 }
@@ -142,6 +142,44 @@ void QuickSortUtil(int arr[], int lower, int upper)
 void QuickSort(int arr[], int size)
 {
     QuickSortUtil(arr, 0, size - 1);
+}
+
+void QuickSelectUtil(int arr[], int lower, int upper, int k)
+{
+    if (upper <= lower)
+        return;
+
+    int pivot = arr[lower];
+
+    int start = lower;
+    int stop = upper;
+
+    while (lower < upper)
+    {
+        while (lower < upper && arr[lower] <= pivot)
+        {
+            lower++;
+        }
+        while (lower <= upper && arr[upper] > pivot)
+        {
+            upper--;
+        }
+        if (lower < upper)
+        {
+            swap(arr, upper, lower);
+        }
+    }
+
+    swap(arr, upper, start); //upper is the pivot position
+    if (k < upper)
+        QuickSelectUtil(arr, start, upper - 1, k); //pivot -1 is the upper for left sub array.
+    if (k > upper)
+        QuickSelectUtil(arr, upper + 1, stop, k); // pivot + 1 is the lower for right sub array.
+}
+int QuickSelect(int *a, int count, int index)
+{
+    QuickSelectUtil(a, 0, count - 1, index - 1);
+    return a[index - 1];
 }
 
 void Merge(int *arr, int *tempArray, int lowerIndex, int middleIndex, int upperIndex)
@@ -193,48 +231,9 @@ void printArray(int *arr, int size)
     printf("\n");
 }
 
-void QuickSelectUtil(int arr[], int lower, int upper, int k)
-{
-    if (upper <= lower)
-        return;
-
-    int pivot = arr[lower];
-
-    int start = lower;
-    int stop = upper;
-
-    while (lower < upper)
-    {
-        while (arr[lower] <= pivot)
-        {
-            lower++;
-        }
-        while (arr[upper] > pivot)
-        {
-            upper--;
-        }
-        if (lower < upper)
-        {
-            swap(arr, upper, lower);
-        }
-    }
-
-    swap(arr, upper, start); //upper is the pivot position
-    if (k < upper)
-        QuickSelectUtil(arr, start, upper - 1, k); //pivot -1 is the upper for left sub array.
-    if (k > upper)
-        QuickSelectUtil(arr, upper + 1, stop, k); // pivot + 1 is the lower for right sub array.
-}
-
-int QuickSelect(int *a, int count, int index)
-{
-    QuickSelectUtil(a, 0, count - 1, index - 1);
-    return a[index - 1];
-}
-
 void BucketSort(int array[], int n, int range)
 {
-    int i, j=0;
+    int i, j = 0;
     int *count = (int *)malloc((range + 1) * sizeof(int));
     for (i = 0; i < range; i++)
         count[i] = 0;
@@ -402,7 +401,8 @@ void ArrayReduction(int arr[], int size)
 
     for (int i = 0; i < size; i++)
     {
-        if (arr[i] - reduction > 0){
+        if (arr[i] - reduction > 0)
+        {
             printf("%d ", (size - i));
             reduction = arr[i];
             count += 1;
@@ -508,7 +508,7 @@ void merge(int arr1[], int size1, int arr2[], int size2)
         else
         {
             // always first element of arr2 is compared.
-            arr1[index] ^= arr2[0] ^= arr1[index]^= arr2[0] ;
+            arr1[index] ^= arr2[0] ^= arr1[index] ^= arr2[0];
             index += 1;
             // After swap arr2 may be unsorted.
             // Insertion of the element in proper sorted position.
@@ -516,7 +516,7 @@ void merge(int arr1[], int size1, int arr2[], int size2)
             {
                 if (arr2[i] < arr2[i + 1])
                     break;
-                arr2[i] ^= arr2[i + 1] ^= arr2[i]^= arr2[i + 1] ;
+                arr2[i] ^= arr2[i + 1] ^= arr2[i] ^= arr2[i + 1];
             }
         }
     }
@@ -525,11 +525,11 @@ void merge(int arr1[], int size1, int arr2[], int size2)
 // Testing code.
 int main9()
 {
-    int arr1[] = {1, 5,9,10,15,20};
+    int arr1[] = {1, 5, 9, 10, 15, 20};
     int arr2[] = {2, 3, 8, 13};
     merge(arr1, sizeof(arr1) / sizeof(int), arr2, sizeof(arr2) / sizeof(int));
-    printArray(arr1, sizeof(arr1)/sizeof(int));
-    printArray(arr2, sizeof(arr2)/sizeof(int));
+    printArray(arr1, sizeof(arr1) / sizeof(int));
+    printArray(arr2, sizeof(arr2) / sizeof(int));
 }
 
 int checkReverse(int arr[], int size)
@@ -575,8 +575,10 @@ int checkReverse(int arr[], int size)
     return 1;
 }
 
-int min(int X, int Y){
-    if (X < Y){
+int min(int X, int Y)
+{
+    if (X < Y)
+    {
         return X;
     }
     return Y;
@@ -633,7 +635,8 @@ void UnionIntersectionUnsorted(int arr1[], int size1, int arr2[], int size2)
     UnionIntersectionSorted(arr1, size1, arr2, size2);
 }
 
-int main(){
+int main()
+{
     int arr1[] = {1, 11, 2, 3, 14, 5, 6, 8, 9};
     int arr2[] = {2, 4, 5, 12, 7, 8, 13, 10};
     UnionIntersectionUnsorted(arr1, sizeof(arr1) / sizeof(int), arr2, sizeof(arr2) / sizeof(int));
