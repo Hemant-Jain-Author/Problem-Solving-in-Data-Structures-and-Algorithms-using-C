@@ -381,14 +381,14 @@ int numLeafs(treeNode* root)
 		return (numLeafs(root->rChild) + numLeafs(root->lChild));
 }
 
-int identical(treeNode* root1, treeNode* root2)
+int isIdentical(treeNode* root1, treeNode* root2)
 {
 	if (!root1 && !root2)
 		return 1;
 	else if (!root1 || !root2)
 		return 0;
 	else
-		return (identical(root1->lChild, root2->lChild) && identical(root1->rChild, root2->rChild) && (root1->value == root2->value));
+		return (isIdentical(root1->lChild, root2->lChild) && isIdentical(root1->rChild, root2->rChild) && (root1->value == root2->value));
 }
 
 int isBSTUtil(treeNode* root, int min, int max)
@@ -459,7 +459,7 @@ treeNode* findNodeIterative(treeNode* root, int value) /* iterative */
 
 }
 
-treeNode* findNodeIterative_optimized(treeNode* root, int value)
+treeNode* findNodeIterativeOptimized(treeNode* root, int value)
 {
 	while (root && root->value != value)
 	{

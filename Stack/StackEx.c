@@ -284,6 +284,18 @@ void reverseKElementInQueue(Queue *que, int k)
 
 }
 
+int main()
+{
+	Stack stk;
+	StackInitialize(&stk);
+	StackPush(&stk, 1);
+	StackPush(&stk, 2);
+	StackPush(&stk, 3);
+	StackPush(&stk, 4);
+	StackPush(&stk, 5);
+	StackPrint(&stk);
+	return 0;
+}
 
 int main()
 {
@@ -295,6 +307,7 @@ int main()
 	StackPush(&stk, -6);
 	StackPush(&stk, 40);
 	StackPrint(&stk);
+
 	reverseStack2(&stk);
 	StackPrint(&stk);
 	reverseKElementInStack(&stk, 2);
@@ -317,9 +330,9 @@ int main()
 	QueuePrint(&que);
 	reverseKElementInQueue(&que, 2);
 	QueuePrint(&que);
-
 	return 0;
 }
+
 
 int isBalancedParenthesis(char *expn, int size)
 {
