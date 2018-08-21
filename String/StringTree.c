@@ -135,7 +135,7 @@ int main()
 
     TreeNode *root = NULL;
     TreeNode *temp = NULL;
-    FILE *fp = fopen("binaryString.cpp", "r");
+    FILE *fp = fopen("String.c", "r");
     char a[100];
     while (getword(a, fp))
     {
@@ -143,6 +143,6 @@ int main()
     }
     printTree(root);
     printf("\n");
-    printf("quency returned :: %d ",frequency(root, "&&"));
+    printf("quency returned :: %d ",frequency(root, "0"));
     printf("\n");
 }

@@ -23,24 +23,40 @@ int matchExp(char *exp, char *str)
     return matchExpUtil(exp, str, 0, 0);
 }
 
-int match(char *source, char *pattern)
+int main1()
 {
-    int iSource = 0;
-    int iPattern = 0;
-    int sourceLen = strlen(source);
-    int patternLen = strlen(pattern);
+    char *exp = "*hello*?world";
+    char *text = "hello  world";
+    printf("matchExp :: %d ", matchExp(exp, text));
+    return 0;
+}
 
-    for (iSource = 0; iSource < sourceLen; iSource++)
+int matchPattern(char *text, char *pattern)
+{
+    int iText = 0;
+    int iPattern = 0;
+    int textSize = strlen(text);
+    int patternSize = strlen(pattern);
+
+    for (iText = 0; iText < textSize; iText++)
     {
-        if (source[iSource] == pattern[iPattern])
+        if (text[iText] == pattern[iPattern])
         {
             iPattern++;
         }
-        if (iPattern == patternLen)
+        if (iPattern == patternSize)
         {
             return 1;
         }
     }
+    return 0;
+}
+
+int main2()
+{
+    char *pattern = "hello";
+    char *text = "ah erlulo  world";
+    printf("matchPattern :: %d ", matchPattern(text, pattern));
     return 0;
 }
 
@@ -53,6 +69,13 @@ int myAtoi(const char *str)
         str++;
     }
     return value;
+}
+
+int main3()
+{
+    char* st = "100";
+    printf(" %d ", myAtoi(st));
+    return 0;
 }
 
 int isUniqueChar(char *s)
@@ -72,19 +95,28 @@ int isUniqueChar(char *s)
         }
         else
         {
-            printf("Unknown Char!\n");
+            printf("Unknown Char.\n");
             return 0;
         }
 
         if (bitarr & (1 << c))
         {
-            printf("Duplicate detected!\n");
+            printf("Duplicate detected.\n");
             return 0;
         }
         bitarr |= (1 << c);
     }
-    printf("No duplicate detected!\n");
+    printf("No duplicate detected.\n");
     return 1;
+}
+
+int main4()
+{
+    char* st = "APLE";
+    printf(" %d ", isUniqueChar(st));
+    st = "APPLE";
+    printf(" %d ", isUniqueChar(st));
+    return 0;
 }
 
 char ToUpper(char s)
@@ -124,7 +156,7 @@ int isPermutation(char *s1, char *s2)
         count[ch]--;
     }
 
-    for (int i = 0; i < length; i++)
+    for (int i = 0; i < 256; i++)
     {
         if (count[i])
         {
@@ -136,6 +168,17 @@ int isPermutation(char *s1, char *s2)
     return 1;
 }
 
+int main5()
+{
+    char* st = "HELLO";
+    char* st2 = "LLOEH";
+    char* st3 = "LLPEH";
+    printf("IsPermutation %d ", isPermutation(st, st2));
+    printf("IsPermutation %d ", isPermutation(st, st3));
+    return 0;
+}
+
+
 int isPalindrome(char *str)
 {
     int i = 0, j = strlen(str) - 1;
@@ -146,15 +189,27 @@ int isPalindrome(char *str)
     }
     if (i < j)
     {
-        printf("String is not a Palindrome");
+        printf("String is not a Palindrome.\n");
         return 0;
     }
     else
     {
-        printf("String is a Palindrome");
+        printf("String is a Palindrome.\n");
         return 1;
     }
 }
+
+int main6()
+{
+    char* st = "HELLOLLEH";
+    printf("isPalindrome %d \n", isPalindrome(st));
+    st = "HELLOOLLEH";
+    printf("isPalindrome %d \n", isPalindrome(st));
+    st = "HELLOOLLEHA";
+    printf("isPalindrome %d \n", isPalindrome(st));
+    return 0;
+}
+
 void myItoa(char *buffer, int value)
 {
     static int index = -1;
@@ -165,6 +220,18 @@ void myItoa(char *buffer, int value)
     buffer[++index] = '0' + remender;
     buffer[index + 1] = '\0';
 }
+
+int main7()
+{
+    char* st = "HELLOLLEH";
+    printf("isPalindrome %d \n", isPalindrome(st));
+    st = "HELLOOLLEH";
+    printf("isPalindrome %d \n", isPalindrome(st));
+    st = "HELLOOLLEHA";
+    printf("isPalindrome %d \n", isPalindrome(st));
+    return 0;
+}
+
 float MyAtof(char *str)
 {
     float num = 0.0F;
@@ -191,7 +258,7 @@ float MyAtof(char *str)
     }
     return num;
 }
-/* lower to upper */
+
 char LowerUpper(char s)
 {
     if (s >= 97 && s <= (97 + 25))
@@ -200,6 +267,7 @@ char LowerUpper(char s)
         s = s + 32;
     return s;
 }
+
 char *myStrcpy(char *dst, char *src)
 {
     char *ptr = dst;
@@ -207,6 +275,7 @@ char *myStrcpy(char *dst, char *src)
         ;
     return ptr;
 }
+
 int Pow(int x, int n)
 {
     int value;
@@ -223,6 +292,13 @@ int Pow(int x, int n)
         return (x * value * value);
     }
 }
+
+int main8()
+{
+    printf("%d", Pow(10,4));
+    return 0;
+}
+
 int myStrcmp(char *a, char *b)
 {
     while ((*a) == (*b))
@@ -239,35 +315,50 @@ int myStrcmp(char *a, char *b)
     int value = (*a - *b);
     return value;
 }
+
+
+int main9()
+{
+    printf("%d\n", myStrcmp("applaa","applha"));
+    printf("%d\n", myStrcmp("applqa","applha"));
+    printf("%d\n", myStrcmp("applha","applha"));
+    return 0;
+}
+
+
 char *mySubstr(char *src, char *dst, int n)
 {
-    int count = n;
     char *ptr = dst;
-    do
+    int i=0;
+    for(i=0;i<n && src;i++)
     {
-        n--;
-        if (n == 0)
-        {
-            ptr[count - 1] = '\0';
-            break;
-        }
-        else
-        {
-            dst = src;
-            dst++;
-            src++;
-        }
-    } while (src);
+            dst[i] = src[i];
+    }
+    dst[i] = '\0';
     return ptr;
 }
+
+int main10()
+{
+    char dest[100];
+    printf("%s\n", mySubstr("applebanana",dest, 5));
+    return 0;
+}
+
 char *myStrdup(char *src)
 {
     char *dst = (char *)malloc((strlen(src) + 1) * sizeof(char));
     char *ptr = dst;
-    while (*dst++ = *src++)
-        ;
+    while (*dst++ = *src++);
     return ptr;
 }
+
+int main11()
+{
+    printf("%s\n", myStrdup("applebanana"));
+    return 0;
+}
+
 void mymemcpy(void *destPtr, const void *srcPtr, int size)
 {
     char *destTemp = (char *)destPtr;
@@ -277,17 +368,28 @@ void mymemcpy(void *destPtr, const void *srcPtr, int size)
         *destTemp++ = *srcTemp++;
     }
 }
-void reverse(char *s, int N)
+
+void reverse(char *str, int n)
 {
-    char *p, *q;
-    char t;
-    for (p = s, q = s + N - 1; p < q; ++p, --q)
+    char *start, *end;
+    char temp;
+
+    for (start = str, end = str + n - 1; start < end; ++start, --end)
     {
-        t = *q;
-        *q = *p;
-        *p = t;
+        temp = *start;
+        *start = *end;
+        *end = temp;
     }
 }
+
+int main12()
+{
+    char ch[]="Hello";
+    reverse(ch, 5);
+    printf("%s\n", ch);
+    return 0;
+}
+
 void mymemmove(void *from, void *to, int size)
 {
     char *destTemp = (char *)to;
@@ -311,24 +413,43 @@ void mymemmove(void *from, void *to, int size)
     reverse(destTemp, size);
 #endif
 }
+
 int myStrlen(char *src)
 {
     int length = 0;
     while (*src != '\0')
     {
         length++;
+        src++;
     }
     return length;
 }
+
+int main13()
+{
+    char ch[]="Hello";
+    printf("%d\n", myStrlen(ch));
+    return 0;
+}
+
 char *Strcat(char *s1, char *s2)
 {
     char *ptr = s1;
-    while (*s1++)
-        ;
-    while (*s2 != '\0')
+    while (*s1!= '\0')
+        s1++;
+    while (*s2!='\0')
         *s1++ = *s2++;
     return ptr;
 }
+
+int main14()
+{
+    char ch[100]="Hello";
+    printf("%s\n", Strcat(ch, ", World!"));
+    return 0;
+}
+
+
 void reverseString(char *a, int lower, int upper)
 {
     char tempChar;
@@ -341,6 +462,15 @@ void reverseString(char *a, int lower, int upper)
         upper--;
     }
 }
+
+int main15()
+{
+    char ch[100]="Hello, World!";
+    reverseString(ch, 0, 12);
+    printf("%s\n", ch);
+    return 0;
+}
+
 void reverseWords(char *a)
 {
     int length = strlen(a);
@@ -362,10 +492,18 @@ void reverseWords(char *a)
     reverseString(a, 0, length - 1); //-1 because we do not want to reverse ‘\0’
 }
 
+int main16()
+{
+    char ch[100]="Hello, World!";
+    reverseWords(ch);
+    printf("%s\n", ch);
+    return 0;
+}
+
 void printAnagramUtil(char *a, int max, int n)
 {
     if (max == 1)
-        printf(" %s ",a);
+        printf(" %s \n", a);
 
     for (int i = -1; i < max - 1; i++)
     {
@@ -381,6 +519,14 @@ void printAnagram(char *a)
 {
     int n = strlen(a);
     printAnagramUtil(a, n, n);
+}
+
+int main17()
+{
+    char ch[]="Hello";
+    printAnagram(ch);
+    //printf("%s\n", ch);
+    return 0;
 }
 
 void shuffle(char ar[], int n)
@@ -405,6 +551,15 @@ void shuffle(char ar[], int n)
         }
     }
 }
+
+int main18()
+{
+    char ch[]="aaaabbbb";
+    shuffle(ch, 4);
+    printf("%s\n", ch);
+    return 0;
+}
+
 char *addBinary(char *first, char *second)
 {
     int size1 = strlen(first);
@@ -444,6 +599,7 @@ char *addBinary(char *first, char *second)
     total[totalIndex] = (carry == 0) ? '0' : '1';
     return total;
 }
+
 void removeSpaces(char *str)
 {
     char *to = str;
@@ -469,5 +625,8 @@ void removeSpaces(char *str)
 
 int main()
 {
+    char ch[]="aa aa bbb b .";
+    removeSpaces(ch);
+    printf("%s\n", ch);
     return 0;
 }

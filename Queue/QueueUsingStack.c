@@ -34,6 +34,7 @@ void StackInitialize(Stack *stk)
 	stk->top = -1;
 }
 
+
 void StackPush(Stack *stk, int value)
 {
 	if (stk->top < MAX_CAPACITY - 1)

@@ -4,26 +4,27 @@
 
 int BruteForceSearch(char *text, char *pattern)
 {
-    int i = 0, j = 0, count = 0;
     const int n = strlen(text);
     const int m = strlen(pattern);
+    int j;
 
-    while (i <= n - m)
+    for (int i = 0; i <= n - m; i++)
     {
-        j = 0;
-        while (j < m && pattern[j] == text[i + j])
-            j++;
+        for (j = 0; j < m; j++)
+        {
+            if (pattern[j] != text[i + j])
+                break;
+        }
         if (j == m)
             return (i);
-        i++;
     }
     return -1;
 }
 
 int RobinKarp(char *text, char *pattern)
 {
-    int n = strlen(text);
-    int m = strlen(pattern);
+    const int n = strlen(text);
+    const int m = strlen(pattern);
     int i, j;
     int prime = 101;
     int powm = 1;
@@ -126,5 +127,11 @@ int KMPFindCount(char *text, char *pattern)
 
 int main()
 {
+    char *text = "this is a program in c";
+    char *pattern = "program";
+    printf("BruteForceSearch : %d \n", BruteForceSearch(text, pattern));
+    printf("RobinKarp : %d \n", RobinKarp(text, pattern));
+    printf("KMP : %d \n", KMP(text, pattern));
+
     return 0;
 }

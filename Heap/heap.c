@@ -576,7 +576,7 @@ int kthLargestStream(int k)
 	while (1)
 	{
 		printf("Enter data: ");
-		scanf_s("%d", &data);
+		scanf("%d", &data);
 		
 		if (size < k - 1)
 			HeapAdd(&hp,data);
@@ -595,7 +595,7 @@ int kthLargestStream(int k)
 	}
 }
 
-int main()
+int main7()
 {
 	kthLargestStream(3);
 	return 0;
@@ -629,3 +629,65 @@ printf("%d", minJumps(arr, sizeof(arr) / sizeof(int)));
 return 0;
 }
 */
+
+#define ERROR_VALUE 999999
+
+typedef struct medianHeap{
+    Heap minHeap;
+    Heap maxHeap;
+} MedianHeap;
+
+void MedianHeapInit(MedianHeap* heap)
+{
+	HeapInitialize2(&heap->minHeap, 100, 1);
+	HeapInitialize2(&heap->maxHeap, 100, 0);
+}
+
+void MedianHeapAdd(MedianHeap* heap, int value)
+{
+	if (HeapSize(&heap->maxHeap) == 0 || HeapTop(&heap->maxHeap) >= value )
+	{
+		HeapAdd(&heap->maxHeap, value);
+	}
+	else
+	{
+		HeapAdd(&heap->minHeap, value);
+	}
+	//size balancing
+	if (HeapSize(&heap->maxHeap) > HeapSize(&heap->minHeap) + 1)
+	{
+		value = HeapRemove(&heap->maxHeap);
+		HeapAdd(&heap->minHeap, value);
+	}
+	if (HeapSize(&heap->minHeap) > HeapSize(&heap->maxHeap) + 1)
+	{
+		value = HeapRemove(&heap->minHeap);
+		HeapAdd(&heap->maxHeap, value);
+	}
+}
+
+int getMedian(MedianHeap* heap)
+{
+	if (HeapSize(&heap->maxHeap) == 0 && HeapSize(&heap->minHeap) == 0)
+		return ERROR_VALUE;
+
+	if (HeapSize(&heap->maxHeap) == HeapSize(&heap->minHeap))
+		return (HeapTop(&heap->maxHeap) + HeapTop(&heap->minHeap)) / 2;
+	else if (HeapSize(&heap->maxHeap) > HeapSize(&heap->minHeap))
+		return HeapTop(&heap->maxHeap);
+	else 
+		return HeapTop(&heap->minHeap);
+}
+int main()
+{
+	int arr[] = { 1, 9, 2, 8, 3, 7, 4, 6, 5, 1, 9, 2, 8, 3, 7, 4, 6, 5, 10, 10 };
+
+	MedianHeap heap;
+	MedianHeapInit(&heap);
+	for (int i = 0; i < 20; i++)
+	{
+		MedianHeapAdd(&heap, arr[i]);
+		printf("Median after insertion of %d is %d \n", arr[i], getMedian(&heap));
+	}
+	return 0;
+}

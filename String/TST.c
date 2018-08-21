@@ -17,44 +17,44 @@ TSTNode *newNode(char data)
     temp->left = temp->equal = temp->right = NULL;
     return temp;
 }
-void insert(TSTNode **root, char *word)
+void insertTST(TSTNode **root, char *word)
 {
 
     if (!(*root))
         *root = newNode(*word);
 
     if ((*word) < (*root)->data)
-        insert(&((*root)->left), word);
+        insertTST(&((*root)->left), word);
     else if ((*word) > (*root)->data)
-        insert(&((*root)->right), word);
+        insertTST(&((*root)->right), word);
     else
     {
         if (*(word + 1))
-            insert(&((*root)->equal), word + 1);
+            insertTST(&((*root)->equal), word + 1);
         else
             (*root)->isLastChar = 1;
     }
 }
-int searchTST(TSTNode *root, char *word)
+int findTSTUtil(TSTNode *root, char *word)
 {
     if (!root)
         return 0;
 
     if (*word < (root)->data)
-        return searchTST(root->left, word);
+        return findTSTUtil(root->left, word);
     else if (*word > (root)->data)
-        return searchTST(root->right, word);
+        return findTSTUtil(root->right, word);
     else
     {
         if (*(word + 1) == '\0')
             return root->isLastChar;
 
-        return searchTST(root->equal, word + 1);
+        return findTSTUtil(root->equal, word + 1);
     }
 }
-int searchTSTWrapper(TSTNode *root, char *word)
+int findTST(TSTNode *root, char *word)
 {
-    int ret = searchTST(root, word);
+    int ret = findTSTUtil(root, word);
     printf(" %s : ", word);
     ret ? printf("Found\n") : printf("Not Found\n");
     return ret;
@@ -62,16 +62,15 @@ int searchTSTWrapper(TSTNode *root, char *word)
 int main()
 {
     TSTNode *root = NULL;
-    insert(&root, "banana");
-    insert(&root, "apple");
-    insert(&root, "mango");
+    insertTST(&root, "banana");
+    insertTST(&root, "apple");
+    insertTST(&root, "mango");
 
     printf("\nSearch results for apple, banana, grapes and mango :\n");
-    searchTSTWrapper(root, "apple");
-    searchTSTWrapper(root, "banana");
-    searchTSTWrapper(root, "grapes");
-    searchTSTWrapper(root, "mango");
-
+    findTST(root, "apple");
+    findTST(root, "banana");
+    findTST(root, "grapes");
+    findTST(root, "mango");
     return 0;
 }
 
