@@ -73,7 +73,7 @@ int myAtoi(const char *str)
 
 int main3()
 {
-    char* st = "100";
+    char *st = "100";
     printf(" %d ", myAtoi(st));
     return 0;
 }
@@ -112,7 +112,7 @@ int isUniqueChar(char *s)
 
 int main4()
 {
-    char* st = "APLE";
+    char *st = "APLE";
     printf(" %d ", isUniqueChar(st));
     st = "APPLE";
     printf(" %d ", isUniqueChar(st));
@@ -170,14 +170,13 @@ int isPermutation(char *s1, char *s2)
 
 int main5()
 {
-    char* st = "HELLO";
-    char* st2 = "LLOEH";
-    char* st3 = "LLPEH";
+    char *st = "HELLO";
+    char *st2 = "LLOEH";
+    char *st3 = "LLPEH";
     printf("IsPermutation %d ", isPermutation(st, st2));
     printf("IsPermutation %d ", isPermutation(st, st3));
     return 0;
 }
-
 
 int isPalindrome(char *str)
 {
@@ -201,7 +200,7 @@ int isPalindrome(char *str)
 
 int main6()
 {
-    char* st = "HELLOLLEH";
+    char *st = "HELLOLLEH";
     printf("isPalindrome %d \n", isPalindrome(st));
     st = "HELLOOLLEH";
     printf("isPalindrome %d \n", isPalindrome(st));
@@ -223,7 +222,7 @@ void myItoa(char *buffer, int value)
 
 int main7()
 {
-    char* st = "HELLOLLEH";
+    char *st = "HELLOLLEH";
     printf("isPalindrome %d \n", isPalindrome(st));
     st = "HELLOOLLEH";
     printf("isPalindrome %d \n", isPalindrome(st));
@@ -295,7 +294,7 @@ int Pow(int x, int n)
 
 int main8()
 {
-    printf("%d", Pow(10,4));
+    printf("%d", Pow(10, 4));
     return 0;
 }
 
@@ -316,23 +315,21 @@ int myStrcmp(char *a, char *b)
     return value;
 }
 
-
 int main9()
 {
-    printf("%d\n", myStrcmp("applaa","applha"));
-    printf("%d\n", myStrcmp("applqa","applha"));
-    printf("%d\n", myStrcmp("applha","applha"));
+    printf("%d\n", myStrcmp("applaa", "applha"));
+    printf("%d\n", myStrcmp("applqa", "applha"));
+    printf("%d\n", myStrcmp("applha", "applha"));
     return 0;
 }
-
 
 char *mySubstr(char *src, char *dst, int n)
 {
     char *ptr = dst;
-    int i=0;
-    for(i=0;i<n && src;i++)
+    int i = 0;
+    for (i = 0; i < n && src; i++)
     {
-            dst[i] = src[i];
+        dst[i] = src[i];
     }
     dst[i] = '\0';
     return ptr;
@@ -341,7 +338,7 @@ char *mySubstr(char *src, char *dst, int n)
 int main10()
 {
     char dest[100];
-    printf("%s\n", mySubstr("applebanana",dest, 5));
+    printf("%s\n", mySubstr("applebanana", dest, 5));
     return 0;
 }
 
@@ -349,7 +346,8 @@ char *myStrdup(char *src)
 {
     char *dst = (char *)malloc((strlen(src) + 1) * sizeof(char));
     char *ptr = dst;
-    while (*dst++ = *src++);
+    while (*dst++ = *src++)
+        ;
     return ptr;
 }
 
@@ -384,7 +382,7 @@ void reverse(char *str, int n)
 
 int main12()
 {
-    char ch[]="Hello";
+    char ch[] = "Hello";
     reverse(ch, 5);
     printf("%s\n", ch);
     return 0;
@@ -427,7 +425,7 @@ int myStrlen(char *src)
 
 int main13()
 {
-    char ch[]="Hello";
+    char ch[] = "Hello";
     printf("%d\n", myStrlen(ch));
     return 0;
 }
@@ -435,20 +433,34 @@ int main13()
 char *Strcat(char *s1, char *s2)
 {
     char *ptr = s1;
-    while (*s1!= '\0')
+    while (*s1 != '\0')
         s1++;
-    while (*s2!='\0')
+    while (*s2 != '\0')
         *s1++ = *s2++;
     return ptr;
 }
 
 int main14()
 {
-    char ch[100]="Hello";
+    char ch[100] = "Hello";
     printf("%s\n", Strcat(ch, ", World!"));
     return 0;
 }
 
+void reverseString2(char *a, int n)
+{
+    int lower = 0;
+    int upper = n – 1;
+    char tempChar;
+    while (lower < upper)
+    {
+        tempChar = a[lower];
+        a[lower] = a[upper];
+        a[upper] = tempChar;
+        lower++;
+        upper--;
+    }
+}
 
 void reverseString(char *a, int lower, int upper)
 {
@@ -465,7 +477,7 @@ void reverseString(char *a, int lower, int upper)
 
 int main15()
 {
-    char ch[100]="Hello, World!";
+    char ch[100] = "Hello, World!";
     reverseString(ch, 0, 12);
     printf("%s\n", ch);
     return 0;
@@ -494,7 +506,7 @@ void reverseWords(char *a)
 
 int main16()
 {
-    char ch[100]="Hello, World!";
+    char ch[100] = "Hello, World!";
     reverseWords(ch);
     printf("%s\n", ch);
     return 0;
@@ -523,7 +535,7 @@ void printAnagram(char *a)
 
 int main17()
 {
-    char ch[]="Hello";
+    char ch[] = "Hello";
     printAnagram(ch);
     //printf("%s\n", ch);
     return 0;
@@ -554,7 +566,7 @@ void shuffle(char ar[], int n)
 
 int main18()
 {
-    char ch[]="aaaabbbb";
+    char ch[] = "aaaabbbb";
     shuffle(ch, 4);
     printf("%s\n", ch);
     return 0;
@@ -625,7 +637,7 @@ void removeSpaces(char *str)
 
 int main()
 {
-    char ch[]="aa aa bbb b .";
+    char ch[] = "aa aa bbb b .";
     removeSpaces(ch);
     printf("%s\n", ch);
     return 0;

@@ -163,3 +163,4 @@ int main()
     printf("Find 18 : %d ", FindCount(&myTable, 18));
     return 0;
 }
+

@@ -41,7 +41,6 @@ void StackPush2(Stack *stk, int data)
     }
 }
 
-
 int StackPop1(Stack *stk)
 {
     if (stk->top1 >= 0)
@@ -74,4 +73,16 @@ int StackPop2(Stack *stk)
 
 int main()
 {
+    Stack stk;
+    StackInitialize(&stk);
+    for (int i = 0; i < 20; i++)
+    {
+        StackPush1(&stk, i);
+        StackPush2(&stk, i + 10);
+    }
+    for (int i = 0; i < 21; i++)
+    {
+        StackPop1(&stk);
+        StackPop2(&stk);
+    }
 }

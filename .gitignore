@@ -8,3 +8,6 @@ Stack/a.exe
 Stack/err
 String/a.exe
 String/err
+*.exe
+Queue/err
+*.exe

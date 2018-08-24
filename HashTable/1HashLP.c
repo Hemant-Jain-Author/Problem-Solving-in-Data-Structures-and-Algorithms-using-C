@@ -7,8 +7,7 @@
 
 unsigned int Hash(int key, int size) //division method
 {
-    unsigned int hashValue = 0;
-    hashValue = key;
+    unsigned int hashValue = key;
     return hashValue % size;
 }
 
