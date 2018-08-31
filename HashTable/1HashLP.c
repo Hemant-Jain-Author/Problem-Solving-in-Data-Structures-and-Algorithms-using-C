@@ -24,19 +24,7 @@ typedef struct hashTable_t
     char *flag;
 } HashTable;
 
-HashTable *HashInit(int size)
-{
-    HashTable *hTable;
-    hTable = (HashTable *)malloc(sizeof(HashTable));
-    hTable->size = size;
-    hTable->array = (int *)malloc(hTable->size * sizeof(int));
-    hTable->flag = (char *)malloc(hTable->size * sizeof(char));
-    for (int i = 0; i < hTable->size; i++)
-        hTable->flag[i] = EMPTY_NODE;
-    return hTable;
-}
-
-void HashInit2(HashTable *hTable, int size)
+void HashInit(HashTable *hTable, int size)
 {
     hTable->size = size;
     hTable->array = (int *)malloc(hTable->size * sizeof(int));
@@ -128,7 +116,7 @@ int HashRemove(HashTable *hTable, int value)
 int main()
 {
     HashTable myTable;
-    HashInit2(&myTable, 10);
+    HashInit(&myTable, 10);
     HashAdd(&myTable, 89);
     HashAdd(&myTable, 89);
     HashAdd(&myTable, 18);

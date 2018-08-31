@@ -21,19 +21,7 @@ unsigned int Hash(int key, int tableSize)//division method
 	return hashValue % tableSize;
 }
 
-HashTable* HashInit(int size)
-{
-	HashTable* hTable;
-	hTable = (HashTable*)malloc(sizeof(HashTable));
-	hTable->tableSize = size;
-	hTable->listArray = (DataNode**)malloc(hTable->tableSize * sizeof(DataNode*));
-
-	for (int i = 0; i<hTable->tableSize; i++)
-		hTable->listArray[i] = NULL;
-	return hTable;
-}
-
-void HashInit2(HashTable* hTable, int size)
+void HashInit(HashTable* hTable, int size)
 {
 	hTable->tableSize = size;
 	hTable->listArray = (DataNode**)malloc(hTable->tableSize * sizeof(DataNode*));
@@ -116,7 +104,7 @@ int HashRemove(HashTable* hTable, int value)
 int main()
 {
     HashTable myTable;
-    HashInit2(&myTable, 10);
+    HashInit(&myTable, 10);
     HashAdd(&myTable, 88);
     HashAdd(&myTable, 88);
     HashAdd(&myTable, 18);

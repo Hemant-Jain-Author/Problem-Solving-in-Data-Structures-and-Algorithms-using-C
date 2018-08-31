@@ -24,7 +24,7 @@ unsigned int Hash(int key, int tableSize) //division method
     return hashValue % tableSize;
 }
 
-void HashInit2(HashTable *hTable, int size)
+void HashInit(HashTable *hTable, int size)
 {
     hTable->tableSize = size;
     hTable->listArray = (DataNode **)malloc(hTable->tableSize * sizeof(DataNode *));
@@ -146,7 +146,7 @@ int CounterRemove(HashTable *hTable, int key)
 int main()
 {
     HashTable myTable;
-    HashInit2(&myTable, 10);
+    HashInit(&myTable, 10);
     CounterAdd(&myTable, 88);
     CounterAdd(&myTable, 88);
     CounterAdd(&myTable, 18);

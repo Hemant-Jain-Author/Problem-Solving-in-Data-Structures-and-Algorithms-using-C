@@ -192,7 +192,7 @@ int searchList(ListNode *head, int value)
     return 0;
 }
 
-void deleteFirstNodes(ListNode **ptrHead, int delValue)
+void deleteFirstNodes(ListNode **ptrHead)
 {
     ListNode *currNode = *ptrHead;
     ListNode *nextNode;
@@ -330,7 +330,7 @@ void reverseList(ListNode **ptrHead)
     *ptrHead = prevNode;
 }
 
-ListNode *reverseRecurse2(ListNode *currentNode, ListNode *nextNode)
+ListNode *reverseRecurseUtil(ListNode *currentNode, ListNode *nextNode)
 {
     ListNode *ret;
     if (!currentNode)
@@ -342,14 +342,14 @@ ListNode *reverseRecurse2(ListNode *currentNode, ListNode *nextNode)
         return currentNode;
     }
 
-    ret = reverseRecurse2(currentNode->next, currentNode);
+    ret = reverseRecurseUtil(currentNode->next, currentNode);
     currentNode->next = nextNode;
     return ret;
 }
 
 void reverseRecurse(ListNode **ptrHead)
 {
-    *ptrHead = reverseRecurse2(*ptrHead, NULL);
+    *ptrHead = reverseRecurseUtil(*ptrHead, NULL);
 }
 
 void removeDuplicate(ListNode *head)
@@ -420,6 +420,21 @@ int compareList(ListNode *head1, ListNode *head2)
         return 0;
     else
         return compareList(head1->next, head2->next);
+}
+
+int compareList2(ListNode *head1, ListNode *head2)
+{
+    while (head1 == NULL && head2 == NULL )
+    {
+        if (head1->value != head2->value)
+            return 0;
+        head1 = head1->next;
+        head2 = head2->next;
+    }
+
+    if (head1 == NULL && head2 == NULL)
+        return 1;
+    return 0;
 }
 
 int loopDetect(ListNode *head)
