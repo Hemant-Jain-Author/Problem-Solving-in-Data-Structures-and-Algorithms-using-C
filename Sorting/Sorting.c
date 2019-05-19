@@ -255,16 +255,38 @@ void BucketSort(int array[], int n, int range)
 int main1()
 {
     int arr[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    BubbleSort(arr, sizeof(arr) / sizeof(int));
     printArray(arr, sizeof(arr) / sizeof(int));
-    //BubbleSort(arr, sizeof(arr) / sizeof(int));
-    //InsertionSort(arr, sizeof(arr) / sizeof(int));
-    //SelectionSort(arr, sizeof(arr) / sizeof(int));
-    //SelectionSort2(arr, sizeof(arr) / sizeof(int));
-    //MergeSort(arr, sizeof(arr) / sizeof(int));
-    //QuickSort(arr, sizeof(arr) / sizeof(int));
-    //BucketSort(arr, sizeof(arr) / sizeof(int), 10);
-    printf("Fifth element :: %d", QuickSelect(arr, sizeof(arr) / sizeof(int), 5));
-    printArray(arr, sizeof(arr) / sizeof(int));
+    
+
+    int arr2[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    InsertionSort(arr2, sizeof(arr2) / sizeof(int));
+    printArray(arr2, sizeof(arr2) / sizeof(int));
+ 
+    //int arr3[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    int arr3[10] = {9, 1, 8, 2, 7, 3, 6, 4, 5};
+    SelectionSort(arr3, sizeof(arr3) / sizeof(int));
+    printArray(arr3, sizeof(arr3) / sizeof(int));
+ 
+    int arr4[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    SelectionSort2(arr4, sizeof(arr4) / sizeof(int));
+    printArray(arr4, sizeof(arr4) / sizeof(int));
+ 
+    int arr5[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    MergeSort(arr5, sizeof(arr5) / sizeof(int));
+    printArray(arr5, sizeof(arr5) / sizeof(int));
+ 
+    int arr6[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    QuickSort(arr6, sizeof(arr6) / sizeof(int));
+    printArray(arr6, sizeof(arr6) / sizeof(int));
+ 
+    int arr7[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    BucketSort(arr7, sizeof(arr7) / sizeof(int), 10);
+    printArray(arr7, sizeof(arr7) / sizeof(int));
+ 
+    int arr8[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    printf("Fifth element :: %d", QuickSelect(arr8, sizeof(arr8) / sizeof(int), 5));
+    printArray(arr, sizeof(arr8) / sizeof(int));
 }
 
 int Partition01(int arr[], int size)
@@ -320,6 +342,7 @@ int main2()
     int arr[] = {0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1};
     Partition01(arr, sizeof(arr) / sizeof(int));
     printArray(arr, sizeof(arr) / sizeof(int));
+
     int arr2[] = {0, 1, 1, 0, 1, 2, 1, 2, 0, 0, 0, 1};
     Partition012(arr2, sizeof(arr2) / sizeof(int));
     printArray(arr2, sizeof(arr2) / sizeof(int));
@@ -412,11 +435,12 @@ void ArrayReduction(int arr[], int size)
 }
 
 //Testing code
-int main8()
+int main5()
 {
     int arr[] = {5, 1, 1, 1, 2, 3, 5};
     ArrayReduction(arr, sizeof(arr) / sizeof(int));
 }
+
 /*
 def SortFrequency(int arr[], int size):
 	HashTable ht;
@@ -489,13 +513,14 @@ void SortByOrder(int arr[], int size, int arr2[], int size2)
 }
 
 // Testing code
-int main7()
+int main6()
 {
     int arr[] = {2, 1, 2, 5, 7, 1, 9, 3, 6, 8, 8};
     int arr2[] = {2, 1, 8, 3};
     SortByOrder(arr, sizeof(arr) / sizeof(int), arr2, sizeof(arr2) / sizeof(int));
 }
 */
+
 void merge(int arr1[], int size1, int arr2[], int size2)
 {
     int index = 0;
@@ -523,7 +548,7 @@ void merge(int arr1[], int size1, int arr2[], int size2)
 }
 
 // Testing code.
-int main9()
+int main7()
 {
     int arr1[] = {1, 5, 9, 10, 15, 20};
     int arr2[] = {2, 3, 8, 13};
@@ -635,9 +660,19 @@ void UnionIntersectionUnsorted(int arr1[], int size1, int arr2[], int size2)
     UnionIntersectionSorted(arr1, size1, arr2, size2);
 }
 
-int main()
+int main8()
 {
     int arr1[] = {1, 11, 2, 3, 14, 5, 6, 8, 9};
     int arr2[] = {2, 4, 5, 12, 7, 8, 13, 10};
     UnionIntersectionUnsorted(arr1, sizeof(arr1) / sizeof(int), arr2, sizeof(arr2) / sizeof(int));
+}
+
+int main(){
+    main1();
+    main2();
+    main3();
+    main4();
+    main5();
+    main7();
+    main8();
 }
