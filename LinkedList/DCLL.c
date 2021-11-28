@@ -1,14 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct listNode
+typedef struct Node_t
 {
     int value;
-    struct listNode *next;
-    struct listNode *prev;
+    struct Node_t *next;
+    struct Node_t *prev;
 } Node;
 
-int insertAtStart(Node **ptrHead, int value)
+typedef struct DCLL_t
+{
+    Node *head;
+} DCLL;
+
+void InitDCLL(DCLL *list){
+    list->head = NULL;
+}
+
+int insertAtStart(DCLL *list, int value)
 {
     Node *temp = (Node *)malloc(sizeof(Node));
     if (!temp)
@@ -16,29 +25,27 @@ int insertAtStart(Node **ptrHead, int value)
         printf("Memory Allocation Error");
         return 0;
     }
+    temp->value = value;
 
-    Node *head = *ptrHead;
-
+    Node *head = list->head;
     if (!head)
     {
-        temp->value = value;
         temp->next = temp;
         temp->prev = temp;
-        *ptrHead = temp;
+        list->head = temp;
     }
     else
     {
-        temp->value = value;
         temp->prev = head->prev;
         temp->prev->next = temp;
         temp->next = head;
         head->prev = temp;
-        *ptrHead = temp;
+        list->head = temp;
     }
     return 1;
 }
 
-int insertAtEnd(Node **ptrHead, int value)
+int insertAtEnd(DCLL *list, int value)
 {
     Node *temp = (Node *)malloc(sizeof(Node));
     if (!temp)
@@ -46,19 +53,17 @@ int insertAtEnd(Node **ptrHead, int value)
         printf("Memory Allocation Error");
         return 0;
     }
+    temp->value = value;
 
-    Node *head = *ptrHead;
-
+    Node *head = list->head;
     if (!head)
     {
-        temp->value = value;
         temp->next = temp;
         temp->prev = temp;
-        *ptrHead = temp;
+        list->head = temp;
     }
     else
     {
-        temp->value = value;
         temp->prev = head->prev;
         temp->prev->next = temp;
         temp->next = head;
@@ -67,37 +72,36 @@ int insertAtEnd(Node **ptrHead, int value)
     return 1;
 }
 
-int removeFromStart(Node **ptrHead)
+int removeFromStart(DCLL *list)
 {
-    Node *head = *ptrHead;
-
+    Node *head = list->head;
     if (!head)
-        printf("EmptyListError");
+        printf("Empty List Error");
 
     int value = head->value;
 
     if (head->next == head)
     {
         free(head);
-        *ptrHead = NULL;
+        list->head = NULL;
         return value;
     }
+
     Node *tail = head->prev;
     Node *next = head->next;
 
     next->prev = tail;
     tail->next = next;
     free(head);
-    *ptrHead = next;
+    list->head = next;
     return value;
 }
 
-int removeFromEnd(Node **ptrHead)
+int removeFromEnd(DCLL *list)
 {
-    Node *head = *ptrHead;
-
+    Node *head = list->head;
     if (!head)
-        printf("EmptyListError");
+        printf("Empty List Error");
 
     Node *tail = head->prev;
     int value = tail->value;
@@ -105,7 +109,7 @@ int removeFromEnd(Node **ptrHead)
     if (tail->next == tail)
     {
         free(tail);
-        *ptrHead = NULL;
+        list->head = NULL;
         return value;
     }
 
@@ -116,12 +120,13 @@ int removeFromEnd(Node **ptrHead)
     return value;
 }
 
-int isPresent(Node **ptrHead, int key)
+int searchList(DCLL *list, int key)
 {
-    Node *head = *ptrHead;
-    Node *curr = head;
+    Node *head = list->head;
     if (!head)
         return 0;
+
+    Node *curr = head;
 
     do
     {
@@ -135,9 +140,9 @@ int isPresent(Node **ptrHead, int key)
     return 0;
 }
 
-void freeList(Node **ptrHead)
+void freeList(DCLL *list)
 {
-    Node *head = *ptrHead;
+    Node *head = list->head;
     if (!head)
         return;
 
@@ -150,43 +155,45 @@ void freeList(Node **ptrHead)
         curr = next;
     }
     free(head);
-    *ptrHead = NULL;
+    list->head = NULL;
 }
 
-int printList(Node *head)
+int printList(DCLL *list)
 {
-    Node *curr = head;
+    Node *head = list->head;
     if (!head)
         return 0;
-
+    Node *curr = head;
     do
     {
-        printf(" %d ", curr->value);
+        printf("%d ", curr->value);
         curr = curr->next;
     } while (curr != head);
-
+    printf("\n");
     return 0;
 }
 
 int main()
 {
-    Node *head = NULL;
-    Node **ptrHead = &head;
-    insertAtStart(ptrHead, 1);
-    insertAtStart(ptrHead, 2);
-    insertAtStart(ptrHead, 3);
-    insertAtStart(ptrHead, 4);
-    insertAtStart(ptrHead, 5);
-    insertAtStart(ptrHead, 6);
-    insertAtStart(ptrHead, 7);
-    insertAtEnd(ptrHead, 9);
-    printList(*ptrHead);
-    removeFromEnd(ptrHead);
-    removeFromStart(ptrHead);
-    printList(*ptrHead);
-    printf("\n %d \n",isPresent(ptrHead,5));
-    printf("\n %d \n",isPresent(ptrHead,9));
-    freeList(ptrHead);
-    printList(*ptrHead);
+    DCLL list;
+    InitDCLL(&list);
+    insertAtStart(&list, 1);
+    insertAtStart(&list, 2);
+    insertAtStart(&list, 3);
+    insertAtStart(&list, 4);
+    insertAtStart(&list, 5);
+    insertAtEnd(&list, 6);
+    insertAtEnd(&list, 7);
+    printList(&list);
+
+    removeFromEnd(&list);
+    removeFromStart(&list);
+    printList(&list);
+
+    printf("searchList: %d \n",searchList(&list,3));
+    printf("searchList: %d \n",searchList(&list,6));
+    
+    freeList(&list);
+    printList(&list);
     return 0;
 }

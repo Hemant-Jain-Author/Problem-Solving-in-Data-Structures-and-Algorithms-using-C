@@ -226,12 +226,13 @@ void MergeSort(int *arr, int size)
 
 void printArray(int *arr, int size)
 {
+    printf("Array : ");
     for (int i = 0; i < size; i++)
         printf(" %d ", arr[i]);
     printf("\n");
 }
 
-void BucketSort(int array[], int n, int range)
+void CountSort(int array[], int n, int range)
 {
     int i, j = 0;
     int *count = (int *)malloc((range + 1) * sizeof(int));
@@ -251,42 +252,121 @@ void BucketSort(int array[], int n, int range)
     free(count);
 }
 
+void shellSort(int arr[], int n)
+{
+	// Gap starts with n/2 and half in each iteration.
+	for (int gap = n / 2; gap > 0; gap /= 2)
+	{
+		// Do a gapped insertion sort.
+		for (int i = gap; i < n; i += 1)
+		{
+			int curr = arr[i];
+
+			// Shift elements of already sorted list
+			// to find right position for curr value.
+			int j;
+			for (j = i; j >= gap && more(arr[j - gap], curr); j -= gap)
+			{
+				arr[j] = arr[j - gap];
+			}
+
+			// Put current value in its correct location
+			arr[j] = curr;
+		}
+	}
+}
+/*
+void bucketSort(int arr[], int maxValue)
+{
+    int numBucket = 5;
+	int length = strlen(arr)/strlen(int);
+	if (length == 0)
+	{
+		return;
+	}
+
+	// Create empty buckets
+	std::vector<std::vector<int>> bucket(numBucket);
+	for (int i = 0; i < numBucket; i++)
+		bucket.push_back(std::vector<int>());
+
+	int div = std::ceil(static_cast<double>(maxValue) / numBucket);
+
+	// Add elements into the buckets
+	for (int i = 0; i < length; i++)
+	{
+		if (arr[i] < 0 || arr[i] > maxValue)
+		{
+			std::cout << "Value out of range." << std::endl;
+			return;
+		}
+
+		int bucketIndex = (arr[i] / div);
+
+		// Maximum value will be assigned to last bucket.
+		if (bucketIndex >= numBucket)
+		{
+			bucketIndex = numBucket - 1;
+		}
+		bucket[bucketIndex].push_back(arr[i]);
+	}
+
+	// Sort the elements of each bucket.
+	for (int i = 0; i < numBucket; i++)
+		std::sort(bucket[i].begin(), bucket[i].end());
+
+	// Populate output from the sorted subarray.
+	int index = 0, count;
+	for (int i = 0; i < numBucket; i++)
+	{
+		std::vector<int> temp = bucket[i];
+		count = temp.size();
+		for (int j = 0; j < count; j++)
+		{
+			arr[index++] = temp[j];
+		}
+	}
+}
+*/
 /* Testing code */
 int main1()
 {
-    int arr[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    int arr[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
     BubbleSort(arr, sizeof(arr) / sizeof(int));
     printArray(arr, sizeof(arr) / sizeof(int));
     
 
-    int arr2[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    int arr2[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
     InsertionSort(arr2, sizeof(arr2) / sizeof(int));
     printArray(arr2, sizeof(arr2) / sizeof(int));
  
-    //int arr3[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
-    int arr3[10] = {9, 1, 8, 2, 7, 3, 6, 4, 5};
+    //int arr3[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    int arr3[] = {9, 1, 8, 2, 7, 3, 6, 4, 5};
     SelectionSort(arr3, sizeof(arr3) / sizeof(int));
     printArray(arr3, sizeof(arr3) / sizeof(int));
  
-    int arr4[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    int arr4[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
     SelectionSort2(arr4, sizeof(arr4) / sizeof(int));
     printArray(arr4, sizeof(arr4) / sizeof(int));
  
-    int arr5[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    int arr5[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
     MergeSort(arr5, sizeof(arr5) / sizeof(int));
     printArray(arr5, sizeof(arr5) / sizeof(int));
  
-    int arr6[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    int arr6[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
     QuickSort(arr6, sizeof(arr6) / sizeof(int));
     printArray(arr6, sizeof(arr6) / sizeof(int));
  
-    int arr7[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
-    BucketSort(arr7, sizeof(arr7) / sizeof(int), 10);
+    int arr7[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    CountSort(arr7, sizeof(arr7) / sizeof(int), 10);
     printArray(arr7, sizeof(arr7) / sizeof(int));
  
-    int arr8[10] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
-    printf("Fifth element :: %d", QuickSelect(arr8, sizeof(arr8) / sizeof(int), 5));
-    printArray(arr, sizeof(arr8) / sizeof(int));
+    int arr8[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
+    printf("Fifth element :: %d\n", QuickSelect(arr8, sizeof(arr8) / sizeof(int), 5));
+
+    int arr9[] = {36, 32, 11, 6, 19, 31, 17, 3};
+    shellSort(arr9, sizeof(arr9) / sizeof(int));
+    printArray(arr9, sizeof(arr9) / sizeof(int));
 }
 
 int Partition01(int arr[], int size)
@@ -666,6 +746,7 @@ int main8()
     int arr2[] = {2, 4, 5, 12, 7, 8, 13, 10};
     UnionIntersectionUnsorted(arr1, sizeof(arr1) / sizeof(int), arr2, sizeof(arr2) / sizeof(int));
 }
+
 
 int main(){
     main1();

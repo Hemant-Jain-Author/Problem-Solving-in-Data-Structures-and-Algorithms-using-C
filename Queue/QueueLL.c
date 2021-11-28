@@ -1,14 +1,29 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define ERROR_VALUE 9999;
-typedef struct queueNode_t
+#define ERROR_VALUE 999999;
+
+typedef struct QueueNode_t
 {
     int value;
-    struct queueNode_t *next;
+    struct QueueNode_t *next;
 } QueueNode;
 
+typedef struct Queue_t
+{
+    QueueNode *tail;
+} Queue;
 
-int QueueAdd(QueueNode **ptrTail, int value)
+void QueueInit(Queue *queue) 
+{
+    queue->tail = NULL;
+}
+
+int QueueIsEmpty(Queue *queue)
+{
+    return queue->tail == NULL;
+}
+
+int QueueAdd(Queue *queue, int value)
 {
     QueueNode *temp = (QueueNode *)malloc(sizeof(QueueNode));
     if (!temp)
@@ -16,74 +31,68 @@ int QueueAdd(QueueNode **ptrTail, int value)
         printf("Memory Allocation Error");
         return 0;
     }
+    temp->value = value;
 
-    QueueNode *tail = *ptrTail;
-
-    if (!tail)
-    {
-        temp->value = value;
+    if (!queue->tail) {
         temp->next = temp;
-        *ptrTail = temp;
-    }
-    else
-    {
-        temp->value = value;
-        temp->next = tail->next;
-        tail->next = temp;
-        *ptrTail = temp;
+        queue->tail = temp;    
+    } else {
+        temp->next = queue->tail->next;    
+        queue->tail->next = temp;
+        queue->tail = temp;
     }
     return 1;
 }
-
-int QueueRemove(QueueNode **ptrTail)
+int QueueRemove(Queue *queue)
 {
-    QueueNode *tail = *ptrTail;
-    QueueNode *deleteMe;
     int value;
+    QueueNode *deleteMe;
 
-    if (!tail)
+    if (!queue->tail)
         return ERROR_VALUE;
 
-    if (tail->next == tail)
+    if (queue->tail->next == queue->tail)
     {
-        value = tail->value;
-        free(tail);
-        *ptrTail = NULL;
+        value = queue->tail->value;
+        free(queue->tail);
+        queue->tail = NULL;
         return value;
     }
-    deleteMe = tail->next;
+
+    deleteMe = queue->tail->next;
     value = deleteMe->value;
-    tail->next = deleteMe->next;
+    queue->tail->next = deleteMe->next;
     free(deleteMe);
     return value;
 }
 
-void printList(QueueNode *tail)
+void QueuePrint(Queue *queue)
 {
-    if (!tail)
+    if (!queue->tail)
         return;
 
-    QueueNode *head = tail->next;
-    printf("\n%d ", head->value);
+    QueueNode *head = queue->tail->next;
+    printf("Queue %d ", head->value);
     QueueNode *currNode = head->next;
-
     while (currNode != head)
     {
         printf("%d ", currNode->value);
         currNode = currNode->next;
     }
+    printf("\n");
 }
 
 int main()
 {
-    QueueNode *tail = NULL;
-    QueueAdd(&tail, 1);
-    QueueAdd(&tail, 2);
-    QueueAdd(&tail, 3);
-    QueueAdd(&tail, 4);
-    QueueAdd(&tail, 5);
-    for (int i = 0; i < 5; i++)
-        printf("%d ", QueueRemove(&tail));
-    return 0;
+    Queue queue;
+    QueueInit(&queue);
+    QueueAdd(&queue, 1);
+    QueueAdd(&queue, 2);
+    QueueAdd(&queue, 3);
+    QueueAdd(&queue, 4);
+    QueuePrint(&queue);
 
+    while(!QueueIsEmpty(&queue))
+        printf("%d ", QueueRemove(&queue));
+    return 0;
 }

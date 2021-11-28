@@ -1,96 +1,89 @@
-/*
-   For any linked list there are only three cases zero element ,one element,general
-   Any program which is likely to change head pointer is to be passed a double pointer 
-
-   for doubly linked list we have few more things 
-   0> NULL values
-   1> only element (it genaralt introduce an if statement with null)
-   2> Always an if before while. which will check from this head .
-   3> general case (check with the initial head kept)
-   4> Avoide using recursion solutions it makes life harder
-  
-  */
 
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct listNode
+typedef struct Node_t
 {
     int value;
-    struct listNode *next;
+    struct Node_t *next;
 } Node;
 
-int insertAtStart(Node **ptrTail, int value)
+typedef struct CircularLL_t
+{
+    Node *tail;
+} CircularLL;
+
+CircularLL* createCircularLL(){
+    CircularLL *list = (CircularLL *)malloc(sizeof(CircularLL));
+    list->tail = NULL;
+    return list;
+}
+
+int insertAtStart(CircularLL* list, int value)
 {
     Node *temp = (Node *)malloc(sizeof(Node));
-    if (!temp)
-    {
+    if (!temp) {
         printf("Memory Allocation Error");
         return 0;
     }
+    temp->value = value;
+    Node *tail = list->tail;
 
-    Node *tail = *ptrTail;
-
-    if (!tail)
+    if (!tail) 
     {
-        temp->value = value;
         temp->next = temp;
-        *ptrTail = temp;
+        list->tail = temp;
     }
     else
     {
-        temp->value = value;
         temp->next = tail->next;
         tail->next = temp;
     }
     return 1;
 }
 
-int insertAtEnd(Node **ptrTail, int value)
+int insertAtEnd(CircularLL *list, int value)
 {
     Node *temp = (Node *)malloc(sizeof(Node));
-    if (!temp)
-    {
+    if (!temp) {
         printf("Memory Allocation Error");
         return 0;
     }
-
-    Node *tail = *ptrTail;
+    temp->value = value;
+    Node *tail = list->tail;
 
     if (!tail)
     {
-        temp->value = value;
         temp->next = temp;
-        *ptrTail = temp;
+        list->tail = temp;
     }
     else
     {
-        temp->value = value;
         temp->next = tail->next;
         tail->next = temp;
-        *ptrTail = temp;
+        list->tail = temp;
     }
     return 1;
 }
 
-void printList(Node *tail)
+void printList(CircularLL *list)
 {
+    Node* tail = list->tail;
     if (!tail)
         return;
-
-    Node *head = tail->next;
-    printf("\n%d ", head->value);
-    Node *currNode = head->next;
-
-    while (currNode != head)
+    
+    Node *curr = tail->next;
+    while (curr != tail)
     {
-        printf("%d ", currNode->value);
-        currNode = currNode->next;
+        printf("%d ", curr->value);
+        curr = curr->next;
     }
+    printf("%d \n", curr->value);
 }
 
-int searchList(Node *tail, int value)
+int searchList(CircularLL *list, int value)
 {
+    Node* tail = list->tail;
     if (!tail)
         return 0;
 
@@ -107,69 +100,33 @@ int searchList(Node *tail, int value)
     return 0;
 }
 
-void deleteList(Node **ptrTail)
+void deleteList(CircularLL *list)
 {
-    Node *tail = *ptrTail;
-    Node *curr;
-    Node *next;
+    Node *tail = list->tail;
     if (!tail)
         return;
 
-    curr = tail->next;
+    Node *curr = tail->next;
     free(tail);
-
+    Node *next;
+    
     while (curr != tail)
     {
         next = curr->next;
         free(curr);
         curr = next;
     }
-    *ptrTail = NULL;
+    list->tail = NULL;
 }
 
-/* Delete a node given its pointer */
-void deleteNodePtr(Node **ptrTail, Node *ptrDel)
+int deleteNode(CircularLL *list, int value)
 {
-    Node *tail = *ptrTail;
-    Node *curr = tail;
-    Node *prev = NULL;
-    Node *deleteMe;
-
-    if (ptrDel == NULL || !tail)
-        return;
-
-    prev = curr;
-    curr = curr->next;
-    while (curr != tail)
-    {
-        if (curr == ptrDel)
-        {
-            prev->next = curr->next;
-            free(curr);
-            return;
-        }
-        prev = curr;
-        curr = curr->next;
-    }
-    if (curr == ptrDel)
-    {
-        prev->next = curr->next;
-        free(curr);
-        *ptrTail = prev;
-    }
-}
-
-int deleteNode(Node **ptrTail, int value)
-{
-    Node *tail = *ptrTail;
-    Node *curr = tail;
-    Node *prev = NULL;
-    Node *deleteMe;
-
+    Node *tail = list->tail;
     if (!tail)
         return 0;
 
-    prev = curr;
+    Node *curr = tail;
+    Node *prev = curr;
     curr = curr->next;
     while (curr != tail)
     {
@@ -186,27 +143,25 @@ int deleteNode(Node **ptrTail, int value)
     {
         prev->next = curr->next;
         free(curr);
-        *ptrTail = prev;
+        list->tail = prev;
         return 1;
     }
     return 0;
 }
 
-int deleteHeadNode(Node **ptrTail)
+int deleteHeadNode(CircularLL *list)
 {
-    Node *tail = *ptrTail;
-    Node *deleteMe;
-
+    Node *tail = list->tail;
     if (!tail)
         return 0;
 
     if (tail->next == tail)
     {
         free(tail);
-        *ptrTail = NULL;
+        list->tail = NULL;
         return 1;
     }
-    deleteMe = tail->next;
+    Node *deleteMe = tail->next;
     tail->next = deleteMe->next;
     free(deleteMe);
     return 1;
@@ -214,30 +169,27 @@ int deleteHeadNode(Node **ptrTail)
 
 int main()
 {
-    Node *head = NULL;
-    Node **ptrHead = &head;
+    CircularLL* list = createCircularLL();
+    insertAtStart(list, 1);
+    insertAtStart(list, 2);
+    insertAtStart(list, 3);
+    insertAtStart(list, 4);
+    insertAtStart(list, 5);
+    insertAtEnd(list, 6);
+    insertAtEnd(list, 7);
+    printList(list);
 
-    insertAtStart(ptrHead, 1);
-    insertAtStart(ptrHead, 2);
-    insertAtStart(ptrHead, 3);
-    insertAtStart(ptrHead, 4);
-    insertAtStart(ptrHead, 5);
-    insertAtStart(ptrHead, 6);
-    insertAtStart(ptrHead, 7);
-    printList(*ptrHead);
-    deleteNode(ptrHead, 6);
-    printList(*ptrHead);
+    deleteNode(list, 4);
+    printList(list);
 
-    Node *head2 = NULL;
-    Node **ptrHead2 = &head2;
+    printf("Search list : %d\n", searchList(list, 3));
+    printf("Search list : %d\n", searchList(list, 6));
+    printf("Search list : %d\n", searchList(list, 4));
 
-    insertAtEnd(ptrHead2, 1);
-    insertAtEnd(ptrHead2, 2);
-    insertAtEnd(ptrHead2, 3);
-    insertAtEnd(ptrHead2, 4);
-    insertAtEnd(ptrHead2, 5);
-    insertAtEnd(ptrHead2, 6);
-    insertAtEnd(ptrHead2, 7);
-    printList(*ptrHead2);
+    deleteHeadNode(list);
+    printList(list);
+
+    deleteList(list);
+    printList(list);
     return 0;
 }

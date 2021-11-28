@@ -13,19 +13,14 @@ typedef struct stack
     int min;
 } Stack;
 
-void StackInitialize(Stack *stk, int size);
-void StackPush(Stack *stk, int value);
-int StackPop(Stack *stk);
-int StackTop(Stack *stk);
-int StackIsEmpty(Stack *stk);
-int StackSize(Stack *stk);
-
-void StackInitialize(Stack *stk, int size)
+Stack* createStack(int size)
 {
+    Stack *stk = (Stack*)malloc(sizeof(Stack));
     stk->data = (int *)malloc(size * sizeof(int));
     stk->top = -1;
     stk->capacity = size;
     stk->min = size;
+    return stk;
 }
 
 void StackPush(Stack *stk, int value)
@@ -34,14 +29,14 @@ void StackPush(Stack *stk, int value)
     {
         stk->top++;
         stk->data[stk->top] = value;
-        printf("value push : %d \n", value);
+        printf("Value push : %d.\n", value);
     }
     else
     {
         stk->capacity = stk->capacity * 2;
         stk->data = (int *)realloc(stk->data, stk->capacity * sizeof(int));
-        printf("Stack size doubled");
-        printf("Stack capacity %d", stk->capacity);
+        printf("Stack size doubled.\n");
+        printf("Stack capacity %d.\n", stk->capacity);
         StackPush(stk, value);
     }
 }
@@ -56,23 +51,21 @@ int StackPop(Stack *stk)
         {
             stk->capacity = stk->capacity / 2;
             stk->data = (int *)realloc(stk->data, stk->capacity * sizeof(int));
-            printf("Stack size halfed\n");
-            printf("Stack capacity %d", stk->capacity);
+            printf("Stack size halfed.\n");
+            printf("Stack capacity %d.\n", stk->capacity);
         }
         return value;
     }
-    printf("stack empty\n");
+    printf("stack empty.\n");
 }
 
 int main()
 {
     Stack stk;
-    StackInitialize(&stk, 5);
+    StackInit(&stk, 5);
     for (int i = 0; i < 20; i++)
         StackPush(&stk, i);
     for (int i = 0; i < 20; i++)
-        printf(" %d \n", StackPop(&stk));
-
+        printf("%d ", StackPop(&stk));
     return 0;
 }
-

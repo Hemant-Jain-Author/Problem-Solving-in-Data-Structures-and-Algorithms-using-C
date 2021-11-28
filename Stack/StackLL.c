@@ -8,47 +8,75 @@ typedef struct stackNode_t
     struct stackNode_t *next;
 } StackNode;
 
-void StackPush(StackNode **ptrHead, int value)
+
+typedef struct Stack_t
+{
+    StackNode *head;
+} Stack;
+
+void StackInit(Stack *stk) 
+{
+    stk->head = NULL;
+}
+
+int StackIsEmpty(Stack *stk)
+{
+    return stk->head == NULL;
+}
+
+void StackPush(Stack *stk, int value)
 {
     StackNode *temp = (StackNode *)malloc(sizeof(StackNode));
     if (!temp)
     {
-        printf("Memory allocation error");
+        printf("Memory allocation error.\n");
         return;
     }
     temp->value = value;
-    temp->next = *ptrHead;
-    *ptrHead = temp;
+    temp->next = stk->head;
+    stk->head = temp;
 }
 
-int StackPop(StackNode **ptrHead) //free the returned node yourself
+int StackPop(Stack *stk)
 {
     StackNode *deleteMe;
-    int value;
-    if (*ptrHead)
+    if(stk->head == NULL)
     {
-        deleteMe = *ptrHead;
-        *ptrHead = deleteMe->next;
-        value = deleteMe->value;
-        free(deleteMe);
-        return value;
-    }
-    else
-    {
-        printf("Stack is empty \n");
+        printf("Stack is empty.\n");
         return ERROR_VALUE;
     }
+    deleteMe = stk->head;
+    stk->head = stk->head->next;
+    int value = deleteMe->value;
+    free(deleteMe);
+    return value;
 }
+
+void StackPrint(Stack *stk)
+{
+    if (!stk->head)
+        return;
+
+    StackNode *head = stk->head;
+    printf("Stack : ");
+    while (head != NULL)
+    {
+        printf("%d ", head->value);
+        head = head->next;
+    }
+    printf("\n");
+}
+
 
 int main()
 {
-    StackNode *head = NULL;
-    StackPush(&head, 1);
-    StackPush(&head, 2);
-    StackPush(&head, 3);
-    StackPush(&head, 4);
-    StackPush(&head, 5);
-    for (int i = 0; i < 5; i++)
-        printf("%d", StackPop(&head));
+    Stack stk;
+    StackInit(&stk);
+    StackPush(&stk, 1);
+    StackPush(&stk, 2);
+    StackPush(&stk, 3);
+    StackPrint(&stk);
+    while (!StackIsEmpty(&stk))
+        printf("%d ", StackPop(&stk));
     return 0;
 }

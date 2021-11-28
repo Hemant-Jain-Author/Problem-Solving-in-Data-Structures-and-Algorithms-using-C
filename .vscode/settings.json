@@ -14,5 +14,11 @@
         "xfunctional": "c",
         "xstddef": "c",
         "xtr1common": "c"
-    }
+    },
+    "cSpell.words": [
+        "DCLL",
+        "heapify",
+        "htree"
+    ],
+    "C_Cpp.errorSquiggles": "Disabled"
 }

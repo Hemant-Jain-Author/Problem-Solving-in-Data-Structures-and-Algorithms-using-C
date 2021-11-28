@@ -22,18 +22,17 @@ int max(int a, int b)
 {
 	return a < b ? b : a;
 }
-void StackInitialize(Stack *stk);
+void StackInit(Stack *stk);
 void StackPush(Stack *stk, int value);
 int StackPop(Stack *stk);
 int StackTop(Stack *stk);
 int StackIsEmpty(Stack *stk);
 int StackSize(Stack *stk);
 
-void StackInitialize(Stack *stk)
+void StackInit(Stack *stk)
 {
 	stk->top = -1;
 }
-
 
 void StackPush(Stack *stk, int value)
 {
@@ -92,10 +91,10 @@ typedef struct Queue_t
 	Stack stk2;
 }Queue;
 
-void QueueInitialize(Queue* que)
+void QueueInit(Queue* que)
 {
-	StackInitialize(&que->stk1);
-	StackInitialize(&que->stk2);
+	StackInit(&que->stk1);
+	StackInit(&que->stk2);
 }
 
 void QueueAdd(Queue* que, int value)
@@ -106,13 +105,11 @@ void QueueAdd(Queue* que, int value)
 int QueueRemove(Queue* que)
 {
 	int value;
-	if (!StackIsEmpty(&que->stk2))
-		return StackPop(&que->stk2);
-	
-	while (!StackIsEmpty(&que->stk1))
-	{
-		value = StackPop(&que->stk1);
-		StackPush(&que->stk2, value);
+	if (StackIsEmpty(&que->stk2)) {	
+		while (!StackIsEmpty(&que->stk1)) {
+			value = StackPop(&que->stk1);
+			StackPush(&que->stk2, value);
+		}
 	}
 	return StackPop(&que->stk2);
 }
@@ -120,7 +117,7 @@ int QueueRemove(Queue* que)
 int main()
 {
 	Queue que;
-	QueueInitialize(&que);
+	QueueInit(&que);
 	QueueAdd(&que, 1);
 	QueueAdd(&que, 2);
 	QueueAdd(&que, 3);

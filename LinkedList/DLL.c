@@ -1,15 +1,3 @@
-/*
-   For any linked list there are only three cases zero element ,one element,general
-   Any program which is likely to change head pointer is to be passed a double pointer 
-
-   for doubly linked list we have few more things 
-
-   0> NULL values
-   1> only element (tail case)
-   2> first element
-   3> general case
-   4> last element (tail case)
- */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,7 +9,18 @@ typedef struct listNode
     struct listNode *prev;
 } Node;
 
-int insertNode(Node **ptrHead, int value)
+typedef struct DLL_t
+{
+    Node *head;
+    Node *tail;
+} DLL;
+
+void InitDLL(DCLL *list){
+    list->head = NULL;
+    list->tail = NULL;
+}
+
+int insertNode(DLL *list, int value)
 {
     Node *temp = (Node *)malloc(sizeof(Node));
     if (!temp)
@@ -29,27 +28,27 @@ int insertNode(Node **ptrHead, int value)
         printf("Memory Allocation Error");
         return 0;
     }
+    temp->value = value;
 
-    Node *head = *ptrHead;
+    Node *head = list->head;
     if (!head)
     {
-        temp->value = value;
         temp->next = NULL;
         temp->prev = NULL;
-        *ptrHead = temp;
+        list->head = temp;
+        list->tail = temp;
     }
     else
     {
-        temp->value = value;
         temp->prev = NULL;
         temp->next = head;
         head->prev = temp;
-        *ptrHead = temp;
+        list->head = temp;
     }
     return 1;
 }
 
-int sortedInsert(Node **ptrHead, int value)
+int sortedInsert(DLL *list, int value)
 {
     Node *temp = (Node *)malloc(sizeof(Node));
     if (!temp)
@@ -59,13 +58,13 @@ int sortedInsert(Node **ptrHead, int value)
     }
 
     temp->value = value;
-    Node *curr = *ptrHead;
+    Node *curr = list->head;
 
     if (!curr) /*first element*/
     {
         temp->next = NULL;
         temp->prev = NULL;
-        *ptrHead = temp;
+        list->head = temp;
         return 1;
     }
     if (curr->value <= value) /*at the begining*/
@@ -73,7 +72,7 @@ int sortedInsert(Node **ptrHead, int value)
         temp->next = curr;
         temp->prev = NULL;
         curr->prev = temp;
-        *ptrHead = temp;
+        list->head = temp;
         return 1;
     }
 
@@ -87,6 +86,7 @@ int sortedInsert(Node **ptrHead, int value)
         temp->next = NULL;
         temp->prev = curr;
         curr->next = temp;
+        list->tail = temp;
     }
     else /*all other*/
     {
@@ -99,29 +99,37 @@ int sortedInsert(Node **ptrHead, int value)
 }
 
 /* Print A singly linked list */
-void printList(Node *head)
+void printList(DCLL *list)
 {
+    Node *head = list->head;
     while (head != NULL)
     {
-        printf(" %d  ", head->value);
+        printf("%d  ", head->value);
         head = head->next;
     }
     printf("\n");
 }
 
-void printReverseList(Node *head)
+void printReverseListUtil(Node *head)
 {
     if (!head)
         return;
 
-    printReverseList(head->next);
-    printf(" %d ", head->value);
+    printReverseListUtil(head->next);
+    printf("%d ", head->value);
+}
+
+void printReverseList(DCLL *list)
+{
+    Node *head = list->head;
+    printReverseListUtil(head);
 }
 
 /* Reverse a doubly linked List iteratively */
-void reverseList(Node **ptrHead)
+void reverseList(DLL *list)
 {
-    Node *curr = *ptrHead;
+    Node *curr = list->head;
+    list->tail = list->head;
     Node *tempNode;
 
     while (curr)
@@ -132,7 +140,7 @@ void reverseList(Node **ptrHead)
 
         if (!curr->prev)
         {
-            *ptrHead = curr;
+            list->head = curr;
             return;
         }
         curr = curr->prev;
@@ -141,9 +149,9 @@ void reverseList(Node **ptrHead)
 }
 
 /* Delete a singly linked list */
-void deleteList(Node **ptrHead)
+void deleteList(DLL *list)
 {
-    Node *curr = *ptrHead;
+    Node *curr = list->head;
     Node *next;
     while (curr != NULL)
     {
@@ -151,20 +159,21 @@ void deleteList(Node **ptrHead)
         free(curr);
         curr = next;
     }
-    *ptrHead = NULL;
+    list->head = NULL;
+    list->tail = NULL;
 }
 
-void deleteFirstNode(Node **ptrHead)
+void deleteFirstNode(DLL *list)
 {
-    Node *head = *ptrHead;
-    Node *deleteMe;
-
+    Node *head = list->head;
     if(head == NULL)
         return;
     
-    deleteMe = head;
+    Node *deleteMe = head;
     head = head->next;
-    *ptrHead = head;
+    list->head = head;
+    if(head == NULL)
+        list->tail = NULL:
 
     if (head != NULL)
         head->prev = NULL;
@@ -172,40 +181,9 @@ void deleteFirstNode(Node **ptrHead)
     free(deleteMe);
 }
 
-
-/* Delete a node given its pointer */
-void deleteNodePtr(Node **ptrHead, Node *ptrDel)
+void deleteNode(DLL *list, int value)
 {
-    Node *curr = *ptrHead;
-    Node *next;
-
-    if (ptrDel == NULL)
-        return;
-
-    if (curr == ptrDel) /*first node*/
-    {
-        *ptrHead = curr->next;
-        curr->next->prev = NULL;
-        free(curr);
-        return;
-    }
-    while (curr != NULL)
-    {
-        next = curr->next;
-        if (next == ptrDel) /*node to be deleated*/
-        {
-            curr->next = next->next;
-            next->next->prev = curr;
-            free(next);
-            return;
-        }
-        curr = next;
-    }
-}
-
-void deleteNode(Node **ptrHead, int value)
-{
-    Node *curr = *ptrHead;
+    Node *curr = list->head;
     Node *next;
     Node *deleteMe;
     if(curr == NULL)
@@ -217,8 +195,10 @@ void deleteNode(Node **ptrHead, int value)
         curr = curr->next;
         if(curr)
             curr->prev = NULL;
+        else
+            list->tail = NULL;
         
-        *ptrHead = curr;
+        list->head = curr;
         free(deleteMe);
         return;
     }
@@ -230,6 +210,8 @@ void deleteNode(Node **ptrHead, int value)
             curr->next = next->next;
             if (curr->next)
                 curr->next->prev = curr;
+            if(next == list->tail)
+                list->tail = curr;
             free(next);
             return;
         }
@@ -334,33 +316,32 @@ int compareList2(Node *head1, Node *head2)
 
 int main()
 {
-    Node *head = NULL;
-    Node **ptrHead = &head;
+    DLL list;
 
-    sortedInsert(ptrHead, 1);
-    sortedInsert(ptrHead, 7);
-    sortedInsert(ptrHead, 3);
-    sortedInsert(ptrHead, 4);
-    sortedInsert(ptrHead, 6);
-    sortedInsert(ptrHead, 5);
-    sortedInsert(ptrHead, 2);
-    sortedInsert(ptrHead, 1);
-    sortedInsert(ptrHead, 7);
-    sortedInsert(ptrHead, 3);
-    sortedInsert(ptrHead, 4);
-    sortedInsert(ptrHead, 6);
-    sortedInsert(ptrHead, 5);
-    sortedInsert(ptrHead, 2);
-    printList(*ptrHead);
-    reverseList(ptrHead);
-    printList(*ptrHead);
-    removeDuplicates(*ptrHead);
-    printList(*ptrHead);
+    sortedInsert(&list, 1);
+    sortedInsert(&list, 7);
+    sortedInsert(&list, 3);
+    sortedInsert(&list, 4);
+    sortedInsert(&list, 6);
+    sortedInsert(&list, 5);
+    sortedInsert(&list, 2);
+    sortedInsert(&list, 1);
+    sortedInsert(&list, 7);
+    sortedInsert(&list, 3);
+    sortedInsert(&list, 4);
+    sortedInsert(&list, 6);
+    sortedInsert(&list, 5);
+    sortedInsert(&list, 2);
+    printList(&list);
+    reverseList(&list);
+    printList(&list);
+    removeDuplicates(&list);
+    printList(&list);
     
-    Node *head3 = copyList(*ptrHead);
+    Node *head3 = copyList(&list);
     printList(head3);
     printf("comparision result %d ", compareList2(head, head3));
-    Node *head4 = copyListReversed(*ptrHead);
+    Node *head4 = copyListReversed(&list);
     printList(head4);
     return 0;
 }

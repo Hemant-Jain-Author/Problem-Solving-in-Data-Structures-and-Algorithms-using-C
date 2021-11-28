@@ -2,22 +2,26 @@
 #include <stdlib.h>
 #include <math.h>
 
-int comp(int value1, int value2, int inc)
+int greater(int a, int b) // min heap compare function.
 {
-    if (inc)
-        return value1 > value2;
-    return value1 < value2;
+    return a > b;
 }
 
-typedef struct Heap
+int less(int a, int b) // max heap compare function.
+{
+    return a < b;
+}
+
+
+typedef struct Heap_t
 {
     int capacity;
     int size;
     int *array;
-    int isMinHeap;
+    int(* compare)(int , int);
 } Heap;
 
-void proclateDown(int *a, int position, int size, int isMinHeap)
+void proclateDown(int arr[], int position, int size, int(* compare)(int , int))
 {
     int lChild = 2 * position + 1;
     int rChild = lChild + 1;
@@ -28,155 +32,168 @@ void proclateDown(int *a, int position, int size, int isMinHeap)
     if (lChild < size)
         small = lChild;
 
-    if (rChild < size && comp(a[lChild], a[rChild], isMinHeap))
+    if (rChild < size && compare(arr[lChild], arr[rChild]))
         small = rChild;
 
-    if (small != -1 && comp(a[position], a[small], isMinHeap))
+    if (small != -1 && compare(arr[position], arr[small]))
     {
-        temp = a[position];
-        a[position] = a[small];
-        a[small] = temp;
+        temp = arr[position];
+        arr[position] = arr[small];
+        arr[small] = temp;
 
-        proclateDown(a, small, size, isMinHeap);
+        proclateDown(arr, small, size, compare);
     }
 }
 
-void proclateUp(int *a, int position, int isMinHeap)
+void proclateUp(int arr[], int position, int(* compare)(int , int))
 {
     int parent = (position - 1) / 2;
     int temp;
 
     if (parent >= 0)
     {
-        if (comp(a[parent], a[position], isMinHeap))
+        if (compare(arr[parent], arr[position]))
         {
-            temp = a[position];
-            a[position] = a[parent];
-            a[parent] = temp;
+            temp = arr[position];
+            arr[position] = arr[parent];
+            arr[parent] = temp;
 
-            proclateUp(a, parent, isMinHeap);
+            proclateUp(arr, parent, compare);
         }
     }
 }
 
-void heapify(int arr[], int size, int isMinHeap)
+void heapify(int arr[], int size, int(* compare)(int , int))
 {
-    for (int i = (size) / 2; i >= 0; i--)
-        proclateDown(arr, i, size, isMinHeap);
+    for (int i = size/2; i >= 0; i--)
+        proclateDown(arr, i, size, compare);
 }
 
-void HeapInitialize(Heap *hp, int arr[], int size, int isMinHeap)
+
+Heap* createHeap2(int arr[], int size, int(* compare)(int , int))
 {
+    Heap* hp = (Heap*) malloc(sizeof(Heap));
     hp->size = hp->capacity = size;
     hp->array = arr;
-    hp->isMinHeap = isMinHeap;
-    heapify(arr, size, isMinHeap);
+    hp->compare = compare;
+    heapify(arr, size, compare);
+    return hp;
 }
 
-void HeapInitialize2(Heap *hp, int size, int isMinHeap)
+Heap* createHeap(int(* compare)(int , int))
 {
-    hp->size = 0;
-    hp->capacity = size;
-    hp->isMinHeap = isMinHeap;
-    hp->array = (int *)malloc((size + 1) * sizeof(int));
+    Heap* hp = (Heap*) malloc(sizeof(Heap));
+    hp->size = 0; 
+    hp->capacity = 100;
+    hp->array = (int *)malloc((hp->capacity) * sizeof(int));
+    hp->compare = compare;
+    return hp;
 }
 
-int HeapRemove(Heap *hp)
+int heapRemove(Heap *hp)
 {
     int value = hp->array[0];
     hp->array[0] = hp->array[hp->size - 1];
     hp->size--;
-    proclateDown(hp->array, 0, hp->size, hp->isMinHeap);
+    proclateDown(hp->array, 0, hp->size, hp->compare);
     return value;
 }
 
-void HeapAdd(Heap *hp, int value)
+void heapAdd(Heap *hp, int value)
 {
     if (hp->size == hp->capacity)
         return;
     hp->size++;
     hp->array[hp->size - 1] = value;
-    proclateUp(hp->array, hp->size - 1, hp->isMinHeap);
+    proclateUp(hp->array, hp->size - 1, hp->compare);
 }
 
-int HeapTop(Heap *hp)
+int heapTop(Heap *hp)
 {
     return hp->array[0];
 }
 
-int Heapsize(Heap *hp)
+int heapSize(Heap *hp)
 {
     return hp->size;
 }
 
-void HeapSort(int arr[], int size, int inc)
+void sort(int arr[], int size, int inc)
 {
-    Heap hp;
-    int *b = (int *)malloc(sizeof(int) * size);
+    int(* comp )(int , int);
+    if(inc)
+        comp = less; // max heap for increasing.
+    else
+        comp = greater; // min heap for decreasing.
 
-    for (int i = 0; i < size; i++)
-        b[i] = arr[i];
-
-    HeapInitialize(&hp, b, size, inc);
-    for (int i = 0; i < size; i++)
-        arr[i] = HeapRemove(&hp);
+    Heap* hp = createHeap2(arr, size, comp);
+    for (int i = size-1; i >=0; i--)
+        arr[i] = heapRemove(hp);
 }
 
-void Printarray(int *arr, int size)
+void printArray(int *array, int size)
 {
     for (int i = 0; i < size; i++)
-        printf(" %d ", arr[i]);
+        printf("%d ", array[i]);
     printf("\n");
 }
 
-void PrintHeap(Heap *hp)
+void printHeap(Heap *hp)
 {
-    Printarray(hp->array, hp->size);
+    for (int i = 0; i < hp->size; i++)
+        printf("%d ", hp->array[i]);
+    printf("\n");
 }
 
 int main1()
 {
+    
     int a[10] = {4, 5, 3, 2, 6, 7, 10, 8, 9, 1};
-    Heap hp;
-    HeapInitialize(&hp, a, 10, 1);
-    PrintHeap(&hp);
+    Heap* hp = createHeap2(a, 10, greater);//min heap
+    printHeap(hp);
 
-    printf("Value returned from deleteMin %d \n", HeapRemove(&hp));
-    PrintHeap(&hp);
+    printf("Top value removed : %d \n", heapRemove(hp));
+    printHeap(hp);
 
-    HeapAdd(&hp, 1);
-    PrintHeap(&hp);
-    HeapAdd(&hp, 2);
-    PrintHeap(&hp);
+    heapAdd(hp, 10);
+    printHeap(hp);
+    
+    heapAdd(hp, 20);
+    printHeap(hp);
 
     int b[10] = {4, 5, 3, 2, 6, 7, 10, 8, 9, 1};
-    HeapSort(b, 10, 1);
-    Printarray(b, 10);
-    HeapSort(b, 10, 0);
-    Printarray(b, 10);
+    sort(b, 10, 1); // increasing
+    printArray(b, 10);
+    
+    sort(b, 10, 0); // decreasing
+    printArray(b, 10);
     return 0;
 }
 
-void Sort(int arr[], int size, int inc)
-{
-    HeapSort(arr, size, inc);
-}
+/*
+1 2 3 4 5 7 10 8 9 6 
+Top value 1 
+2 4 3 6 5 7 10 8 9 
+2 4 3 6 5 7 10 8 9 10 
+2 4 3 6 5 7 10 8 9 10 
+1 2 3 4 5 6 7 8 9 10 
+10 9 8 7 6 5 4 3 2 1 
+*/
 
 int KthSmallest(int arr[], int size, int k)
 {
-    Sort(arr, size, 1);
+    sort(arr, size, 1);
     return arr[k - 1];
 }
 
 int KthSmallest2(int arr[], int size, int k)
 {
-    Heap hp;
-    HeapInitialize(&hp, arr, size, 1);
+    Heap* hp = createHeap2(arr, size, greater);
     int i = 0;
     int value = 0;
     while (i < size && i < k)
     {
-        value = HeapRemove(&hp);
+        value = heapRemove(hp);
         i += 1;
     }
     return value;
@@ -221,19 +238,26 @@ int main2()
     int arr3[] = {8, 7, 6, 5, 7, 5, 2, 1};
     printf("isMaxHeap :: %d\n", isMaxHeap(arr3, sizeof(arr) / sizeof(int)));
     int arr4[] = {8, 7, 6, 5, 7, 5, 2, 1};
-    Sort(arr4, sizeof(arr) / sizeof(int), 1);
+    sort(arr4, sizeof(arr) / sizeof(int), 1);
     printf("isMinHeap :: %d\n", isMinHeap(arr4, sizeof(arr) / sizeof(int)));
     return 0;
 }
+/*
+Kth Smallest :: 5
+Kth Smallest :: 5
+isMaxHeap :: 1
+isMinHeap :: 1
+*/
 
 int KSmallestProduct(int arr[], int size, int k)
 {
-    Sort(arr, size, 1);
+    sort(arr, size, 1);
     int product = 1;
     for (int i = 0; i < k; i++)
         product *= arr[i];
     return product;
 }
+
 void swap(int arr[], int i, int j)
 {
     int temp = arr[i];
@@ -285,13 +309,12 @@ int KSmallestProduct3(int arr[], int size, int k)
 
 int KSmallestProduct2(int arr[], int size, int k)
 {
-    Heap hp;
-    HeapInitialize(&hp, arr, size, 1);
+    Heap* hp = createHeap2(arr, size, greater);
     int i = 0;
     int product = 1;
     while (i < size && i < k)
     {
-        product *= HeapRemove(&hp);
+        product *= heapRemove(hp);
         i += 1;
     }
     return product;
@@ -300,20 +323,22 @@ int KSmallestProduct2(int arr[], int size, int k)
 int main3()
 {
     int arr[] = {8, 7, 6, 5, 7, 5, 2, 1};
-    printf("Kth Smallest product:: %d\n",
-           KSmallestProduct(arr, 8, 3));
+    printf("Kth Smallest product:: %d\n", KSmallestProduct(arr, 8, 3));
     int arr2[] = {8, 7, 6, 5, 7, 5, 2, 1};
-    printf("Kth Smallest product:: %d\n",
-           KSmallestProduct2(arr2, 8, 3));
+    printf("Kth Smallest product:: %d\n", KSmallestProduct2(arr2, 8, 3));
     int arr3[8] = {8, 7, 6, 5, 7, 5, 2, 1};
-    printf("Kth Smallest product:: %d\n",
-           KSmallestProduct3(arr3, 8, 3));
+    printf("Kth Smallest product:: %d\n", KSmallestProduct3(arr3, 8, 3));
     return 0;
 }
+/*
+Kth Smallest product:: 10
+Kth Smallest product:: 10
+Kth Smallest product:: 10
+*/
 
 void PrintLargerHalf(int arr[], int size)
 {
-    Sort(arr, size, 1);
+    sort(arr, size, 1);
     for (int i = size / 2; i < size; i++)
         printf("%d ", arr[i]);
     printf("\n");
@@ -321,11 +346,10 @@ void PrintLargerHalf(int arr[], int size)
 
 void PrintLargerHalf2(int arr[], int size)
 {
-    Heap hp;
-    HeapInitialize(&hp, arr, size, 1);
+    Heap* hp = createHeap2(arr, size, greater);
     for (int i = 0; i < size / 2; i++)
-        HeapRemove(&hp);
-    Printarray(arr, size / 2);
+        heapRemove(hp);
+    printArray(arr, size / 2);
 }
 
 void PrintLargerHalf3(int arr[], int size)
@@ -346,28 +370,31 @@ int main4()
     PrintLargerHalf3(arr3, 8);
     return 0;
 }
-
+/*
+6 7 7 8 
+6 7 8 7 
+6 7 7 8 
+*/
 void sortK(int arr[], int size, int k)
 {
-    Heap hp;
-    HeapInitialize(&hp, arr, k, 1);
+    Heap* hp = createHeap2(arr, k, greater);
 
     int *output = (int *)malloc(sizeof(int) * size);
     int index = 0;
 
     for (int i = k; i < size; i++)
     {
-        output[index++] = HeapRemove(&hp);
-        HeapAdd(&hp, arr[i]);
+        output[index++] = heapRemove(hp);
+        heapAdd(hp, arr[i]);
     }
-    while (Heapsize(&hp) > 0)
-        output[index++] = HeapRemove(&hp);
+    while (heapSize(hp) > 0)
+        output[index++] = heapRemove(hp);
 
     for (int i = k; i < size; i++)
     {
         arr[i] = output[i];
     }
-    Printarray(output, index);
+    printArray(output, index);
 }
 
 // Testing Code
@@ -380,80 +407,12 @@ int main5()
     return 0;
 }
 
-int ChotaBhim(int cups[], int size)
-{
-    int time = 60;
-    Sort(cups, size, 0);
-    int total = 0;
-    int index, temp;
-    while (time > 0)
-    {
-        total += cups[0];
-        cups[0] = ceil(cups[0] / 2.0);
-        index = 0;
-        temp = cups[0];
-        while (index < size - 1 && temp < cups[index + 1])
-        {
-            cups[index] = cups[index + 1];
-            index += 1;
-        }
-        cups[index] = temp;
-        time -= 1;
-    }
-    printf("Total %d ", total);
-    return total;
-}
+//1 4 5 9 10 50 
 
-int ChotaBhim2(int cups[], int size)
-{
-    int time = 60;
-    Sort(cups, size, 0);
-    int total = 0;
-    int i, temp;
-    while (time > 0)
-    {
-        total += cups[0];
-        cups[0] = ceil(cups[0] / 2.0);
-        i = 0;
-        // Insert into proper location.
-        while (i < size - 1)
-        {
-            if (cups[i] > cups[i + 1])
-                break;
-            temp = cups[i];
-            cups[i] = cups[i + 1];
-            cups[i + 1] = temp;
-            i += 1;
-        }
-        time -= 1;
-    }
-    printf("Total : %d\n", total);
-    return total;
-}
-
-int ChotaBhim3(int cups[], int size)
-{
-    int time = 60;
-    Heap hp;
-    HeapInitialize(&hp, cups, size, 0);
-    int total = 0;
-    int value;
-    while (time > 0)
-    {
-        value = HeapRemove(&hp);
-        total += value;
-        value = ceil(value / 2.0);
-        HeapAdd(&hp, value);
-        time -= 1;
-    }
-    printf("Total : %d\n", total);
-    return total;
-}
 
 int JoinRopes(int ropes[], int size)
 {
-    Sort(ropes, size, 0);
-    Printarray(ropes, size);
+    sort(ropes, size, 0); // decreasing
     int total = 0;
     int value = 0;
     int temp, index;
@@ -479,18 +438,17 @@ int JoinRopes(int ropes[], int size)
 
 int JoinRopes2(int ropes[], int size)
 {
-    Heap hp;
-    HeapInitialize(&hp, ropes, size, 1);
+    Heap* hp = createHeap2(ropes, size, greater);
     int total = 0;
     int value = 0;
-    while (Heapsize(&hp) > 1)
+    while (heapSize(hp) > 1)
     {
-        value = HeapRemove(&hp);
-        value += HeapRemove(&hp);
-        HeapAdd(&hp, value);
+        value = heapRemove(hp);
+        value += heapRemove(hp);
+        heapAdd(hp, value);
         total += value;
     }
-    printf("Total : %d ", total);
+    printf("Total : %d \n", total);
     return total;
 }
 
@@ -512,54 +470,16 @@ int main6()
 }
 
 /*
-int kthAbsDiff(int arr[], int size, int k)
-{
-Sort(arr, size, 1);
-int diff[100];// = malloc();
-int index = 0;
-for (int i = k + 1; i < size - 1; i++)
-{
-for (int j = i + 1; j < size; j++)
-diff[index++] = abs(arr[i] - arr[j]);
-}
-Sort(diff, size, 1);
-return diff[k - 1];
-}
-
-int kthAbsDiff(int arr[], int size, int k)
-{
-	Sort(arr, size, 1);
-	Heap hp;
-	int value = 0;
-
-	for (int i = k + 1; i < size - 1; i++)
-		HeapAdd(&hp,(abs(arr[i] - arr[i + 1]), i, i + 1));
-	heapify(hp);
-
-	for (int i = 0; i < k; i++)
-	{
-		tp = heapq.heappop(hp);
-		value = tp[0];
-		src = tp[1];
-		dst = tp[2];
-		if (dst + 1 < size)
-			heapq.heappush(hp, (abs(arr[src] - arr[dst + 1]), src, dst + 1));
-	}
-	return value;
-}
-
-int main7()
-{
-	int arr[] = { 1, 2, 3, 4 };
-	printf("", kthAbsDiff(arr, 4, 5));
-	return 0;
-}
+Total 76
+Total : 76
+Total : 76
+Total : 33 
+Total : 33 
 */
 
 int kthLargestStream(int k)
 {
-    Heap hp;
-    HeapInitialize2(&hp, 100, 1);
+    Heap* hp = createHeap(greater);
     int size = 0;
     int data;
     while (1)
@@ -568,17 +488,17 @@ int kthLargestStream(int k)
         scanf("%d", &data);
 
         if (size < k - 1)
-            HeapAdd(&hp, data);
+            heapAdd(hp, data);
         else
         {
             if (size == k - 1)
-                HeapAdd(&hp, data);
-            else if (HeapTop(&hp) < data)
+                heapAdd(hp, data);
+            else if (heapTop(hp) < data)
             {
-                HeapAdd(&hp, data);
-                HeapRemove(&hp);
+                heapAdd(hp, data);
+                heapRemove(hp);
             }
-            printf("Kth larges element is :: ", HeapTop(&hp));
+            printf("Kth larges element is :: %d\n", heapTop(hp));
         }
         size += 1;
     }
@@ -586,99 +506,94 @@ int kthLargestStream(int k)
 
 int main7()
 {
-    kthLargestStream(3);
+    //kthLargestStream(3);
     return 0;
 }
-/*
-int minJumps(int arr[], int size)
-{
-int *jumps = (int *)malloc(sizeof(int) * size);
-//all jumps to maxint.
-int steps, j;
-jumps[0] = 0;
 
-for (int i = 0; i < size; i++)
-{
-steps = arr[i];
-// error checks can be added hear.
-j = i + 1;
-while (j <= i + steps && j < size)
-{
-jumps[j] = min(jumps[j], jumps[i] + 1);
-j += 1;
-}
-printf("%s", jumps);
-}
-return jumps[size - 1];
-}
-int main2()
-{
-int arr[] = {1, 4, 3, 7, 6, 1, 0, 3, 5, 1, 10};
-printf("%d", minJumps(arr, sizeof(arr) / sizeof(int)));
-return 0;
-}
-*/
 
 #define ERROR_VALUE 999999
 
 typedef struct medianHeap
 {
-    Heap minHeap;
-    Heap maxHeap;
+    Heap* minHeap;
+    Heap* maxHeap;
 } MedianHeap;
 
-void MedianHeapInit(MedianHeap *heap)
+MedianHeap* createMedianHeap()
 {
-    HeapInitialize2(&heap->minHeap, 100, 1);
-    HeapInitialize2(&heap->maxHeap, 100, 0);
+    MedianHeap* hp = (MedianHeap* )malloc(sizeof(MedianHeap));
+    hp->minHeap = createHeap(greater);
+    hp->maxHeap = createHeap(less);
+    return hp;
 }
 
-void MedianHeapAdd(MedianHeap *heap, int value)
+void medianHeapAdd(MedianHeap *heap, int value)
 {
-    if (Heapsize(&heap->maxHeap) == 0 || HeapTop(&heap->maxHeap) >= value)
+    if (heapSize(heap->maxHeap) == 0 || heapTop(heap->maxHeap) >= value)
     {
-        HeapAdd(&heap->maxHeap, value);
-    }
-    else
-    {
-        HeapAdd(&heap->minHeap, value);
+        heapAdd(heap->maxHeap, value);
+    } else {
+        heapAdd(heap->minHeap, value);
     }
     //size balancing
-    if (Heapsize(&heap->maxHeap) > Heapsize(&heap->minHeap) + 1)
+    if (heapSize(heap->maxHeap) > heapSize(heap->minHeap) + 1)
     {
-        value = HeapRemove(&heap->maxHeap);
-        HeapAdd(&heap->minHeap, value);
+        value = heapRemove(heap->maxHeap);
+        heapAdd(heap->minHeap, value);
     }
-    if (Heapsize(&heap->minHeap) > Heapsize(&heap->maxHeap) + 1)
+    if (heapSize(heap->minHeap) > heapSize(heap->maxHeap) + 1)
     {
-        value = HeapRemove(&heap->minHeap);
-        HeapAdd(&heap->maxHeap, value);
+        value = heapRemove(heap->minHeap);
+        heapAdd(heap->maxHeap, value);
     }
 }
 
 int getMedian(MedianHeap *heap)
 {
-    if (Heapsize(&heap->maxHeap) == 0 && Heapsize(&heap->minHeap) == 0)
+    if (heapSize(heap->maxHeap) == 0 && heapSize(heap->minHeap) == 0)
         return ERROR_VALUE;
 
-    if (Heapsize(&heap->maxHeap) == Heapsize(&heap->minHeap))
-        return (HeapTop(&heap->maxHeap) + HeapTop(&heap->minHeap)) / 2;
-    else if (Heapsize(&heap->maxHeap) > Heapsize(&heap->minHeap))
-        return HeapTop(&heap->maxHeap);
+    if (heapSize(heap->maxHeap) == heapSize(heap->minHeap))
+        return (heapTop(heap->maxHeap) + heapTop(heap->minHeap)) / 2;
+    else if (heapSize(heap->maxHeap) > heapSize(heap->minHeap))
+        return heapTop(heap->maxHeap);
     else
-        return HeapTop(&heap->minHeap);
+        return heapTop(heap->minHeap);
 }
+
+int main8()
+{
+    int arr[] = {1, 9, 2, 8, 3, 7, 4, 6, 5, 1};
+    MedianHeap* heap = createMedianHeap();
+    for (int i = 0; i < 10; i++)
+    {
+        medianHeapAdd(heap, arr[i]);
+        printf("Median after insertion of %d is %d \n", arr[i], getMedian(heap));
+    }
+    return 0;
+}
+/*
+Median after insertion of 1 is 1 
+Median after insertion of 9 is 5 
+Median after insertion of 2 is 2 
+Median after insertion of 8 is 5 
+Median after insertion of 3 is 3 
+Median after insertion of 7 is 5 
+Median after insertion of 4 is 4 
+Median after insertion of 6 is 5 
+Median after insertion of 5 is 5 
+Median after insertion of 1 is 4 
+*/
 
 int main()
 {
-    int arr[] = {1, 9, 2, 8, 3, 7, 4, 6, 5, 1, 9, 2, 8, 3, 7, 4, 6, 5, 10, 10};
-
-    MedianHeap heap;
-    MedianHeapInit(&heap);
-    for (int i = 0; i < 20; i++)
-    {
-        MedianHeapAdd(&heap, arr[i]);
-        printf("Median after insertion of %d is %d \n", arr[i], getMedian(&heap));
-    }
+    main1();     
+    main2();
+    main3();
+    main4();
+    main5();
+    main6();
+    main7();
+    main8();
     return 0;
 }
