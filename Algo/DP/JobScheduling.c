@@ -9,8 +9,7 @@ typedef struct Job_t
 	int value;
 }Job;
 
-Job* createJob(int s, int f, int v)
-{
+Job* createJob(int s, int f, int v) {
 	Job* jb = (Job*)malloc(sizeof(Job));
 	jb->start = s;
 	jb->stop = f;
@@ -18,27 +17,23 @@ Job* createJob(int s, int f, int v)
 	return jb;
 }
 
-int max(int a, int b){
+int max(int a, int b) {
 	return (a>b)? a : b;
 }
 
-int comp(Job *j1, Job *j2) // swap condition for sorting.
-{
+int greater(Job *j1, Job *j2) { // swap condition for sorting.
 	return j1->stop > j2->stop;
 }
 
-int maxValueJobUtil(Job* arr[], int n)
-{
+int maxValueJobUtil(Job* arr[], int n) {
 	// Base case
 	if (n == 1)
 		return arr[0]->value;
 
 	// Find Value when current job is included
 	int incl = arr[n - 1]->value;
-	for (int j = n - 1; j >= 0; j--)
-	{
-		if (arr[j]->stop <= arr[n - 1]->start)
-		{
+	for (int j = n - 1; j >= 0; j--) {
+		if (arr[j]->stop <= arr[n - 1]->start) {
 			incl += maxValueJobUtil(arr, j + 1);
 			break;
 		}
@@ -50,16 +45,12 @@ int maxValueJobUtil(Job* arr[], int n)
 	return max(incl, excl);
 }
 
-void sort(Job* arr[], int size, int (*comp)(Job* p1, Job* p2))
-{
+void sort(Job* arr[], int size, int (*comp)(Job* p1, Job* p2)) {
     int i, j;
 	Job* temp;
-    for (i = 0; i < (size - 1); i++)
-    {
-        for (j = 0; j < size - i - 1; j++)
-        {
-            if (comp(arr[j], arr[j + 1]))
-            {
+    for (i = 0; i < (size - 1); i++) {
+        for (j = 0; j < size - i - 1; j++) {
+            if (comp(arr[j], arr[j + 1])) {
                 /* Swapping */
                 temp = arr[j];
                 arr[j] = arr[j + 1];
@@ -69,27 +60,23 @@ void sort(Job* arr[], int size, int (*comp)(Job* p1, Job* p2))
     }
 }
 
-int maxValueJobs(int s[], int f[], int v[], int n)
-{
+int maxValueJobs(int s[], int f[], int v[], int n) {
 	Job* act[n];
 	for (int i = 0;i < n;i++)
 		act[i] = createJob(s[i], f[i], v[i]);
 
-	sort(act, n, comp); // sort according to finish time.
+	sort(act, n, greater); // sort according to finish time.
 	return maxValueJobUtil(act, n);
 }
 
-int maxValueJobTDUtil(int dp[], Job* arr[], int n)
-{
+int maxValueJobTDUtil(int dp[], Job* arr[], int n) {
 	if (dp[n - 1] != 0)
 		return dp[n - 1];
 
 	// Find Value when current job is included
 	int incl = arr[n - 1]->value;
-	for (int j = n - 2; j >= 0; j--)
-	{
-		if (arr[j]->stop <= arr[n - 1]->start)
-		{
+	for (int j = n - 2; j >= 0; j--) {
+		if (arr[j]->stop <= arr[n - 1]->start) {
 			incl += maxValueJobTDUtil(dp, arr, j + 1);
 			break;
 		}
@@ -101,13 +88,12 @@ int maxValueJobTDUtil(int dp[], Job* arr[], int n)
 	return dp[n - 1];
 }
 
-int maxValueJobsTD(int s[], int f[], int v[], int n)
-{
+int maxValueJobsTD(int s[], int f[], int v[], int n) {
 	Job* act[n];
 	for (int i = 0;i < n;i++)
 		act[i] = createJob(s[i], f[i], v[i]);
 
-	sort(act, n, comp); // sort according to finish time.
+	sort(act, n, greater); // sort according to finish time.
 	int dp[n];
 	memset(dp, 0, sizeof(dp));
 	dp[0] = act[0]->value;
@@ -115,23 +101,19 @@ int maxValueJobsTD(int s[], int f[], int v[], int n)
 	return maxValueJobTDUtil(dp, act, n);
 }
 
-int maxValueJobsBU(int s[], int f[], int v[], int n)
-{
+int maxValueJobsBU(int s[], int f[], int v[], int n) {
 	Job* act[n];
 	for (int i = 0;i < n;i++)
 		act[i] = createJob(s[i], f[i], v[i]);
 
-	sort(act, n, comp); // sort according to finish time.
+	sort(act, n, greater); // sort according to finish time.
 	int dp[n];
 	dp[0] = act[0]->value;
 
-	for (int i = 1; i < n; i++)
-	{
+	for (int i = 1; i < n; i++) {
 		int incl = act[i]->value;
-		for (int j = i - 1; j >= 0; j--)
-		{
-			if (act[j]->stop <= act[i]->start)
-			{
+		for (int j = i - 1; j >= 0; j--) {
+			if (act[j]->stop <= act[i]->start) {
 				incl += dp[j];
 				break;
 			}
@@ -141,8 +123,7 @@ int maxValueJobsBU(int s[], int f[], int v[], int n)
 	return dp[n - 1];
 }
 
-int main()
-{
+int main() {
 	int start[] = {1, 5, 0, 3, 5, 6, 8};
 	int finish[] = {2, 6, 5, 4, 9, 7, 9};
 	int value[] = {2, 2, 4, 3, 10, 2, 8};

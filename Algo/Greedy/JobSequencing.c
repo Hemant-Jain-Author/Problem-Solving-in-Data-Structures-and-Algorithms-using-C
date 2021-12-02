@@ -8,8 +8,7 @@ typedef struct Job_t
 	int profit;
 }Job;
 
-Job* createJob(char id, int deadline, int profit)
-{
+Job* createJob(char id, int deadline, int profit) {
 	Job* job = (Job*)malloc(sizeof(Job));
 	job->id = id;
 	job->deadline = deadline;
@@ -21,19 +20,14 @@ int max(int a, int b){
 	return (a > b)? a : b;
 }
 
-int less(Job *a, Job *b)
-{
+int less(Job *a, Job *b) {
 	return a->profit < b->profit;
 }
 
-void sort(Job * arr[], int size, int (*comp)(Job * p1, Job * p2))
-{
-    for (int i = 0; i < (size - 1); i++)
-    {
-        for (int j = 0; j < size - i - 1; j++)
-        {
-            if (comp(arr[j], arr[j + 1]))
-            {
+void sort(Job * arr[], int size, int (*comp)(Job * p1, Job * p2)) {
+    for (int i = 0; i < (size - 1); i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (comp(arr[j], arr[j + 1])} {
                 /* Swapping */
                 Job* temp = arr[j];
                 arr[j] = arr[j + 1];
@@ -44,8 +38,7 @@ void sort(Job * arr[], int size, int (*comp)(Job * p1, Job * p2))
 }
 
 
-int JobSequencing(char ids[], int deadlines[], int profits[], int n)
-{
+int JobSequencing(char ids[], int deadlines[], int profits[], int n) {
 	Job* jobs[n];
 	int maxDL = deadlines[0];
 	for (int i = 1; i < n; i++)
@@ -67,10 +60,8 @@ int JobSequencing(char ids[], int deadlines[], int profits[], int n)
 	int profit = 0;
 
 	// Iterate through all given jobs
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = jobs[i]->deadline - 1; j >= 0; j--)
-		{
+	for (int i = 0; i < n; i++) {
+		for (int j = jobs[i]->deadline - 1; j >= 0; j--) {
 			if (result[j] == 0)
 			{
 				result[j] = 1;
@@ -82,18 +73,15 @@ int JobSequencing(char ids[], int deadlines[], int profits[], int n)
 	}
 	printf("Profit is :: %d\n" , profit );
 	printf("Jobs selected are::");
-	for (int i = 0;i < maxDL;i++)
-	{
-		if (answer[i] != '0')
-		{
+	for (int i = 0;i < maxDL;i++) {
+		if (answer[i] != '0') {
 			printf("%c " , answer[i]);
 		}
 	}
 	return profit;
 }
 
-int main()
-{
+int main() {
 	char id[] = {'a', 'b', 'c', 'd', 'e'};
 	int deadline[] = {3, 1, 2, 4, 4};
 	int profit[] = {50, 40, 27, 31, 30};

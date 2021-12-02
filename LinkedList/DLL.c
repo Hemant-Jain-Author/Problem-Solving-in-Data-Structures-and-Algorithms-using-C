@@ -2,88 +2,71 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct listNode
+typedef struct Node
 {
     int value;
-    struct listNode *next;
-    struct listNode *prev;
+    struct Node *next;
+    struct Node *prev;
 } Node;
 
-typedef struct DLL_t
+Node* createNode(int value, Node* next, Node* prev){
+    Node *node = (Node*)malloc(sizeof(Node));
+    node->value = value;
+    node->next = next;
+    node->prev = prev;
+    return node;
+}
+
+typedef struct DLL
 {
     Node *head;
     Node *tail;
 } DLL;
 
-void InitDLL(DCLL *list){
+DLL *createDLL(){
+    DLL *list = (DLL*)malloc(sizeof(DLL));
     list->head = NULL;
     list->tail = NULL;
+    return list;
 }
 
-int insertNode(DLL *list, int value)
-{
-    Node *temp = (Node *)malloc(sizeof(Node));
-    if (!temp)
-    {
-        printf("Memory Allocation Error");
-        return 0;
-    }
-    temp->value = value;
-
+void insertNode(DLL *list, int value) {
+    Node *temp = createNode(value, NULL, NULL);
     Node *head = list->head;
-    if (!head)
-    {
-        temp->next = NULL;
-        temp->prev = NULL;
+    if (!head) {
         list->head = temp;
         list->tail = temp;
-    }
-    else
-    {
-        temp->prev = NULL;
+    } else {
         temp->next = head;
         head->prev = temp;
         list->head = temp;
     }
-    return 1;
 }
 
-int sortedInsert(DLL *list, int value)
-{
-    Node *temp = (Node *)malloc(sizeof(Node));
-    if (!temp)
-    {
-        printf("Memory Allocation Error");
-        return 0;
-    }
-
-    temp->value = value;
+void sortedInsert(DLL *list, int value) {
+    Node *temp = createNode(value, NULL, NULL);    
     Node *curr = list->head;
-
     if (!curr) /*first element*/
     {
-        temp->next = NULL;
-        temp->prev = NULL;
         list->head = temp;
-        return 1;
+        return;
     }
+
     if (curr->value <= value) /*at the begining*/
     {
         temp->next = curr;
-        temp->prev = NULL;
         curr->prev = temp;
         list->head = temp;
-        return 1;
+        return;
     }
 
-    while (curr->next && curr->next->value > value) /*treversal*/
+    while (curr->next && curr->next->value > value) /*traversal*/
     {
         curr = curr->next;
     }
 
     if (!curr->next) /*at the end*/
     {
-        temp->next = NULL;
         temp->prev = curr;
         curr->next = temp;
         list->tail = temp;
@@ -95,23 +78,19 @@ int sortedInsert(DLL *list, int value)
         temp->prev = curr;
         curr->next = temp;
     }
-    return 1;
 }
 
 /* Print A singly linked list */
-void printList(DCLL *list)
-{
+void printList(DLL *list) {
     Node *head = list->head;
-    while (head != NULL)
-    {
+    while (head != NULL) {
         printf("%d  ", head->value);
         head = head->next;
     }
     printf("\n");
 }
 
-void printReverseListUtil(Node *head)
-{
+void printReverseListUtil(Node *head) {
     if (!head)
         return;
 
@@ -119,27 +98,23 @@ void printReverseListUtil(Node *head)
     printf("%d ", head->value);
 }
 
-void printReverseList(DCLL *list)
-{
+void printReverseList(DLL *list) {
     Node *head = list->head;
     printReverseListUtil(head);
 }
 
 /* Reverse a doubly linked List iteratively */
-void reverseList(DLL *list)
-{
+void reverseList(DLL *list) {
     Node *curr = list->head;
     list->tail = list->head;
     Node *tempNode;
 
-    while (curr)
-    {
+    while (curr) {
         tempNode = curr->next;
         curr->next = curr->prev;
         curr->prev = tempNode;
 
-        if (!curr->prev)
-        {
+        if (!curr->prev) {
             list->head = curr;
             return;
         }
@@ -148,13 +123,10 @@ void reverseList(DLL *list)
     return;
 }
 
-/* Delete a singly linked list */
-void deleteList(DLL *list)
-{
+void deleteList(DLL *list) {
     Node *curr = list->head;
     Node *next;
-    while (curr != NULL)
-    {
+    while (curr != NULL) {
         next = curr->next;
         free(curr);
         curr = next;
@@ -163,8 +135,7 @@ void deleteList(DLL *list)
     list->tail = NULL;
 }
 
-void deleteFirstNode(DLL *list)
-{
+void deleteFirstNode(DLL *list) {
     Node *head = list->head;
     if(head == NULL)
         return;
@@ -173,7 +144,7 @@ void deleteFirstNode(DLL *list)
     head = head->next;
     list->head = head;
     if(head == NULL)
-        list->tail = NULL:
+        list->tail = NULL;
 
     if (head != NULL)
         head->prev = NULL;
@@ -181,8 +152,7 @@ void deleteFirstNode(DLL *list)
     free(deleteMe);
 }
 
-void deleteNode(DLL *list, int value)
-{
+void deleteNode(DLL *list, int value) {
     Node *curr = list->head;
     Node *next;
     Node *deleteMe;
@@ -203,10 +173,8 @@ void deleteNode(DLL *list, int value)
         return;
     }
     next = curr->next;
-    while (next != NULL)
-    {
-        if (next->value == value)
-        {
+    while (next != NULL) {
+        if (next->value == value) {
             curr->next = next->next;
             if (curr->next)
                 curr->next->prev = curr;
@@ -220,128 +188,128 @@ void deleteNode(DLL *list, int value)
     }
 }
 
-void removeDuplicates(Node *head)
-{
+void removeDuplicates(DLL *list) {
+    Node *head = list->head;
     Node *deleteMe;
-    while (head)
-    {
-        if ((head->next) && head->value == head->next->value)
-        {
+    while (head) {
+        if ((head->next) && head->value == head->next->value) {
             deleteMe = head->next;
             head->next = deleteMe->next;
             if(head->next)
                 head->next->prev = head;
             free(deleteMe);
-        }
-        else
-        {
+        } else {
             head = head->next;
         }
     }
 }
 
-Node *copyListReversed(Node *head)
-{
+DLL *copyListReversed(DLL *list) {
+    DLL *list2 = createDLL();
+    Node *head = list->head;
+    if (!head)
+        return list2;
+
+    Node *head2 = createNode(head->value, NULL, NULL); 
+    Node *tail2 = head2;
     Node *temp = NULL;
-    Node *head2 = NULL;
-    Node *curr = head;
-    while (curr)
-    {
-        temp = (Node *)malloc(sizeof(Node));
-        temp->value = curr->value;
+    head = head->next;
+
+    while (head) {
+        temp = createNode(head->value, NULL, NULL);
         temp->next = head2;
-        temp->prev = NULL;
-        if (head2)
-            head2->prev = temp;
+        head2->prev = temp;
         head2 = temp;
-        curr = curr->next;
+        head = head->next;
     }
-    return head2;
+    list2->head = head2;
+    list2->tail = tail2;
+    return list2;
 }
 
-Node *copyList(Node *head)
-{
+DLL *copyList(DLL *list) {
     Node *head2 = NULL;
     Node *tail2 = NULL;
     Node *tempNode = NULL;
+    Node *head = list->head;
+    DLL *list2 = createDLL();
 
     if (!head)
-        return NULL;
+        return list2;
 
-    head2 = (Node *)malloc(sizeof(Node));
+    head2 = createNode(head->value, NULL, NULL); 
     tail2 = head2;
-    head2->value = head->value;
-    head2->next = NULL;
-    head2->prev = NULL;
     head = head->next;
 
-    while (head)
-    {
-        tempNode = (Node *)malloc(sizeof(Node));
-        tempNode->value = head->value;
-        tempNode->next = NULL;
+    while (head) {
+        tempNode = createNode(head->value, NULL, NULL); 
         tail2->next = tempNode;
         tempNode->prev = tail2;
-        tail2 = tail2->next;
+        tail2 = tempNode;
         head = head->next;
     }
-
-    return head2;
+ 
+    list2->head = head2;
+    list2->tail = tail2;
+    return list2;
 }
 
-int compareList(Node *head1, Node *head2)
-{
+int compareListUtil(Node *head1, Node *head2) {
     if (head1 == NULL && head2 == NULL)
         return 1;
     else if ((head1 == NULL) || (head2 == NULL) || (head1->value != head2->value))
         return 0;
     else
-        return compareList(head1->next, head2->next);
+        return compareListUtil(head1->next, head2->next);
 }
 
-int compareList2(Node *head1, Node *head2)
-{
-    while (head1 != NULL && head2 != NULL)
-    {
+int compareList(DLL* list1, DLL* list2) {
+    return compareListUtil(list1->head, list2->head);
+}
+
+int compareList2(DLL* list1, DLL* list2) {
+    Node *head1 = list1->head;
+    Node *head2 = list2->head;
+    while (head1 != NULL && head2 != NULL) {
         if (head1->value != head2->value)
             return 0;
         head1 = head1->next;
         head2 = head2->next;
     }
-    if (head1 == head2)
+    if (head1 == NULL && head2 == NULL)
         return 1;
-    else
-        return 0;
+    return 0;
 }
 
-int main()
-{
-    DLL list;
-
-    sortedInsert(&list, 1);
-    sortedInsert(&list, 7);
-    sortedInsert(&list, 3);
-    sortedInsert(&list, 4);
-    sortedInsert(&list, 6);
-    sortedInsert(&list, 5);
-    sortedInsert(&list, 2);
-    sortedInsert(&list, 1);
-    sortedInsert(&list, 7);
-    sortedInsert(&list, 3);
-    sortedInsert(&list, 4);
-    sortedInsert(&list, 6);
-    sortedInsert(&list, 5);
-    sortedInsert(&list, 2);
-    printList(&list);
-    reverseList(&list);
-    printList(&list);
-    removeDuplicates(&list);
-    printList(&list);
+int main() {
+    DLL* list = createDLL();
+    sortedInsert(list, 1);
+    sortedInsert(list, 7);
+    sortedInsert(list, 3);
+    sortedInsert(list, 4);
+    sortedInsert(list, 6);
+    sortedInsert(list, 5);
+    sortedInsert(list, 2);
+    sortedInsert(list, 1);
+    sortedInsert(list, 7);
+    sortedInsert(list, 3);
+    sortedInsert(list, 4);
+    sortedInsert(list, 6);
+    sortedInsert(list, 5);
+    sortedInsert(list, 2);
+    printList(list);
+    reverseList(list);
+    printList(list);
+    removeDuplicates(list);
+    printList(list);
     
-    Node *head3 = copyList(&list);
-    printList(head3);
-    printf("comparision result %d ", compareList2(head, head3));
-    Node *head4 = copyListReversed(&list);
-    printList(head4);
+    DLL* list2 = copyList(list);
+    printList(list2);
+    printf("comparision result %d\n", compareList2(list, list2));
+    DLL* list3 = copyListReversed(list);
+    printList(list3);
+
+    deleteList(list3);
+    printList(list3);
     return 0;
 }

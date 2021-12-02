@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int palindromicSubstring(char* str)
-{
+int palindromicSubstring(char* str) {
 	int n = strlen(str);
 	int dp[n][n];
 	memset(dp, 0, sizeof(dp));
@@ -14,21 +13,15 @@ int palindromicSubstring(char* str)
 	int max = 1;
 	int start = 0;
 
-	for (int l = 1; l < n; l++)
-	{
-		for (int i = 0, j = i + l; j < n; i++, j++)
-		{
-			if (str[i] == str[j] && dp[i + 1][j - 1] == j - i - 1)
-			{
+	for (int l = 1; l < n; l++) {
+		for (int i = 0, j = i + l; j < n; i++, j++) {
+			if (str[i] == str[j] && dp[i + 1][j - 1] == j - i - 1) {
 				dp[i][j] = dp[i + 1][j - 1] + 2;
-				if (dp[i][j] > max)
-				{
+				if (dp[i][j] > max) {
 					max = dp[i][j]; // Keeping track of max length and
 					start = i; // starting position of sub-string.
 				}
-			}
-			else
-			{
+			} else {
 				dp[i][j] = 0;
 			}
 		}
@@ -36,8 +29,7 @@ int palindromicSubstring(char* str)
 	return max;
 }
 
-int main()
-{
+int main() {
 	char* str = "ABCAUCBCxxCBA";
 	int length = palindromicSubstring(str);
 	printf("Max Palindromic Substrings len: %d." , length );

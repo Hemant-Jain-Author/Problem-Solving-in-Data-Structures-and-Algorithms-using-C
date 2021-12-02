@@ -2,13 +2,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node_t
+typedef struct Node
 {
     int value;
-    struct Node_t *next;
+    struct Node *next;
 } Node;
 
-typedef struct CircularLL_t
+Node* createNode(int value){
+    Node* node = (Node*)malloc(sizeof(Node));
+    node->value = value;
+    node->next = node;
+    return node;
+}
+
+
+typedef struct CircularLL
 {
     Node *tail;
 } CircularLL;
@@ -19,46 +27,25 @@ CircularLL* createCircularLL(){
     return list;
 }
 
-int insertAtStart(CircularLL* list, int value)
-{
-    Node *temp = (Node *)malloc(sizeof(Node));
-    if (!temp) {
-        printf("Memory Allocation Error");
-        return 0;
-    }
-    temp->value = value;
+int insertAtStart(CircularLL* list, int value) {
+    Node *temp = createNode(value);
     Node *tail = list->tail;
-
     if (!tail) 
     {
-        temp->next = temp;
         list->tail = temp;
-    }
-    else
-    {
+    } else {
         temp->next = tail->next;
         tail->next = temp;
     }
     return 1;
 }
 
-int insertAtEnd(CircularLL *list, int value)
-{
-    Node *temp = (Node *)malloc(sizeof(Node));
-    if (!temp) {
-        printf("Memory Allocation Error");
-        return 0;
-    }
-    temp->value = value;
+int insertAtEnd(CircularLL *list, int value) {
+    Node *temp = createNode(value);
     Node *tail = list->tail;
-
-    if (!tail)
-    {
-        temp->next = temp;
+    if (!tail) {
         list->tail = temp;
-    }
-    else
-    {
+    } else {
         temp->next = tail->next;
         tail->next = temp;
         list->tail = temp;
@@ -66,23 +53,20 @@ int insertAtEnd(CircularLL *list, int value)
     return 1;
 }
 
-void printList(CircularLL *list)
-{
+void printList(CircularLL *list) {
     Node* tail = list->tail;
     if (!tail)
         return;
     
     Node *curr = tail->next;
-    while (curr != tail)
-    {
+    while (curr != tail) {
         printf("%d ", curr->value);
         curr = curr->next;
     }
     printf("%d \n", curr->value);
 }
 
-int searchList(CircularLL *list, int value)
-{
+int searchList(CircularLL *list, int value) {
     Node* tail = list->tail;
     if (!tail)
         return 0;
@@ -91,8 +75,7 @@ int searchList(CircularLL *list, int value)
         return 1;
 
     Node *curr = tail->next;
-    while (curr != tail)
-    {
+    while (curr != tail) {
         if (curr->value == value)
             return 1;
         curr = curr->next;
@@ -100,8 +83,7 @@ int searchList(CircularLL *list, int value)
     return 0;
 }
 
-void deleteList(CircularLL *list)
-{
+void deleteList(CircularLL *list) {
     Node *tail = list->tail;
     if (!tail)
         return;
@@ -110,8 +92,7 @@ void deleteList(CircularLL *list)
     free(tail);
     Node *next;
     
-    while (curr != tail)
-    {
+    while (curr != tail) {
         next = curr->next;
         free(curr);
         curr = next;
@@ -119,8 +100,7 @@ void deleteList(CircularLL *list)
     list->tail = NULL;
 }
 
-int deleteNode(CircularLL *list, int value)
-{
+int deleteNode(CircularLL *list, int value) {
     Node *tail = list->tail;
     if (!tail)
         return 0;
@@ -128,10 +108,8 @@ int deleteNode(CircularLL *list, int value)
     Node *curr = tail;
     Node *prev = curr;
     curr = curr->next;
-    while (curr != tail)
-    {
-        if (curr->value == value)
-        {
+    while (curr != tail) {
+        if (curr->value == value) {
             prev->next = curr->next;
             free(curr);
             return 1;
@@ -139,8 +117,7 @@ int deleteNode(CircularLL *list, int value)
         prev = curr;
         curr = curr->next;
     }
-    if (curr->value == value)
-    {
+    if (curr->value == value) {
         prev->next = curr->next;
         free(curr);
         list->tail = prev;
@@ -149,14 +126,12 @@ int deleteNode(CircularLL *list, int value)
     return 0;
 }
 
-int deleteHeadNode(CircularLL *list)
-{
+int deleteHeadNode(CircularLL *list) {
     Node *tail = list->tail;
     if (!tail)
         return 0;
 
-    if (tail->next == tail)
-    {
+    if (tail->next == tail) {
         free(tail);
         list->tail = NULL;
         return 1;
@@ -167,8 +142,7 @@ int deleteHeadNode(CircularLL *list)
     return 1;
 }
 
-int main()
-{
+int main() {
     CircularLL* list = createCircularLL();
     insertAtStart(list, 1);
     insertAtStart(list, 2);

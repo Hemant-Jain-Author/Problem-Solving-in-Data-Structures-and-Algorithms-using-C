@@ -4,57 +4,57 @@
 #define TABLE_SIZE 517
 #define TABLE_BITS 9
 
-typedef struct dataNode_t
-{
-    int key;
-    int value;
-    struct dataNode_t *next;
-} DataNode;
-
-typedef struct hashTable_t
-{
-    int tableSize;
-    DataNode **listArray; //double pointer
-} HashTable;
-
-unsigned int Hash(int key, int tableSize) //division method
-{
+unsigned int Hash(int key, int tableSize) { //division method
     unsigned int hashValue = 0;
     hashValue = key;
     return hashValue % tableSize;
 }
 
-void HashInit(HashTable *hTable, int size)
-{
-    hTable->tableSize = size;
-    hTable->listArray = (DataNode **)malloc(hTable->tableSize * sizeof(DataNode *));
+typedef struct CounterNode {
+    int key;
+    int value;
+    struct CounterNode *next;
+} CounterNode;
+
+CounterNode* createCounterNode(int key, int value, CounterNode* next) {
+    CounterNode* node = (CounterNode*)malloc(sizeof(CounterNode));
+    node->key = key;
+    node->value = value;
+    node->next = next;
+    return node;
+}
+
+typedef struct Counter {
+    int tableSize;
+    CounterNode **listArray; //double pointer
+} Counter;
+
+Counter * createCounter() {
+    Counter *hTable = (Counter*) malloc(sizeof(Counter));
+    hTable->tableSize = TABLE_SIZE;
+    hTable->listArray = (CounterNode **)malloc(hTable->tableSize * sizeof(CounterNode *));
 
     for (int i = 0; i < hTable->tableSize; i++)
         hTable->listArray[i] = NULL;
+    return hTable;
 }
 
-void CounterPrint(HashTable *hTable)
-{
-    DataNode *head;
-    for (int i = 0; i < hTable->tableSize; i++)
-    {
-        head = hTable->listArray[i];
-        while (head)
-        {
-            printf(" [ %d -> %d ]", head->key, head->value);
+void CounterPrint(Counter *hTable) {
+    for (int i = 0; i < hTable->tableSize; i++) {
+        CounterNode *head = hTable->listArray[i];
+        while (head) {
+            printf("[%d->%d] ", head->key, head->value);
             head = head->next;
         }
     }
     printf("\n");
 }
 
-int FindKey(HashTable *hTable, int key)
-{
-    DataNode *head;
+int FindKey(Counter *hTable, int key) {
+    CounterNode *head;
     int index = Hash(key, hTable->tableSize);
     head = hTable->listArray[index];
-    while (head)
-    {
+    while(head) {
         if (head->key == key)
             return 1;
         head = head->next;
@@ -62,105 +62,89 @@ int FindKey(HashTable *hTable, int key)
     return 0;
 }
 
-int FindCount(HashTable *hTable, int key)
-{
-    DataNode *head;
+int GetCount(Counter *hTable, int key) {
     int index = Hash(key, hTable->tableSize);
-    head = hTable->listArray[index];
-    while (head)
-    {
-        if (head->key == key)
+    CounterNode *head = hTable->listArray[index];
+    while(head) {
+        if(head->key == key)
             return head->value;
         head = head->next;
     }
     return 0;
 }
 
-void CounterAdd(HashTable *hTable, int key)
-{
-    DataNode *head;
+void CounterAdd(Counter *hTable, int key) {
     int index = Hash(key, hTable->tableSize);
-    head = hTable->listArray[index];
-    while (head)
-    {
-        if (head->key == key)
-        {
+    CounterNode *head = hTable->listArray[index];
+    while(head) {
+        if (head->key == key) {
             head->value += 1;
             return;
         }
         head = head->next;
     }
-
-    DataNode *temp = (DataNode *)malloc(sizeof(DataNode));
-    temp->key = key;
-    temp->value = 1;
-    temp->next = hTable->listArray[index];
-    hTable->listArray[index] = temp;
+    hTable->listArray[index] = createCounterNode(key, 1, hTable->listArray[index]);
 }
 
-int CounterRemove(HashTable *hTable, int key)
-{
-    DataNode *currNode;
-    DataNode *nextNode;
+int CounterRemove(Counter *hTable, int key) {
     int index = Hash(key, hTable->tableSize);
-    currNode = hTable->listArray[index];
+    CounterNode *currNode = hTable->listArray[index];
 
-    if (currNode && currNode->key == key)
-    {
-        if (currNode->value == 1)
-        {
+    if(currNode && currNode->key == key) {
+        if(currNode->value == 1) {
             hTable->listArray[index] = currNode->next;
             free(currNode);
-        } 
-        else 
-        {
+        } else {
             currNode->value -= 1;
         }
         return 1;
     }
 
-    while (currNode)
-    {
+    CounterNode *nextNode;
+    while (currNode) {
         nextNode = currNode->next;
-        if (nextNode && nextNode->key == key)
-        {   
-            if (nextNode->value == 1)
-            {
+        if (nextNode && nextNode->key == key) {   
+            if (nextNode->value == 1) {
             currNode->next = nextNode->next;
             free(nextNode);
-            }
-            else 
-            {
+            } else {
                 nextNode->value -= 1;
             }
             return 1;
         }
-        else
-        {
-            currNode = nextNode;
-        }
+        currNode = nextNode;
     }
     return 0;
 }
 
-int main()
-{
-    HashTable myTable;
-    HashInit(&myTable, 10);
-    CounterAdd(&myTable, 88);
-    CounterAdd(&myTable, 88);
-    CounterAdd(&myTable, 18);
-    CounterAdd(&myTable, 49);
-    CounterAdd(&myTable, 58);
-    CounterAdd(&myTable, 69);
-    CounterPrint(&myTable);
-    CounterRemove(&myTable, 88);
-    CounterPrint(&myTable);
+int mainA() {
+    Counter* ctr = createCounter();
+    CounterAdd(ctr, 2);
+    CounterAdd(ctr, 3);
+    CounterAdd(ctr, 3);
+    CounterAdd(ctr, 5);
+    CounterAdd(ctr, 5);
+    CounterAdd(ctr, 5);
+    CounterPrint(ctr);
 
-    CounterRemove(&myTable, 88);
-    CounterPrint(&myTable);
-    printf("Find 88 : %d ", FindCount(&myTable, 88));
-    printf("Find 18 : %d ", FindCount(&myTable, 18));
+    CounterRemove(ctr, 3);
+    CounterPrint(ctr);
+    CounterRemove(ctr, 3);
+    CounterPrint(ctr);
+
+    printf("FindKey 5 : %d\n", FindKey(ctr, 5));
+    printf("FindKey 3 : %d\n", FindKey(ctr, 3));
+    printf("GetCount 5 : %d\n", GetCount(ctr, 5));
+    printf("GetCount 3 : %d\n", GetCount(ctr, 3));
     return 0;
 }
 
+/*
+[2->1] [3->2] [5->3] 
+[2->1] [3->1] [5->3] 
+[2->1] [5->3] 
+FindKey 5 : 1
+FindKey 3 : 0
+GetCount 5 : 3
+GetCount 3 : 0
+*/

@@ -1,15 +1,13 @@
 #include <stdio.h>
 #include<stdlib.h>
 
-int diffWaysBU(int n)
-{
+int diffWaysBU(int n) {
 	if (n <= 2)
 		return n;
 
 	int first = 1, second = 2, temp = 0;
 
-	for (int i = 3; i <= n; i++)
-	{
+	for (int i = 3; i <= n; i++) {
 		temp = first + second;
 		first = second;
 		second = temp;
@@ -17,8 +15,7 @@ int diffWaysBU(int n)
 	return temp;
 }
 
-int diffWaysBU2(int n)
-{
+int diffWaysBU2(int n) {
 	if (n < 2)
 		return n;
 
@@ -32,8 +29,7 @@ int diffWaysBU2(int n)
 	return ways[n - 1];
 }
 
-int main()
-{
+int main() {
 	printf("Unique way to reach top:: %d\n" , diffWaysBU(4));
 	printf("Unique way to reach top:: %d\n" , diffWaysBU2(4));
 }

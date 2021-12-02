@@ -2,33 +2,32 @@
 #include <stdio.h>
 #define ERROR_VALUE -99999
 
-typedef struct stackNode_t
+typedef struct StackNode
 {
     int value;
-    struct stackNode_t *next;
+    struct StackNode *next;
 } StackNode;
 
 
-typedef struct Stack_t
+typedef struct Stack
 {
     StackNode *head;
 } Stack;
 
-void StackInit(Stack *stk) 
+Stack* createStack() 
 {
+    Stack *stk = (Stack*)malloc(sizeof(Stack));
     stk->head = NULL;
+    return stk;
 }
 
-int StackIsEmpty(Stack *stk)
-{
+int StackIsEmpty(Stack *stk) {
     return stk->head == NULL;
 }
 
-void StackPush(Stack *stk, int value)
-{
+void StackPush(Stack *stk, int value) {
     StackNode *temp = (StackNode *)malloc(sizeof(StackNode));
-    if (!temp)
-    {
+    if (!temp) {
         printf("Memory allocation error.\n");
         return;
     }
@@ -37,11 +36,9 @@ void StackPush(Stack *stk, int value)
     stk->head = temp;
 }
 
-int StackPop(Stack *stk)
-{
+int StackPop(Stack *stk) {
     StackNode *deleteMe;
-    if(stk->head == NULL)
-    {
+    if(stk->head == NULL) {
         printf("Stack is empty.\n");
         return ERROR_VALUE;
     }
@@ -52,15 +49,13 @@ int StackPop(Stack *stk)
     return value;
 }
 
-void StackPrint(Stack *stk)
-{
+void StackPrint(Stack *stk) {
     if (!stk->head)
         return;
 
     StackNode *head = stk->head;
     printf("Stack : ");
-    while (head != NULL)
-    {
+    while (head != NULL) {
         printf("%d ", head->value);
         head = head->next;
     }
@@ -68,15 +63,13 @@ void StackPrint(Stack *stk)
 }
 
 
-int main()
-{
-    Stack stk;
-    StackInit(&stk);
-    StackPush(&stk, 1);
-    StackPush(&stk, 2);
-    StackPush(&stk, 3);
-    StackPrint(&stk);
-    while (!StackIsEmpty(&stk))
-        printf("%d ", StackPop(&stk));
+int main() {
+    Stack* stk= createStack();
+    StackPush(stk, 1);
+    StackPush(stk, 2);
+    StackPush(stk, 3);
+    StackPrint(stk);
+    while (!StackIsEmpty(stk))
+        printf("%d ", StackPop(stk));
     return 0;
 }

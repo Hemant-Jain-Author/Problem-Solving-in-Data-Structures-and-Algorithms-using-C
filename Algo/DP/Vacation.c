@@ -2,23 +2,21 @@
 #include <stdio.h>
 #include <string.h>
 
-int min(int a, int b){
+int min(int a, int b) {
 	return (a < b)? a : b;
 }
 
-int max(int a, int b){
+int max(int a, int b) {
 	return (a > b)? a : b;
 }
 
-int minCost(int days[], int n, int costs[])
-{
+int minCost(int days[], int n, int costs[]) {
 	int maxVal = days[n - 1];
 	int dp[maxVal + 1];
 	memset(dp, 0, sizeof(dp));
 
 	int j = 0;
-	for (int i = 1; i <= maxVal; i++)
-	{
+	for (int i = 1; i <= maxVal; i++) {
 		if (days[j] == i) // That days is definitely travelled.
 		{
 			j++;
@@ -32,8 +30,7 @@ int minCost(int days[], int n, int costs[])
 	return dp[maxVal];
 }
 
-int main()
-{
+int main() {
 	int days[] = {1, 3, 5, 7, 12, 20, 30};
 	int n = 7;
 	int costs[] = {2, 7, 20};

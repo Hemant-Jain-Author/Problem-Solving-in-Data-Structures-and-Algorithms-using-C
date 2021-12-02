@@ -1,28 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct graph
+typedef struct Graph_t
 {
     int count;
     int **adj;
 } Graph;
 
-typedef struct graphNode
+typedef struct GraphEdge_t
 {
     int src;
     int dest;
     int cost;
-} GraphNode;
+} GraphEdge;
 
-GraphNode* createGraphNode(int src, int dst, int cost){
-    GraphNode *edge = (GraphNode *)malloc(sizeof(GraphNode));
+GraphEdge* createGraphEdge(int src, int dst, int cost){
+    GraphEdge *edge = (GraphEdge *)malloc(sizeof(GraphEdge));
     edge->src = src;
     edge->dest = dst;
     edge->cost = cost;
     return edge;
 }
 
-int greater(GraphNode* a, GraphNode* b) {
+int greater(GraphEdge* a, GraphEdge* b) {
     return a->cost > b->cost;
 }
 
@@ -34,22 +34,20 @@ typedef struct Heap_t
 {
     int capacity;
     int size;
-    GraphNode**array;
-    int(* compare)(GraphNode* , GraphNode*);
+    GraphEdge** array;
+    int(* compare)(GraphEdge* , GraphEdge*);
 } Heap;
 
-Heap* createHeap(int(* compare)(GraphNode* , GraphNode*))
-{
+Heap* createHeap(int(* compare)(GraphEdge* , GraphEdge*)) {
     Heap* hp = (Heap*)malloc(sizeof(Heap));
     hp->size = 0;
     hp->capacity = 100;
-    hp->array = (GraphNode **)malloc((hp->capacity) * sizeof(GraphNode));
+    hp->array = (GraphEdge **)malloc((hp->capacity) * sizeof(GraphEdge));
     hp->compare = compare;
     return hp;
 }
 
-void proclateDown(GraphNode* arr[], int position, int size, int(* compare)(GraphNode* , GraphNode*))
-{
+void proclateDown(GraphEdge* arr[], int position, int size, int(* compare)(GraphEdge* , GraphEdge*)) {
     int lChild = 2 * position + 1;
     int rChild = lChild + 1;
     int small = -1;
@@ -60,48 +58,40 @@ void proclateDown(GraphNode* arr[], int position, int size, int(* compare)(Graph
     if (rChild < size && compare(arr[lChild], arr[rChild]))
         small = rChild;
 
-    if (small != -1 && compare(arr[position], arr[small]))
-    {
-        GraphNode* temp = arr[position];
+    if (small != -1 && compare(arr[position], arr[small])) {
+        GraphEdge* temp = arr[position];
         arr[position] = arr[small];
         arr[small] = temp;
         proclateDown(arr, small, size, compare);
     }
 }
 
-void proclateUp(GraphNode* arr[], int position, int(* compare)(GraphNode* , GraphNode*))
-{
+void proclateUp(GraphEdge* arr[], int position, int(* compare)(GraphEdge* , GraphEdge*)) {
     int parent = (position - 1) / 2;
-    if (parent >= 0)
-    {
-        if (compare(arr[parent], arr[position]))
-        {
-            GraphNode* temp = arr[position];
+    if (parent >= 0) {
+        if (compare(arr[parent], arr[position])) {
+            GraphEdge* temp = arr[position];
             arr[position] = arr[parent];
             arr[parent] = temp;
-
             proclateUp(arr, parent, compare);
         }
     }
 }
 
-void heapify(GraphNode* arr[], int size, int(* compare)(GraphNode* , GraphNode*))
-{
+void heapify(GraphEdge* arr[], int size, int(* compare)(GraphEdge* , GraphEdge*)) {
     for (int i = size/2; i >= 0; i--)
         proclateDown(arr, i, size, compare);
 }
 
-GraphNode* heapRemove(Heap *hp)
-{
-    GraphNode* value = hp->array[0];
+GraphEdge* heapRemove(Heap *hp) {
+    GraphEdge* value = hp->array[0];
     hp->array[0] = hp->array[hp->size - 1];
     hp->size--;
     proclateDown(hp->array, 0, hp->size, hp->compare);
     return value;
 }
 
-void heapAdd(Heap *hp, GraphNode* value)
-{
+void heapAdd(Heap *hp, GraphEdge* value) {
     if (hp->size == hp->capacity)
         return;
     hp->size++;
@@ -109,7 +99,6 @@ void heapAdd(Heap *hp, GraphNode* value)
     proclateUp(hp->array, hp->size - 1, hp->compare);
 }
 
-int heapSize(Heap *hp)
-{
+int heapSize(Heap *hp) {
     return hp->size;
 }

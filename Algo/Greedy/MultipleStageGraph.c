@@ -3,8 +3,7 @@
 
 int INF = 99999;
 
-int shortestDist(int n, int graph[][n])
-{
+int shortestDist(int n, int graph[][n]) {
 	// dist[i] is going to store shortest distance from node i to node n-1.
 	int dist[n];
 	int path[n];
@@ -16,11 +15,9 @@ int shortestDist(int n, int graph[][n])
 	path[0] = -1;
 
 	// Calculating shortest path for the nodes
-	for (int i = 0; i < n; i++)
-	{
+	for (int i = 0; i < n; i++) {
 		// Check all nodes of next 
-		for (int j = i; j < n; j++)
-		{
+		for (int j = i; j < n; j++) {
 			// Reject if no edge exists
 			if (graph[i][j] == INF)
 			{
@@ -35,8 +32,7 @@ int shortestDist(int n, int graph[][n])
 		}
 	}
 	value = n - 1;
-	while (value != -1)
-	{
+	while (value != -1} {
 		printf("%d ", value);
 		value = path[value];
 	}
@@ -44,8 +40,7 @@ int shortestDist(int n, int graph[][n])
 	return dist[n - 1];
 }
 
-int main()
-{
+int main() {
 	// Graph stored in the form of an adjacency Matrix
 	int n = 8;
 	int graph[][8] =

@@ -1,8 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-void tohUtil(int num, char from, char to, char temp)
-{
+void tohUtil(int num, char from, char to, char temp) {
 	if (num < 1)
 		return;
 
@@ -11,14 +10,12 @@ void tohUtil(int num, char from, char to, char temp)
 	tohUtil(num - 1, temp, to, from);
 }
 
-void toh(int num)
-{
+void toh(int num) {
 	printf("The sequence of moves involved in the Tower of Hanoi are :\n" );
 	tohUtil(num, 'A', 'C', 'B');
 }
 
-int main()
-{
+int main() {
 	toh(3);
 	return 0;
 }

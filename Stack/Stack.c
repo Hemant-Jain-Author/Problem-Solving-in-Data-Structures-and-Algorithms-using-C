@@ -5,15 +5,14 @@
 
 #define ERROR_VALUE -999
 
-typedef struct stack
+typedef struct Stack
 {
     int top;
     int *data;
     int capacity;
 } Stack;
 
-Stack* createStack(int size)
-{
+Stack* createStack(int size) {
     Stack *stk = (Stack*)malloc(sizeof(Stack));
     stk->data = (int *)malloc(size * sizeof(int));
     stk->top = -1;
@@ -21,8 +20,7 @@ Stack* createStack(int size)
     return stk;
 }
 
-void StackPush(Stack *stk, int value)
-{
+void StackPush(Stack *stk, int value) {
     if (stk->top + 1 == stk->capacity){
         printf("Stack is full.\n");
         return;
@@ -31,10 +29,8 @@ void StackPush(Stack *stk, int value)
     stk->data[stk->top] = value;
 }
 
-int StackPop(Stack *stk)
-{
-    if (stk->top == -1)
-    {
+int StackPop(Stack *stk) {
+    if (stk->top == -1) {
         printf("stack empty.\n");
         return -99999;
     }
@@ -44,34 +40,28 @@ int StackPop(Stack *stk)
     return value;
 }
 
-int StackTop(Stack *stk)
-{
+int StackTop(Stack *stk) {
     int value = stk->data[stk->top];
     return value;
 }
 
-int StackIsEmpty(Stack *stk)
-{
+int StackIsEmpty(Stack *stk) {
     return (stk->top == -1);
 }
 
-int StackSize(Stack *stk)
-{
+int StackSize(Stack *stk) {
     return (stk->top + 1);
 }
 
-void StackPrint(Stack *stk)
-{
+void StackPrint(Stack *stk) {
     printf("[");
-    for (int i = stk->top; i >= 0; i--)
-    {
+    for (int i = stk->top; i >= 0; i--) {
         printf("%d ", stk->data[i]);
     }
     printf("]\n");
 }
 
-int main()
-{
+int main() {
     Stack* stk = createStack(20);
     for (int i = 0; i < 20; i++)
         StackPush(stk, i);

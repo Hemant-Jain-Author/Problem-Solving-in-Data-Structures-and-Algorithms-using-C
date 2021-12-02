@@ -20,8 +20,7 @@ int min(int a, int b){
 	return (a < b)? a : b;
 }
 
-RmqST* createRmqST(int input[], int n)
-{
+RmqST* createRmqST(int input[], int n) {
 	RmqST* tree = (RmqST*)malloc(sizeof(RmqST));
 	// Height of segment tree.
 	int x = ceil(log(n)/log(2));
@@ -34,11 +33,9 @@ RmqST* createRmqST(int input[], int n)
 	return tree;
 }
 
-int constructST(RmqST* tree, int input[], int start, int end, int index)
-{
+int constructST(RmqST* tree, int input[], int start, int end, int index) {
 	// Store it in current node of the segment tree and return
-	if (start == end)
-	{
+	if (start == end) {
 		tree->segArr[index] = input[start];
 		return input[start];
 	}
@@ -52,19 +49,16 @@ int constructST(RmqST* tree, int input[], int start, int end, int index)
 	 return tree->segArr[index];
 }
 
-int getMin(RmqST* tree, int start, int end)
-{
+int getMin(RmqST* tree, int start, int end) {
 	// Check for error conditions.
-	if (start > end || start < 0 || end > tree->n - 1)
-	{
+	if (start > end || start < 0 || end > tree->n - 1) {
 		printf("Invalid Input.\n");
 		return 99999;
 	}
 	return getMinUtil(tree, 0, tree->n - 1, start, end, 0);
 }
 
-int getMinUtil(RmqST* tree, int segStart, int segEnd, int queryStart, int queryEnd, int index)
-{
+int getMinUtil(RmqST* tree, int segStart, int segEnd, int queryStart, int queryEnd, int index) {
 	if (queryStart <= segStart && segEnd <= queryEnd) // complete overlapping case.
 	{
 		return tree->segArr[index];
@@ -81,11 +75,9 @@ int getMinUtil(RmqST* tree, int segStart, int segEnd, int queryStart, int queryE
 				getMinUtil(tree, mid + 1, segEnd, queryStart, queryEnd, 2 * index + 2));
 }
 
-void update(RmqST* tree, int ind, int val)
-{
+void update(RmqST* tree, int ind, int val) {
 	// Check for error conditions.
-	if (ind < 0 || ind > tree->n - 1)
-	{
+	if (ind < 0 || ind > tree->n - 1) {
 		printf("Invalid Input.\n");
 		return;
 	}
@@ -94,22 +86,18 @@ void update(RmqST* tree, int ind, int val)
 	updateUtil(tree, 0, tree->n - 1, ind, val, 0);
 }
 
-int updateUtil(RmqST* tree, int segStart, int segEnd, int ind, int val, int index)
-{
+int updateUtil(RmqST* tree, int segStart, int segEnd, int ind, int val, int index) {
 	// Update index lies outside the range of current segment.
 	// So minimum will not change.
-	if (ind < segStart || ind > segEnd)
-	{
+	if (ind < segStart || ind > segEnd) {
 		return tree->segArr[index];
 	}
 
 	// If the input index is in range of this node, then update the
 	// value of the node and its children
 
-	if (segStart == segEnd)
-	{
-		if (segStart == ind)
-		{ // Index value need to be updated.
+	if (segStart == segEnd) {
+		if (segStart == ind) { // Index value need to be updated.
 			tree->segArr[index] = val;
 			return val;
 		}
@@ -129,8 +117,7 @@ int updateUtil(RmqST* tree, int segStart, int segEnd, int ind, int val, int inde
 	return tree->segArr[index];
 }
 
-int main()
-{
+int main() {
 	int arr[] = {2, 3, 1, 7, 12, 5};
 	int n = 6;
 	RmqST *tree = createRmqST(arr, 6);

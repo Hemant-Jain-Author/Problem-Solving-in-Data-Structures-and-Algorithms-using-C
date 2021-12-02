@@ -3,12 +3,9 @@
 
 const int INF = 99999;
 
-void printSolution(int V, int dist[V][V])
-{
-	for (int i = 0; i < V; i++)
-	{
-		for (int j = 0; j < V; j++)
-		{
+void printSolution(int V, int dist[V][V]) {
+	for (int i = 0; i < V; i++) {
+		for (int j = 0; j < V; j++) {
 			if (dist[i][j] == INF)
 				printf("INF ");
 			else
@@ -18,19 +15,15 @@ void printSolution(int V, int dist[V][V])
 	}
 }
 
-void floydWarshall(int V, int graph[V][V]) // Bottom up.
-{
+void floydWarshall(int V, int graph[V][V]) { // Bottom up.
 	int dist[V][V];
 	for (int i = 0; i < V; i++)
 		for (int j = 0; j < V; j++)
 			dist[i][j] = graph[i][j]; // Direct path.
 
-	for (int k = 0; k < V; k++) // Pick intermediate vertices.
-	{
-		for (int i = 0; i < V; i++) // Pick source vertices one by one.
-		{
-			for (int j = 0; j < V; j++) // Pick destination vertices.
-			{
+	for (int k = 0; k < V; k++) { // Pick intermediate vertices.
+		for (int i = 0; i < V; i++) { // Pick source vertices one by one.
+			for (int j = 0; j < V; j++) { // Pick destination vertices.
 				// If we have shorter path from i to j via k, then update dist[i][j]
 				if (dist[i][k] != INF && dist[k][j] != INF && dist[i][k] + dist[k][j] < dist[i][j])
 					dist[i][j] = dist[i][k] + dist[k][j];
@@ -41,8 +34,7 @@ void floydWarshall(int V, int graph[V][V]) // Bottom up.
 	printSolution(V, dist);
 }
 
-int main()
-{
+int main() {
 	int graph[7][7] =
 	{
 		{0, 2, 4, INF, INF, INF, INF},

@@ -2,32 +2,31 @@
 #include <stdlib.h>
 #define ERROR_VALUE 999999;
 
-typedef struct QueueNode_t
+typedef struct QueueNode
 {
     int value;
-    struct QueueNode_t *next;
+    struct QueueNode *next;
 } QueueNode;
 
-typedef struct Queue_t
+typedef struct QueueNode
 {
     QueueNode *tail;
-} Queue;
+} QueueNode;
 
-void QueueInit(Queue *queue) 
+Queue* createQueue() 
 {
+    Queue *queue = (Queue*) malloc(sizeof(Queue));
     queue->tail = NULL;
+    return queue;
 }
 
-int QueueIsEmpty(Queue *queue)
-{
+int QueueIsEmpty(Queue *queue) {
     return queue->tail == NULL;
 }
 
-int QueueAdd(Queue *queue, int value)
-{
+int QueueAdd(Queue *queue, int value) {
     QueueNode *temp = (QueueNode *)malloc(sizeof(QueueNode));
-    if (!temp)
-    {
+    if (!temp) {
         printf("Memory Allocation Error");
         return 0;
     }
@@ -43,16 +42,14 @@ int QueueAdd(Queue *queue, int value)
     }
     return 1;
 }
-int QueueRemove(Queue *queue)
-{
+int QueueRemove(Queue *queue) {
     int value;
     QueueNode *deleteMe;
 
     if (!queue->tail)
         return ERROR_VALUE;
 
-    if (queue->tail->next == queue->tail)
-    {
+    if (queue->tail->next == queue->tail) {
         value = queue->tail->value;
         free(queue->tail);
         queue->tail = NULL;
@@ -66,33 +63,27 @@ int QueueRemove(Queue *queue)
     return value;
 }
 
-void QueuePrint(Queue *queue)
-{
+void QueuePrint(Queue *queue) {
     if (!queue->tail)
         return;
 
     QueueNode *head = queue->tail->next;
     printf("Queue %d ", head->value);
     QueueNode *currNode = head->next;
-    while (currNode != head)
-    {
+    while (currNode != head) {
         printf("%d ", currNode->value);
         currNode = currNode->next;
     }
     printf("\n");
 }
 
-int main()
-{
-    Queue queue;
-    QueueInit(&queue);
-    QueueAdd(&queue, 1);
-    QueueAdd(&queue, 2);
-    QueueAdd(&queue, 3);
-    QueueAdd(&queue, 4);
-    QueuePrint(&queue);
+int main() {
+    Queue* queue = createQueue();
+    QueueAdd(queue, 1);
+    QueueAdd(queue, 2);
+    QueueAdd(queue, 3);
 
-    while(!QueueIsEmpty(&queue))
-        printf("%d ", QueueRemove(&queue));
+    while(!QueueIsEmpty(queue))
+        printf("%d ", QueueRemove(queue));
     return 0;
 }

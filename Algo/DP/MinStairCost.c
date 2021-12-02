@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include<stdlib.h>
 
-int minCost(int[] cost, int n)
-{
+int min(int a, int b) {
+	return (a < b)? a : b;
+}
+
+int minCost(int cost[], int n) {
 	// base case
 	if (n == 1)
 		return cost[0];
@@ -17,14 +20,13 @@ int minCost(int[] cost, int n)
 	return min(dp[n - 2], dp[n - 1]);
 }
 
-int main()
-{
-	int [] a = {1, 5, 6, 3, 4, 7, 9, 1, 2, 11};
-	int n = a strlen()/strlen();
-	printf(minCost(a, n);
+int main() {
+	int a[] = {1, 5, 6, 3, 4, 7, 9, 1, 2, 11};
+	int n = sizeof(a)/sizeof(int);
+	printf("minCost : %d\n", minCost(a, n));
 	return 0;
 }
 
 /*
-18
+minCost : 18
 */

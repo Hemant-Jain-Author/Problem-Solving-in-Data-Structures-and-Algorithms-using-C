@@ -1,18 +1,15 @@
 
 #include <stdio.h>
 
-int andEx(int a, int b)
-{
+int andEx(int a, int b) {
 	return a & b;
 }
 
-int orEx(int a, int b)
-{
+int orEx(int a, int b) {
 	return a | b;
 }
 
-int xorEx(int a, int b)
-{
+int xorEx(int a, int b) {
 	return a ^ b;
 }
 
@@ -26,71 +23,56 @@ int rightShiftEx(int a) // divide by 2
 	return a >> 1;
 }
 
-int bitReversalEx(int a)
-{
+int bitReversalEx(int a) {
 	return ~a;
 }
 
-int twoComplementEx(int a)
-{
+int twoComplementEx(int a) {
 	return -a;
 }
 
-int kthBitCheck(int a, int k)
-{
+int kthBitCheck(int a, int k) {
 	return (a & 1 << (k - 1)) > 0;
 }
 
-int kthBitSet(int a, int k)
-{
+int kthBitSet(int a, int k) {
 	return (a | 1 << (k - 1));
 }
 
-int kthBitReset(int a, int k)
-{
+int kthBitReset(int a, int k) {
 	return (a & ~(1 << (k - 1)));
 }
 
-int kthBitToggle(int a, int k)
-{
+int kthBitToggle(int a, int k) {
 	return (a ^ (1 << (k - 1)));
 }
 
-int rightMostBit(int a)
-{
+int rightMostBit(int a) {
 	return a & -a;
 }
 
-int resetRightMostBit(int a)
-{
+int resetRightMostBit(int a) {
 	return a & (a - 1);
 }
 
-int isPowerOf2(int a)
-{
-	if ((a & (a - 1)) == 0)
-	{
+int isPowerOf2(int a) {
+	if ((a & (a - 1)) == 0) {
 		return 1;
-	}
-	else
-	{
+	} else {
 		return 0;
 	}
 }
 
-int countBits(int a)
-{
+int countBits(int a) {
 	int count = 0;
-	while (a > 0)
-	{
+	while (a > 0) {
 		count += 1;
 		a = a & (a - 1); // reset least significant bit.
 	}
 	return count;
 }
 
-int main()
-{
+int main() {
 	int a = 4;
 	int b = 8;
 	printf("%d\n", andEx(a, b));
@@ -108,8 +90,7 @@ int main()
 	printf("%d\n", resetRightMostBit(a));
 	printf("%d\n", isPowerOf2(a));
 
-	for (int i = 0;i < 10;i++)
-	{
+	for (int i = 0;i < 10;i++) {
 		printf("%d bit count : %d\n", i, countBits(i));
 	}
 	return 0;

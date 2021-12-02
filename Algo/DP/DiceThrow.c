@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include<stdlib.h>
 
-int findWaysBU(int n, int m, int V)
-{
+int findWaysBU(int n, int m, int V) {
 	int dp[n + 1][V + 1];
 	for (int i = 0; i <= n; i++)
 		for (int j = 0; j <= V; j++)
@@ -25,10 +24,8 @@ int findWaysBU(int n, int m, int V)
 	return dp[n][V];
 }
 
-int main()
-{
-	for (int i = 1;i <= 6;i++)
-	{
+int main() {
+	for (int i = 1;i <= 6;i++) {
 		printf("%d\n", findWaysBU(i, 6, 6) );
 	}
 }

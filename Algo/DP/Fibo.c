@@ -1,29 +1,25 @@
 #include <stdio.h>
 #include<stdlib.h>
 
-int fibonacci(int n)
-{
+int fibonacci(int n) {
 	if (n <= 2)
 		return n - 1;
 	return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-void fibonacciSeries(int n)
-{
+void fibonacciSeries(int n) {
 	for (int i = 1;i <= n;i++)
 		printf("%d ", fibonacci(i));
 }
 
-int fibonacciBU(int n)
-{
+int fibonacciBU(int n) {
 	if (n <= 2)
 		return n - 1;
 
 	int first = 0, second = 1;
 	int temp = 0;
 
-	for (int i = 2; i < n; i++)
-	{
+	for (int i = 2; i < n; i++) {
 		temp = first + second;
 		first = second;
 		second = temp;
@@ -31,8 +27,7 @@ int fibonacciBU(int n)
 	return temp;
 }
 
-void fibonacciSeriesBU(int n)
-{
+void fibonacciSeriesBU(int n) {
 	if (n < 1)
 		return;
 
@@ -48,15 +43,13 @@ void fibonacciSeriesBU(int n)
 		printf("%d ", dp[i]);
 }
 
-int fibonacciSeriesTDUtil(int n, int dp[])
-{
+int fibonacciSeriesTDUtil(int n, int dp[]) {
 	if (dp[n] == 0)
 		dp[n] = fibonacciSeriesTDUtil(n - 1, dp) + fibonacciSeriesTDUtil(n - 2, dp);	
 	return dp[n];
 }
 
-void fibonacciSeriesTD(int n)
-{
+void fibonacciSeriesTD(int n) {
 	if (n < 1)
 		return;
 
@@ -71,8 +64,7 @@ void fibonacciSeriesTD(int n)
 		printf("%d ", dp[i]);
 }
 
-int main()
-{
+int main() {
 
 	fibonacciSeries(6);
 	printf("\n");

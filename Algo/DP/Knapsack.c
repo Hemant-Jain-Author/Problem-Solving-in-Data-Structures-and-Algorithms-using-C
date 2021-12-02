@@ -6,8 +6,7 @@ int max(int a, int b){
 	return (a > b)? a : b;
 }
 
-int getMaxCost01Util(int wt[], int cost[], int n, int capacity)
-{
+int getMaxCost01Util(int wt[], int cost[], int n, int capacity) {
 	// Base Case
 	if (n == 0 || capacity == 0)
 		return 0;
@@ -23,13 +22,11 @@ int getMaxCost01Util(int wt[], int cost[], int n, int capacity)
 	return max(first, second);
 }
 
-int getMaxCost01(int wt[], int cost[], int n, int capacity)
-{
+int getMaxCost01(int wt[], int cost[], int n, int capacity) {
 	return getMaxCost01Util(wt, cost, n, capacity);
 }
 
-int getMaxCost01TDUtil(int n, int dp[][n+1], int wt[], int cost[], int i, int w)
-{
+int getMaxCost01TDUtil(int n, int dp[][n+1], int wt[], int cost[], int i, int w) {
 	if (w == 0 || i == 0)
 		return 0;
 
@@ -47,23 +44,19 @@ int getMaxCost01TDUtil(int n, int dp[][n+1], int wt[], int cost[], int i, int w)
 	return dp[w][i] = max(first,second);
 }
 
-int getMaxCost01TD(int wt[], int cost[], int n, int capacity)
-{
+int getMaxCost01TD(int wt[], int cost[], int n, int capacity) {
 	int dp[capacity + 1][n + 1];
 	memset(dp, 0, sizeof(dp));
 	return getMaxCost01TDUtil(n, dp, wt, cost, n, capacity);
 }
 
-int getMaxCost01BU(int wt[], int cost[], int n, int capacity)
-{
+int getMaxCost01BU(int wt[], int cost[], int n, int capacity) {
 	int dp[capacity + 1][n + 1] ;
 	memset(dp, 0, sizeof(dp));
 	// Build table dp[][] in bottom up approach.
 	// Weights considered against capacity.
-	for (int w = 1; w <= capacity; w++)
-	{
-		for (int i = 1; i <= n; i++)
-		{
+	for (int w = 1; w <= capacity; w++) {
+		for (int i = 1; i <= n; i++) {
 			// Their are two cases:
 			// (1) ith item is included
 			// (2) ith item is not included
@@ -78,17 +71,14 @@ int getMaxCost01BU(int wt[], int cost[], int n, int capacity)
 	return dp[capacity][n]; // Number of weights considered and final capacity.
 }
 
-int KS01UnboundBU(int wt[], int cost[], int n, int capacity)
-{
+int KS01UnboundBU(int wt[], int cost[], int n, int capacity) {
 	int dp[capacity + 1];
 	memset(dp, 0, sizeof(dp));
 
 	// Build table dp[] in bottom up approach.
 	// Weights considered against capacity.
-	for (int w = 1; w <= capacity; w++)
-	{
-		for (int i = 1; i <= n; i++)
-		{
+	for (int w = 1; w <= capacity; w++) {
+		for (int i = 1; i <= n; i++) {
 			// Their are two cases:
 			// (1) ith item is included 
 			// (2) ith item is not included
@@ -99,8 +89,7 @@ int KS01UnboundBU(int wt[], int cost[], int n, int capacity)
 	return dp[capacity]; // Number of weights considered and final capacity.
 }
 
-int main()
-{
+int main() {
 	int  wt[] = {10, 40, 20, 30};
 	int  cost[] = {60, 40, 90, 120};
 	int capacity = 50;
@@ -117,8 +106,8 @@ int main()
 }
 
 /*
-Maximum cost obtained = 300
-Maximum cost obtained = 210
-Maximum cost obtained = 210
-Maximum cost obtained = 210
+Maximum cost obtained = 300.000000
+Maximum cost obtained = 210.000000
+Maximum cost obtained = 210.000000
+Maximum cost obtained = 210.000000
 */

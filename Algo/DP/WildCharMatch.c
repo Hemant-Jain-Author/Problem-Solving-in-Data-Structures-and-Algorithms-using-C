@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int matchExpUtil(char* exp, char* str, int m, int n)
-{
+int matchExpUtil(char* exp, char* str, int m, int n) {
 	if (m ==  strlen(exp) && (n ==  strlen(str) || exp[m - 1] == '*'))
 		return 1;
 	
@@ -19,20 +18,17 @@ int matchExpUtil(char* exp, char* str, int m, int n)
 	return 0;
 }
 
-int matchExp(char* exp, char* str)
-{
+int matchExp(char* exp, char* str) {
 	return matchExpUtil(exp, str, 0, 0);
 }
 
-int matchExpDPUtil(char* exp, char* str, int m, int n)
-{
+int matchExpDPUtil(char* exp, char* str, int m, int n) {
 	int lookup[m + 1][n + 1];
 	lookup[0][0] = 1; // empty exp and empty str match.
 
 	// 0 row will remain all 0. empty exp can't match any str.
 	// '*' can match with empty string, column 0 update.
-	for (int i = 1; i <= m; i++)
-	{
+	for (int i = 1; i <= m; i++) {
 		if (exp[i - 1] == '*')
 			lookup[i][0] = lookup[i - 1][0];
 		else
@@ -40,10 +36,8 @@ int matchExpDPUtil(char* exp, char* str, int m, int n)
 	}
 
 	// Fill the table in bottom-up fashion
-	for (int i = 1; i <= m; i++)
-	{
-		for (int j = 1; j <= n; j++)
-		{
+	for (int i = 1; i <= m; i++) {
+		for (int j = 1; j <= n; j++) {
 			// If we see a '*' in pattern:
 			// 1) We ignore '*' character and consider next character in the pattern.
 			// 2) We ignore one character in the input str and consider next character.
@@ -61,13 +55,11 @@ int matchExpDPUtil(char* exp, char* str, int m, int n)
 	return lookup[m][n];
 }
 
-int matchExpDP(char* exp, char* str)
-{
+int matchExpDP(char* exp, char* str) {
 	return matchExpDPUtil(exp, str,  strlen(exp),  strlen(str));
 }
 
-int main()
-{
+int main() {
 	printf("%d\n",matchExp("*llo,?World?", "Hello, World!"));
 	printf("%d\n",matchExpDP("*llo,?World?", "Hello, World!"));
 }

@@ -1,69 +1,54 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node_t
+typedef struct Node
 {
     int value;
-    struct Node_t *next;
-    struct Node_t *prev;
+    struct Node *next;
+    struct Node *prev;
 } Node;
 
-typedef struct DCLL_t
+Node* createNode(int value){
+    Node* node = (Node*)malloc(sizeof(Node));
+    node->value = value;
+    node->next = node->prev = node;
+    return node;
+}
+
+typedef struct DCLL
 {
     Node *head;
 } DCLL;
 
-void InitDCLL(DCLL *list){
+DCLL* createDCLL(){
+    DCLL *list = (DCLL *)malloc(sizeof(DCLL));
     list->head = NULL;
+    return list;
 }
 
-int insertAtStart(DCLL *list, int value)
-{
-    Node *temp = (Node *)malloc(sizeof(Node));
-    if (!temp)
-    {
-        printf("Memory Allocation Error");
-        return 0;
-    }
-    temp->value = value;
-
+int insertAtStart(DCLL *list, int value) {
+    Node *temp = createNode(value); 
     Node *head = list->head;
-    if (!head)
-    {
-        temp->next = temp;
-        temp->prev = temp;
+    if (!head) {
         list->head = temp;
-    }
-    else
-    {
+    } else {
         temp->prev = head->prev;
         temp->prev->next = temp;
+
         temp->next = head;
         head->prev = temp;
+
         list->head = temp;
     }
     return 1;
 }
 
-int insertAtEnd(DCLL *list, int value)
-{
-    Node *temp = (Node *)malloc(sizeof(Node));
-    if (!temp)
-    {
-        printf("Memory Allocation Error");
-        return 0;
-    }
-    temp->value = value;
-
+int insertAtEnd(DCLL *list, int value) {
+    Node *temp = createNode(value); 
     Node *head = list->head;
-    if (!head)
-    {
-        temp->next = temp;
-        temp->prev = temp;
+    if (!head) {
         list->head = temp;
-    }
-    else
-    {
+    } else {
         temp->prev = head->prev;
         temp->prev->next = temp;
         temp->next = head;
@@ -72,16 +57,15 @@ int insertAtEnd(DCLL *list, int value)
     return 1;
 }
 
-int removeFromStart(DCLL *list)
-{
+int removeFromStart(DCLL *list) {
     Node *head = list->head;
-    if (!head)
+    if (!head){
         printf("Empty List Error");
+        return -99999;
+    }
 
     int value = head->value;
-
-    if (head->next == head)
-    {
+    if (head->next == head) {
         free(head);
         list->head = NULL;
         return value;
@@ -97,17 +81,17 @@ int removeFromStart(DCLL *list)
     return value;
 }
 
-int removeFromEnd(DCLL *list)
-{
+int removeFromEnd(DCLL *list) {
     Node *head = list->head;
-    if (!head)
+    if (!head){
         printf("Empty List Error");
-
+        return -99999;
+    }
+    
     Node *tail = head->prev;
     int value = tail->value;
 
-    if (tail->next == tail)
-    {
+    if (tail->next == tail) {
         free(tail);
         list->head = NULL;
         return value;
@@ -120,8 +104,7 @@ int removeFromEnd(DCLL *list)
     return value;
 }
 
-int searchList(DCLL *list, int key)
-{
+int searchList(DCLL *list, int key) {
     Node *head = list->head;
     if (!head)
         return 0;
@@ -130,8 +113,7 @@ int searchList(DCLL *list, int key)
 
     do
     {
-        if (curr->value == key)
-        {
+        if (curr->value == key) {
             return 1;
         }
         curr = curr->next;
@@ -140,16 +122,14 @@ int searchList(DCLL *list, int key)
     return 0;
 }
 
-void freeList(DCLL *list)
-{
+void deleteList(DCLL *list) {
     Node *head = list->head;
     if (!head)
         return;
 
     Node *curr = head->next;
     Node *next;
-    while (curr != head)
-    {
+    while (curr != head) {
         next = curr->next;
         free(curr);
         curr = next;
@@ -158,8 +138,7 @@ void freeList(DCLL *list)
     list->head = NULL;
 }
 
-int printList(DCLL *list)
-{
+int printList(DCLL *list) {
     Node *head = list->head;
     if (!head)
         return 0;
@@ -173,27 +152,28 @@ int printList(DCLL *list)
     return 0;
 }
 
-int main()
-{
-    DCLL list;
-    InitDCLL(&list);
-    insertAtStart(&list, 1);
-    insertAtStart(&list, 2);
-    insertAtStart(&list, 3);
-    insertAtStart(&list, 4);
-    insertAtStart(&list, 5);
-    insertAtEnd(&list, 6);
-    insertAtEnd(&list, 7);
-    printList(&list);
+int main() {
+    DCLL* list = createDCLL();
+    insertAtStart(list, 1);
+    insertAtStart(list, 2);
+    insertAtStart(list, 3);
+    insertAtStart(list, 4);
+    insertAtStart(list, 5);
+    insertAtEnd(list, 6);
+    insertAtEnd(list, 7);
+    printList(list);
 
-    removeFromEnd(&list);
-    removeFromStart(&list);
-    printList(&list);
+    removeFromEnd(list);
+    printList(list);
 
-    printf("searchList: %d \n",searchList(&list,3));
-    printf("searchList: %d \n",searchList(&list,6));
+    removeFromStart(list);
+    printList(list);
+
+    printf("searchList: %d \n",searchList(list,3));
+    printf("searchList: %d \n",searchList(list,6));
     
-    freeList(&list);
-    printList(&list);
+    deleteList(list);
+    printList(list);
+
     return 0;
 }

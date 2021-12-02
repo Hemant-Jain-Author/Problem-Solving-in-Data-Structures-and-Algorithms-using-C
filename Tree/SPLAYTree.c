@@ -27,8 +27,7 @@ Node *leftRotate(Node *x); // Function to left rotate subtree rooted with x
 Node *getParent(Node *node);
 Node *findMinNode(Node *curr);
 
-Node* createNode(int d, Node *l, Node *r)
-{
+Node* createNode(int d, Node *l, Node *r) {
 	Node* node = (Node*)malloc(sizeof(Node));
 	node->data = d;
 	node->left = l;
@@ -37,27 +36,23 @@ Node* createNode(int d, Node *l, Node *r)
 	return node;
 }
 
-SPLAYTree* createSPLAYTree()
-{
+SPLAYTree* createSPLAYTree() {
 	SPLAYTree* tree = (SPLAYTree*)malloc(sizeof(SPLAYTree));
 	tree->root = NULL;
 	return tree;
 }
 
-void printTree(SPLAYTree* tree)
-{
+void printTree(SPLAYTree* tree) {
 	char indent[100] = "";
 	printTreeUtil(tree->root, indent, 0);
 	printf("\n");
 }
 
-void printTreeUtil(Node *node, char* indent, int isLeft)
-{
+void printTreeUtil(Node *node, char* indent, int isLeft) {
 	if (node == NULL)
 		return;
 
-	if (isLeft)
-	{
+	if (isLeft) {
 		printf("%s%s", indent, "L:");
 		strcat(indent, "|  ");
 	}
@@ -73,8 +68,7 @@ void printTreeUtil(Node *node, char* indent, int isLeft)
 	indent[strlen(indent) - 3] = '\0';
 }
 
-Node *rightRotate(Node *x)
-{
+Node *rightRotate(Node *x) {
 	Node *y = x->left;
 	Node *T = y->right;
 
@@ -83,25 +77,21 @@ Node *rightRotate(Node *x)
 	y->right = x;
 	x->parent = y;
 	x->left = T;
-	if (T != NULL)
-	{
+	if (T != NULL) {
 		T->parent = x;
 	}
 
-	if (y->parent != NULL && y->parent->left == x)
-	{
+	if (y->parent != NULL && y->parent->left == x) {
 		y->parent->left = y;
 	}
-	else if (y->parent != NULL && y->parent->right == x)
-	{
+	else if (y->parent != NULL && y->parent->right == x) {
 		y->parent->right = y;
 	}
 	// Return new root
 	return y;
 }
 
-Node *leftRotate(Node *x)
-{
+Node *leftRotate(Node *x) {
 	Node *y = x->right;
 	Node *T = y->left;
 
@@ -110,84 +100,66 @@ Node *leftRotate(Node *x)
 	y->left = x;
 	x->parent = y;
 	x->right = T;
-	if (T != NULL)
-	{
+	if (T != NULL) {
 		T->parent = x;
 	}
 
-	if (y->parent != NULL && y->parent->left == x)
-	{
+	if (y->parent != NULL && y->parent->left == x) {
 		y->parent->left = y;
 	}
-	else if (y->parent != NULL && y->parent->right == x)
-	{
+	else if (y->parent != NULL && y->parent->right == x) {
 		y->parent->right = y;
 	}
 	// Return new root
 	return y;
 }
 
-Node *getParent(Node *node)
-{
-	if (node == NULL || node->parent == NULL)
-	{
+Node *getParent(Node *node) {
+	if (node == NULL || node->parent == NULL) {
 		return NULL;
 	}
 	return node->parent;
 }
 
-void splay(SPLAYTree* tree, Node *node)
-{
+void splay(SPLAYTree* tree, Node *node) {
 	Node *parent, *grand;
-	while (node != tree->root)
-	{
+	while (node != tree->root) {
 		parent = getParent(node);
 		grand = getParent(parent);
-		if (parent == NULL)
-		{ // rotations had created new root, always last condition.
+		if (parent == NULL) { // rotations had created new root, always last condition.
 			tree->root = node;
 		}
-		else if (grand == NULL)
-		{ // single rotation case.
+		else if (grand == NULL) { // single rotation case.
 			if (parent->left == node)
 			{
 			   node = rightRotate(parent);
-			}
-			else
-			{
+			} else {
 				node = leftRotate(parent);
 			}
 		}
-		else if (grand->left == parent && parent->left == node)
-		{ // Zig Zig case.
+		else if (grand->left == parent && parent->left == node) { // Zig Zig case.
 			rightRotate(grand);
 			node = rightRotate(parent);
 		}
-		else if (grand->right == parent && parent->right == node)
-		{ // Zag Zag case.
+		else if (grand->right == parent && parent->right == node) { // Zag Zag case.
 			leftRotate(grand);
 			node = leftRotate(parent);
 		}
-		else if (grand->left == parent && parent->right == node)
-		{ //Zig Zag case.
+		else if (grand->left == parent && parent->right == node) { //Zig Zag case.
 			leftRotate(parent);
 			node = rightRotate(grand);
 		}
-		else if (grand->right == parent && parent->left == node)
-		{ // Zag Zig case.
+		else if (grand->right == parent && parent->left == node) { // Zag Zig case.
 			rightRotate(parent);
 			node = leftRotate(grand);
 		}
 	}
 }
 
-int find(SPLAYTree* tree, int data)
-{
+int find(SPLAYTree* tree, int data) {
 	Node *curr = tree->root;
-	while (curr != NULL)
-	{
-		if (curr->data == data)
-		{
+	while (curr != NULL) {
+		if (curr->data == data) {
 			splay(tree, curr);
 			return 1;
 		}
@@ -199,19 +171,16 @@ int find(SPLAYTree* tree, int data)
 	return 0;
 }
 
-void insertData(SPLAYTree* tree, int data)
-{
+void insertData(SPLAYTree* tree, int data) {
 	Node *newNode = createNode(data, NULL, NULL);
-	if (tree->root == NULL)
-	{
+	if (tree->root == NULL) {
 		tree->root = newNode;
 		return;
 	}
 
 	Node *node = tree->root;
 	Node *parent = NULL;
-	while (node != NULL)
-	{
+	while (node != NULL) {
 		parent = node;
 		if (node->data > data)
 			node = node->left;
@@ -233,8 +202,7 @@ void insertData(SPLAYTree* tree, int data)
 	splay(tree, newNode);
 }
 
-Node *findMinNode(Node *curr)
-{
+Node *findMinNode(Node *curr) {
 	Node *node = curr;
 	if (node == NULL)
 		return NULL;
@@ -245,15 +213,12 @@ Node *findMinNode(Node *curr)
 	return node;
 }
 
-void removeData(SPLAYTree* tree, int data)
-{
+void removeData(SPLAYTree* tree, int data) {
 	Node *node = tree->root;
 	Node *parent = NULL;
 	Node *next = NULL;
-	while (node != NULL)
-	{
-		if (node->data == data)
-		{
+	while (node != NULL) {
+		if (node->data == data) {
 			parent = node->parent;
 			if (node->left == NULL && node->right == NULL)
 				next = NULL;
@@ -286,8 +251,7 @@ void removeData(SPLAYTree* tree, int data)
 			node = node->right;
 
 		}
-		else if (node->data > data)
-		{
+		else if (node->data > data) {
 			parent = node;
 			node = node->left;
 		}
@@ -300,8 +264,7 @@ void removeData(SPLAYTree* tree, int data)
 	splay(tree, parent); // Splaying for the parent of the node deleted.
 }
 
-int main()
-{
+int main() {
 	SPLAYTree *tree = createSPLAYTree();
 	insertData(tree, 5);
 	insertData(tree, 4);

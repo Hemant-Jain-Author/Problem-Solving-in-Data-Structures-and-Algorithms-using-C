@@ -1,50 +1,41 @@
 #include "Graph.h"
 
-Graph* createGraph(int count)
-{
+Graph* createGraph(int count) {
     Graph* gph = (Graph*)malloc(sizeof(Graph));
     gph->count = count;
-    gph->adj = (GraphNode **)malloc((count) * sizeof(GraphNode*));
+    gph->adj = (GraphEdge **)malloc((count) * sizeof(GraphEdge*));
     for (int i = 0; i < count; i++)
         gph->adj[i] = NULL;
     return gph;
 }
 
-GraphNode* createGraphNode(int src, int dst, int cost){
-    GraphNode *edge = (GraphNode *)malloc(sizeof(GraphNode));
+GraphEdge* createGraphEdge(int src, int dst, int cost){
+    GraphEdge *edge = (GraphEdge *)malloc(sizeof(GraphEdge));
     edge->src = src;
     edge->dest = dst;
     edge->cost = cost;
     return edge;
 }
 
-void addDirectedEdge(Graph *gph, int src, int dst, int cost)
-{
-    GraphNode *edge = (GraphNode *)malloc(sizeof(GraphNode));
-    edge->src = src;
-    edge->dest = dst;
-    edge->cost = cost;
+void addDirectedEdge(Graph *gph, int src, int dst, int cost) {
+    GraphEdge *edge = createGraphEdge(src, dst, cost); 
     edge->next = gph->adj[src];
     gph->adj[src] = edge;
 }
 
-void addUndirectedEdge(Graph *gph, int src, int dst, int cost)
-{
+void addUndirectedEdge(Graph *gph, int src, int dst, int cost) {
     addDirectedEdge(gph, src, dst, cost);
     addDirectedEdge(gph, dst, src, cost);
 }
 
-void printGraph(Graph *gph)
-{
+void printGraph(Graph *gph) {
     if (!gph)
         return;
 
-    for (int i = 0; i < gph->count; i++)
-    {
-        GraphNode* head = gph->adj[i];
+    for (int i = 0; i < gph->count; i++) {
+        GraphEdge* head = gph->adj[i];
         printf(" Node [ %d ] ::", i);
-        while (head)
-        {
+        while (head) {
             printf(" %d(%d) ", head->dest, head->cost);
             head = head->next;
         }
@@ -52,8 +43,7 @@ void printGraph(Graph *gph)
     }
 }
 
-int main1()
-{
+int main1() {
     int nodeCount = 8;
     Graph* gph = createGraph(nodeCount);
     addDirectedEdge(gph, 1, 2, 2);
@@ -72,43 +62,36 @@ int main1()
     return 0;
 }
 
-void dfsUtil(Graph *gph, int index, int *visited)
-{
+void dfsUtil(Graph *gph, int index, int *visited) {
     visited[index] = 1;
-    GraphNode *head = gph->adj[index];
-    while (head)
-    {
+    GraphEdge *head = gph->adj[index];
+    while (head) {
         if (visited[head->dest] == 0)
             dfsUtil(gph, head->dest, visited);
         head = head->next;
     }
 }
 
-int DFS(Graph *gph, int source, int target)
-{
+int DFS(Graph *gph, int source, int target) {
     int count = gph->count;
     int *visited = (int *)calloc(count, sizeof(int));
     dfsUtil(gph, source, visited);
     return visited[target];
 }
 
-int DFSStack(Graph *gph, int source, int target)
-{
+int DFSStack(Graph *gph, int source, int target) {
     int count = gph->count;
     int *visited = (int *)calloc(count, sizeof(int));
     int curr, destination;
     Stack* stk = createStack(20);
     StackPush(stk, source);
     visited[source] = 1;
-    while (StackSize(stk) != 0)
-    {
+    while (StackSize(stk) != 0) {
         curr = StackPop(stk);
-        GraphNode *head = gph->adj[curr];
-        while (head)
-        {
+        GraphEdge *head = gph->adj[curr];
+        while (head) {
             destination = head->dest;
-            if (visited[destination] == 0)
-            {
+            if (visited[destination] == 0) {
                 StackPush(stk, destination);
                 visited[destination] = 1;
             }
@@ -118,23 +101,19 @@ int DFSStack(Graph *gph, int source, int target)
     return visited[target];
 }
 
-int BFS(Graph *gph, int source, int target)
-{
+int BFS(Graph *gph, int source, int target) {
     int count = gph->count;
     int *visited = (int *)calloc(count, sizeof(int));
     visited[source] = 1;
     int curr, destination;
     Queue* que = createQueue();
     QueueAdd(que, source);
-    while (QueueSize(que) != 0)
-    {
+    while (QueueSize(que) != 0) {
         curr = QueueRemove(que);
-        GraphNode *head = gph->adj[curr];
-        while (head)
-        {
+        GraphEdge *head = gph->adj[curr];
+        while (head) {
             destination = head->dest;
-            if (visited[destination] == 0)
-            {
+            if (visited[destination] == 0) {
                 QueueAdd(que, destination);
                 visited[destination] = 1;
             }
@@ -144,14 +123,12 @@ int BFS(Graph *gph, int source, int target)
     return visited[target];
 }
 
-int bestFirstSearchPQ(Graph *gph, int source, int destination)
-{
+int bestFirstSearchPQ(Graph *gph, int source, int destination) {
     int count = gph->count;
     int previous[count];
     int dist[count];
     int visited[count];
-    for(int i = 0;i<count;i++)
-    {
+    for(int i = 0;i<count;i++) {
         previous[i] = -1;
         dist[i] = 99999;
         visited[i] = 0;
@@ -159,11 +136,10 @@ int bestFirstSearchPQ(Graph *gph, int source, int destination)
     dist[source] = 0;
 
     Heap* pq = createHeap(greater);
-    GraphNode *edge = createGraphNode(source, source, 0);
+    GraphEdge *edge = createGraphEdge(source, source, 0);
     heapAdd(pq, edge);
 
-	while (heapSize(pq) != 0)
-	{
+	while (heapSize(pq) != 0) {
 		edge = heapRemove(pq);
 		if (edge->dest == destination)
 			return 1;
@@ -171,9 +147,8 @@ int bestFirstSearchPQ(Graph *gph, int source, int destination)
 		source = edge->dest;
 		visited[source] = 1;
 
-		GraphNode *head = gph->adj[source];
-		while (head)
-		{
+		GraphEdge *head = gph->adj[source];
+		while (head) {
 			int curr = head->dest;
 			int cost = head->cost;
 			int alt = cost + dist[source];
@@ -181,7 +156,7 @@ int bestFirstSearchPQ(Graph *gph, int source, int destination)
 			{
 				dist[curr] = alt;
 				previous[curr] = source;
-                edge = createGraphNode(source, curr, 0);
+                edge = createGraphEdge(source, curr, 0);
 				heapAdd(pq, edge);
 			}
 			head = head->next;
@@ -190,8 +165,7 @@ int bestFirstSearchPQ(Graph *gph, int source, int destination)
 	return 0;
 }
 
-int main2()
-{
+int main2() {
     Graph* gph = createGraph(9);
     addUndirectedEdge(gph, 0, 2, 1);
     addUndirectedEdge(gph, 1, 2, 5);
@@ -212,12 +186,10 @@ int main2()
     return 0;
 }
 
-void dfsUtil2(Graph *gph, int index, int *visited, Stack *stk)
-{
+void dfsUtil2(Graph *gph, int index, int *visited, Stack *stk) {
     visited[index] = 1;
-    GraphNode* head = gph->adj[index];
-    while (head)
-    {
+    GraphEdge* head = gph->adj[index];
+    while (head) {
         if (visited[head->dest] == 0)
             dfsUtil2(gph, head->dest, visited, stk);
         head = head->next;
@@ -225,14 +197,11 @@ void dfsUtil2(Graph *gph, int index, int *visited, Stack *stk)
     StackPush(stk, index);
 }
 
-void TopologicalSort(Graph *gph)
-{
+void TopologicalSort(Graph *gph) {
     Stack* stk = createStack(100);
     int *visited = (int *)calloc(gph->count, sizeof(int));
-    for (int i = 0; i < gph->count; i++)
-    {
-        if (visited[i] == 0)
-        {
+    for (int i = 0; i < gph->count; i++) {
+        if (visited[i] == 0) {
             dfsUtil2(gph, i, visited, stk);
         }
     }
@@ -243,8 +212,7 @@ void TopologicalSort(Graph *gph)
     printf("\n");
 }
 
-int main3()
-{
+int main3() {
     Graph* gph = createGraph(6);
     addDirectedEdge(gph, 5, 2, 1);
     addDirectedEdge(gph, 5, 0, 1);
@@ -257,15 +225,13 @@ int main3()
     return 0;
 }
 
-int pathExist(Graph *gph, int source, int destination)
-{
+int pathExist(Graph *gph, int source, int destination) {
     int *visited = (int *)calloc(gph->count, sizeof(int));
     dfsUtil(gph, source, visited);
     return visited[destination];
 }
 
-int main4()
-{
+int main4() {
     Graph* gph = createGraph(6);
     addDirectedEdge(gph, 0, 1, 1);
     addDirectedEdge(gph, 0, 2, 1);
@@ -277,17 +243,15 @@ int main4()
     return 0;
 }
 
-int countAllPathDFS(Graph *gph, int *visited, int source, int dest)
-{
+int countAllPathDFS(Graph *gph, int *visited, int source, int dest) {
     if (source == dest)
         return 1;
 
     int count = 0;
     int destination;
     visited[source] = 1;
-    GraphNode *head = gph->adj[source];
-    while (head)
-    {
+    GraphEdge *head = gph->adj[source];
+    while (head) {
         destination = head->dest;
         if (visited[destination] == 0)
             count += countAllPathDFS(gph, visited, destination, dest);
@@ -297,29 +261,24 @@ int countAllPathDFS(Graph *gph, int *visited, int source, int dest)
     return count;
 }
 
-int countAllPath(Graph *gph, int src, int dest)
-{
+int countAllPath(Graph *gph, int src, int dest) {
     int *visited = (int *)calloc(gph->count, sizeof(int));
     return countAllPathDFS(gph, visited, src, dest);
 }
 
-void printAllPathDFS(Graph *gph, int *visited, int source, int dest, Stack *path)
-{
+void printAllPathDFS(Graph *gph, int *visited, int source, int dest, Stack *path) {
     int destination;
     StackPush(path, source);
-    if (source == dest)
-    {
+    if (source == dest) {
         StackPrint(path);
         return;
     }
     visited[source] = 1;
 
-    GraphNode *head = gph->adj[source];
-    while (head)
-    {
+    GraphEdge *head = gph->adj[source];
+    while (head) {
         destination = head->dest;
-        if (visited[destination] == 0)
-        {
+        if (visited[destination] == 0) {
             printAllPathDFS(gph, visited, destination, dest, path);
         }
         head = head->next;
@@ -328,15 +287,13 @@ void printAllPathDFS(Graph *gph, int *visited, int source, int dest, Stack *path
     StackPop(path);
 }
 
-void printAllPath(Graph *gph, int src, int dest)
-{
+void printAllPath(Graph *gph, int src, int dest) {
     int *visited = (int *)calloc(gph->count, sizeof(int));
     Stack* stk = createStack(100);
     printAllPathDFS(gph, visited, src, dest, stk);
 }
 
-int main5()
-{
+int main5() {
     Graph* gph = createGraph(5);
     addDirectedEdge(gph, 0, 1, 1);
     addDirectedEdge(gph, 0, 2, 1);
@@ -349,15 +306,12 @@ int main5()
     return 0;
 }
 
-int rootVertex(Graph *gph)
-{
+int rootVertex(Graph *gph) {
     int count = gph->count;
     int *visited = (int *)calloc(count, sizeof(int));
     int retVal = -1;
-    for (int i = 0; i < count; i++)
-    {
-        if (visited[i] == 0)
-        {
+    for (int i = 0; i < count; i++) {
+        if (visited[i] == 0) {
             dfsUtil(gph, i, visited);
             retVal = i;
         }
@@ -366,8 +320,7 @@ int rootVertex(Graph *gph)
     return retVal;
 }
 
-int main6()
-{
+int main6() {
     Graph* gph = createGraph(7);
     addDirectedEdge(gph, 0, 1, 1);
     addDirectedEdge(gph, 0, 2, 1);
@@ -381,21 +334,20 @@ int main6()
     return 0;
 }
 
-void transitiveClosureUtil(Graph *gph, int source, int index, int **tc)
-{
+void transitiveClosureUtil(Graph *gph, int source, int index, int **tc) {
     if (tc[source][index] == 1)
         return;
+
     tc[source][index] = 1;
-    GraphNode *head = gph->adj[index];
-    while (head)
-    {
+    GraphEdge *head = gph->adj[index];
+    
+    while (head) {
         transitiveClosureUtil(gph, source, head->dest, tc);
         head = head->next;
     }
 }
 
-int **transitiveClosure(Graph *gph)
-{
+int **transitiveClosure(Graph *gph) {
     int count = gph->count;
     int **tc = (int **)calloc(count, sizeof(int *));
     for (int i = 0; i < count; i++)
@@ -407,8 +359,7 @@ int **transitiveClosure(Graph *gph)
     return tc;
 }
 
-int main7()
-{
+int main7() {
     Graph* gph = createGraph(4);
     addDirectedEdge(gph, 0, 1, 1);
     addDirectedEdge(gph, 0, 2, 1);
@@ -417,10 +368,8 @@ int main7()
     addDirectedEdge(gph, 2, 3, 1);
     addDirectedEdge(gph, 3, 3, 1);
     int **tc = transitiveClosure(gph);
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
             printf(" %d ", tc[i][j]);
         }
         printf("\n");
@@ -428,25 +377,21 @@ int main7()
     return 0;
 }
 
-void BFSLevelNode(Graph *gph, int source)
-{
+void BFSLevelNode(Graph *gph, int source) {
     int *visited = (int *)calloc(gph->count, sizeof(int));
     visited[source] = 1;
     Queue* que = createQueue();
     QueueAdd(que, source);
     QueueAdd(que, 0);
-    printf("\nNode  - Level\n");
-    while (QueueSize(que) != 0)
-    {
+    printf("Node - Level\n");
+    while (QueueSize(que) != 0) {
         int curr = QueueRemove(que);
         int depth = QueueRemove(que);
         printf("%d - %d\n", curr, depth);
-        GraphNode *head = gph->adj[curr];
-        while (head)
-        {
+        GraphEdge *head = gph->adj[curr];
+        while (head) {
             int destination = head->dest;
-            if (visited[destination] == 0)
-            {
+            if (visited[destination] == 0) {
                 QueueAdd(que, destination);
                 QueueAdd(que, depth + 1);
                 visited[destination] = 1;
@@ -456,25 +401,21 @@ void BFSLevelNode(Graph *gph, int source)
     }
 }
 
-int BFSDistance(Graph *gph, int source, int dest)
-{
+int BFSDistance(Graph *gph, int source, int dest) {
     int *visited = (int *)calloc(gph->count, sizeof(int));
     Queue* que = createQueue();
     QueueAdd(que, source);
     QueueAdd(que, 0);
     visited[source] = 1;
-    while (QueueSize(que) != 0)
-    {
+    while (QueueSize(que) != 0) {
         int curr = QueueRemove(que);
         int depth = QueueRemove(que);
-        GraphNode *head = gph->adj[curr];
-        while (head)
-        {
+        GraphEdge *head = gph->adj[curr];
+        while (head) {
             int destination = head->dest;
             if (destination == dest)
                 return depth + 1;
-            if (visited[destination] == 0)
-            {
+            if (visited[destination] == 0) {
                 QueueAdd(que, destination);
                 QueueAdd(que, depth + 1);
                 visited[destination] = 1;
@@ -485,8 +426,7 @@ int BFSDistance(Graph *gph, int source, int dest)
     return -1;
 }
 
-int main8()
-{
+int main8() {
     Graph* gph = createGraph(7);
     addUndirectedEdge(gph, 0, 1, 1);
     addUndirectedEdge(gph, 0, 2, 1);
@@ -501,28 +441,22 @@ int main8()
     return 0;
 }
 
-int isCyclePresentUndirectedDFS(Graph *graph,
-                                int index, int parentIndex, int *visited)
-{
+int isCyclePresentUndirectedDFS(Graph *graph, int index, int parentIndex, int *visited) {
     visited[index] = 1;
-    GraphNode *head = graph->adj[index];
-    while (head)
-    {
+    GraphEdge *head = graph->adj[index];
+    while (head) {
         int dest = head->dest;
-        if (visited[dest] == 0)
-        {
+        if (visited[dest] == 0) {
             if (isCyclePresentUndirectedDFS(graph, dest, index, visited))
                 return 1;
-        }
-        else if (parentIndex != dest)
+        } else if (parentIndex != dest)
             return 1;
         head = head->next;
     }
     return 0;
 }
 
-int isCyclePresentUndirected(Graph *graph)
-{
+int isCyclePresentUndirected(Graph *graph) {
     int *visited = (int *)calloc(graph->count, sizeof(int));
     for (int i = 0; i < graph->count; i++)
         if (visited[i] == 0)
@@ -531,27 +465,24 @@ int isCyclePresentUndirected(Graph *graph)
     return 0;
 }
 
-int main9()
-{
+int main9() {
     Graph* gph = createGraph(6);
     addUndirectedEdge(gph, 0, 1, 1);
     addUndirectedEdge(gph, 1, 2, 1);
     addUndirectedEdge(gph, 3, 4, 1);
     addUndirectedEdge(gph, 4, 2, 1);
     addUndirectedEdge(gph, 2, 5, 1);
-   // addUndirectedEdge(gph, 4, 1, 1);
+    // addUndirectedEdge(gph, 4, 1, 1);
     printf("isCyclePresentUndirected : %d\n", isCyclePresentUndirected(gph));
     return 0;
 }
 
-int isCyclePresentDFS(Graph *graph, int index, int *visited, int *marked)
-{
+int isCyclePresentDFS(Graph *graph, int index, int *visited, int *marked) {
     visited[index] = 1;
     marked[index] = 1;
 
-    GraphNode *head = graph->adj[index];
-    while (head)
-    {
+    GraphEdge *head = graph->adj[index];
+    while (head) {
         int dest = head->dest;
         if (marked[dest] == 1)
             return 1;
@@ -565,13 +496,11 @@ int isCyclePresentDFS(Graph *graph, int index, int *visited, int *marked)
     return 0;
 }
 
-int isCyclePresent(Graph *graph)
-{
+int isCyclePresent(Graph *graph) {
     int count = graph->count;
     int *visited = (int *)calloc(count, sizeof(int));
     int *marked = (int *)calloc(count, sizeof(int));
-    for (int index = 0; index < count; index++)
-    {
+    for (int index = 0; index < count; index++) {
         if (visited[index] == 0)
             if (isCyclePresentDFS(graph, index, visited, marked))
                 return 1;
@@ -579,14 +508,12 @@ int isCyclePresent(Graph *graph)
     return 0;
 }
 
-int isCyclePresentDFSColor(Graph *graph, int index, int *visited)
-{
+int isCyclePresentDFSColor(Graph *graph, int index, int *visited) {
     visited[index] = 1; // 2 = grey
     int dest;
 
-    GraphNode *head = graph->adj[index];
-    while (head)
-    {
+    GraphEdge *head = graph->adj[index];
+    while (head) {
         dest = head->dest;
         if (visited[dest] == 1) //"Grey":
             return 1;
@@ -600,12 +527,10 @@ int isCyclePresentDFSColor(Graph *graph, int index, int *visited)
     return 0;
 }
 
-int isCyclePresentColor(Graph *graph)
-{
+int isCyclePresentColor(Graph *graph) {
     int count = graph->count;
     int *visited = (int *)calloc(count, sizeof(int));
-    for (int i = 0; i < count; i++)
-    {
+    for (int i = 0; i < count; i++) {
         if (visited[i] == 0) //"White"
             if (isCyclePresentDFSColor(graph, i, visited))
                 return 1;
@@ -613,8 +538,7 @@ int isCyclePresentColor(Graph *graph)
     return 0;
 }
 
-int main10()
-{
+int main10() {
     Graph* gph = createGraph(5);
     addDirectedEdge(gph, 0, 1, 1);
     addDirectedEdge(gph, 0, 2, 1);
@@ -627,16 +551,13 @@ int main10()
     return 0;
 }
 
-Graph *TransposeGraph(Graph *gph)
-{
+Graph *TransposeGraph(Graph *gph) {
     int count = gph->count;
     Graph *gph2 = createGraph(count);
     
-    for (int i = 0; i < count; i++)
-    {
-        GraphNode *head = gph->adj[i];
-        while (head)
-        {
+    for (int i = 0; i < count; i++) {
+        GraphEdge *head = gph->adj[i];
+        while (head) {
             addDirectedEdge(gph2, head->dest, i, head->cost);
             head = head->next;
         }
@@ -644,8 +565,7 @@ Graph *TransposeGraph(Graph *gph)
     return gph2;
 }
 
-int main11()
-{
+int main11() {
     Graph* gph = createGraph(5);
     addDirectedEdge(gph, 0, 1, 1);
     addDirectedEdge(gph, 0, 2, 1);
@@ -659,8 +579,7 @@ int main11()
     return 0;
 }
 
-int isConnectedUndirected(Graph *gph)
-{
+int isConnectedUndirected(Graph *gph) {
     int count = gph->count;
     int *visited = (int *)calloc(count, sizeof(int));
     dfsUtil(gph, 0, visited);
@@ -670,8 +589,7 @@ int isConnectedUndirected(Graph *gph)
     return 1;
 }
 
-int main12()
-{
+int main12() {
     Graph* gph = createGraph(6);
     addUndirectedEdge(gph, 0, 1, 1);
     addUndirectedEdge(gph, 1, 2, 1);
@@ -683,8 +601,7 @@ int main12()
     return 0;
 }
 
-int isStronglyConnected(Graph *gph)
-{
+int isStronglyConnected(Graph *gph) {
     int count = gph->count;
     int *visited = (int *)calloc(count, sizeof(int));
     dfsUtil(gph, 0, visited);
@@ -703,8 +620,7 @@ int isStronglyConnected(Graph *gph)
     return 1;
 }
 
-int main13()
-{
+int main13() {
     Graph* gph = createGraph(5);
     addDirectedEdge(gph, 0, 1, 1);
     addDirectedEdge(gph, 1, 2, 1);
@@ -716,21 +632,19 @@ int main13()
     return 0;
 }
 
-void DFSRec2(Graph *gph, int index, int *visited, Stack *stk)
-{
+void DFSRec2(Graph *gph, int index, int *visited, Stack *stk) {
     visited[index] = 1;
-    GraphNode *head = gph->adj[index];
-    while (head)
-    {
+    GraphEdge *head = gph->adj[index];
+    while (head) {
         if (visited[head->dest] == 0)
             DFSRec2(gph, head->dest, visited, stk);
+    
         head = head->next;
     }
     StackPush(stk, index);
 }
 
-void stronglyConnectedComponent(Graph *gph)
-{
+void stronglyConnectedComponent(Graph *gph) {
     int count = gph->count;
     int index;
     int *visited = (int *)calloc(count, sizeof(int));
@@ -742,11 +656,10 @@ void stronglyConnectedComponent(Graph *gph)
     Graph *gReversed = TransposeGraph(gph);
     for (int i = 0; i < count; i++)
         visited[i] = 0;
-    while (StackSize(stk) != 0)
-    {
+    
+    while (StackSize(stk) != 0) {
         index = StackPop(stk);
-        if (visited[index] == 0)
-        {
+        if (visited[index] == 0) {
             Stack* stk2 = createStack(100);
             DFSRec2(gReversed, index, visited, stk2);
             StackPrint(stk2);
@@ -754,8 +667,7 @@ void stronglyConnectedComponent(Graph *gph)
     }
 }
 
-int main14()
-{
+int main14() {
     Graph* gph = createGraph(7);
     addDirectedEdge(gph, 0, 1, 1);
     addDirectedEdge(gph, 1, 2, 1);
@@ -769,12 +681,10 @@ int main14()
     return 0;
 }
 
-int heightTreeParentArr(int arr[], int count)
-{
+int heightTreeParentArr(int arr[], int count) {
 	Graph* gph = createGraph(count);
 	int source;
-	for (int i = 0; i < count; i++)
-	{
+	for (int i = 0; i < count; i++) {
 		if (arr[i] != -1)
 			addDirectedEdge(gph, arr[i], i, 1);
 		else
@@ -786,22 +696,19 @@ int heightTreeParentArr(int arr[], int count)
 	QueueAdd(que, source);
     QueueAdd(que, 0);
 	int maxHeight = 0;
-	while (QueueSize(que) != 0)
-	{
+	while (QueueSize(que) != 0) {
 		int curr = QueueRemove(que);
         int height = QueueRemove(que);
 		if (height > maxHeight)
 			maxHeight = height;
         
-		GraphNode *head = gph->adj[curr];
-		while (head)
-		{
+		GraphEdge *head = gph->adj[curr];
+		while (head) {
 			if (visited[head->dest] == 0)
 			{
                 visited[head->dest] = 1;
 				QueueAdd(que, head->dest);
-                QueueAdd(que, height + 1);
-				
+                QueueAdd(que, height + 1);			
 			}
 			head = head->next;
 		}
@@ -809,59 +716,50 @@ int heightTreeParentArr(int arr[], int count)
 	return maxHeight;
 }
 
-int getHeight(int arr[], int count, int index)
-{
+int getHeight(int arr[], int count, int index) {
     if (arr[index] == -1)
         return 0;
     else
         return getHeight(arr, count, arr[index]) + 1;
 }
 
-int heightTreeParentArr2(int arr[], int count)
-{
+int heightTreeParentArr2(int arr[], int count) {
     int *height = (int *)calloc(count, sizeof(int));
     int maxHeight = -1;
-    for (int i = 0; i < count; i++)
-    {
+    for (int i = 0; i < count; i++) {
         height[i] = -1;
     }
 
-    for (int i = 0; i < count; i++)
-    {
+    for (int i = 0; i < count; i++) {
         height[i] = getHeight(arr, count, i);
         maxHeight = max(maxHeight, height[i]);
     }
     return maxHeight;
 }
 
-int main15()
-{
+int main15() {
     int parentArray[] = {-1, 0, 1, 2, 3};
     printf("Height : %d\n", heightTreeParentArr(parentArray, 5));
     printf("Height : %d\n", heightTreeParentArr2(parentArray, 5));
     return 0;
 }
 
-int isConnected(Graph *graph)
-{
+int isConnected(Graph *graph) {
     int count = graph->count;
     int *visited = (int *)calloc(count, sizeof(int));
-    GraphNode *head;
+    GraphEdge *head;
 
     //Find a vertex with non - zero degree
     //DFS traversal of graph from a vertex with non - zero degree
-    for (int i = 0; i < count; i++)
-    {
+    for (int i = 0; i < count; i++) {
         head = graph->adj[i];
-        if (head)
-        {
+        if (head) {
             dfsUtil(graph, i, visited);
             break;
         }
     }
     //Check if all non - zero degree count are visited
-    for (int i = 0; i < count; i++)
-    {
+    for (int i = 0; i < count; i++) {
         head = graph->adj[i];
         if (head)
             if (visited[i] == 0 && head)
@@ -870,13 +768,11 @@ int isConnected(Graph *graph)
     return 1;
 }
 
-void primsMST(Graph *gph)
-{
+void primsMST(Graph *gph) {
     int previous[gph->count];
     int dist[gph->count];
     int visited[gph->count];
-    for(int i = 0;i<gph->count;i++)
-    {
+    for(int i = 0;i<gph->count;i++) {
         previous[i] = -1;
         dist[i] = 99999;
         visited[i] = 0;
@@ -886,25 +782,22 @@ void primsMST(Graph *gph)
     dist[source] = 0;
 
     Heap* pq = createHeap(greater);
-    GraphNode *edge = createGraphNode(source, source, 0);
+    GraphEdge *edge = createGraphEdge(source, source, 0);
     heapAdd(pq, edge);
-    GraphNode *head;
-    while (heapSize(pq) != 0)
-    {
+    GraphEdge *head;
+    while (heapSize(pq) != 0) {
         edge = heapRemove(pq);
         source = edge->dest;
         visited[source] = 1;
         head = gph->adj[source];
-        while (head)
-        {
+        while (head) {
             int dest = head->dest;
             int alt = head->cost;
 
-            if (alt < dist[dest] && visited[dest] == 0)
-            {
+            if (alt < dist[dest] && visited[dest] == 0) {
                 dist[dest] = alt;
                 previous[dest] = source;
-                edge = createGraphNode(source, dest, alt);
+                edge = createGraphEdge(source, dest, alt);
                 heapAdd(pq, edge);
             }
             head = head->next;
@@ -913,8 +806,7 @@ void primsMST(Graph *gph)
         
     int total = 0;
     printf("Edges are ");
-    for (int i = 0; i < gph->count; i++)
-    {
+    for (int i = 0; i < gph->count; i++) {
         if (dist[i] == INFINITE)
             printf("(%d is unreachable.)", i);
         else if(previous[i] != -1){
@@ -926,48 +818,41 @@ void primsMST(Graph *gph)
 
 }
 
-void dijkstra(Graph *gph, int source)
-{
+void dijkstra(Graph *gph, int source) {
     int previous[gph->count];
     int dist[gph->count];
     int visited[gph->count];
-    for(int i = 0;i<gph->count;i++)
-    {
+    for(int i = 0;i<gph->count;i++) {
         previous[i] = -1;
         dist[i] = 99999;
         visited[i] = 0;
     }
 
     dist[source] = 0;
-
     Heap* pq = createHeap(greater);
-    GraphNode *edge = createGraphNode(source, source, 0);
+    GraphEdge *edge = createGraphEdge(source, source, 0);
     heapAdd(pq, edge);
-    GraphNode *head;
+    GraphEdge *head;
 
-    while (heapSize(pq) != 0)
-    {
+    while (heapSize(pq) != 0) {
         edge = heapRemove(pq);
         source = edge->dest;
         visited[source] = 1;
         head = gph->adj[source];
-        while (head)
-        {
+        while (head) {
             int dest = head->dest;
             int alt = head->cost + dist[source];
 
-            if (alt < dist[dest] && visited[dest] == 0)
-            {
+            if (alt < dist[dest] && visited[dest] == 0) {
                 dist[dest] = alt;
                 previous[dest] = source;
-                edge = createGraphNode(source, dest, alt);
+                edge = createGraphEdge(source, dest, alt);
                 heapAdd(pq, edge);
             }
             head = head->next;
         }
     }
-    for (int i = 0; i < gph->count; i++)
-    {
+    for (int i = 0; i < gph->count; i++) {
         if (dist[i] == INFINITE)
             printf("node id %d prev %d cost : Unreachable",
                    i, previous[i]);
@@ -983,53 +868,43 @@ typedef struct Set_t
     int rank;
 }Set;
 
-Set* createSets(int p, int r)
-{
+Set* createSets(int p, int r) {
     Set* set = (Set*)malloc(sizeof(Set));
 	set->parent = p;
 	set->rank = r;
     return set;
 }
 
-int findSetRoot(Set* sets[], int index)
-{
+int findSetRoot(Set* sets[], int index) {
 	int p = sets[index]->parent;
-	while (p != index)
-	{
+	while (p != index) {
 		index = p;
 		p = sets[index]->parent;
 	}
 	return index;
 }
 
-void unionSets(Set* sets[], int x, int y)
-{
+void unionSets(Set* sets[], int x, int y) {
 	if (sets[x]->rank < sets[y]->rank)
 		sets[x]->parent = y;
 	else if (sets[y]->rank < sets[x]->rank)
 		sets[y]->parent = x;
-	else
-	{
+	else {
 		sets[x]->parent = y;
 		sets[y]->rank++;
 	}
 }
-
-int compare(GraphNode *e1, GraphNode *e2)
-{
+/*
+int greater(GraphEdge *e1, GraphEdge *e2) {
     return (e1->cost > e2->cost);
 }
-
-void sort(GraphNode* arr[], int size, int (*comp)(GraphNode* p1, GraphNode* p2))
-{
+*/
+void sort(GraphEdge* arr[], int size, int (*comp)(GraphEdge* p1, GraphEdge* p2)) {
     int i, j;
-	GraphNode* temp;
-    for (i = 0; i < (size - 1); i++)
-    {
-        for (j = 0; j < size - i - 1; j++)
-        {
-            if (comp(arr[j], arr[j + 1]))
-            {
+	GraphEdge* temp;
+    for (i = 0; i < (size - 1); i++) {
+        for (j = 0; j < size - i - 1; j++) {
+            if (comp(arr[j], arr[j + 1])) {
                 /* Swapping */
                 temp = arr[j];
                 arr[j] = arr[j + 1];
@@ -1039,8 +914,7 @@ void sort(GraphNode* arr[], int size, int (*comp)(GraphNode* p1, GraphNode* p2))
     }
 }
 
-void kruskalMST(Graph *gph)
-{
+void kruskalMST(Graph *gph) {
     int count = gph->count;
 	//Different subsets are created.
 	Set* sets[count];
@@ -1049,26 +923,22 @@ void kruskalMST(Graph *gph)
 
 	// Edges are added to array and sorted.
 	int E = 0;
-	GraphNode* edge[100];/////
-    GraphNode *head;
-	for (int i = 0; i < count; i++)
-	{
+	GraphEdge* edge[100];/////
+    GraphEdge *head;
+	for (int i = 0; i < count; i++) {
 		head = gph->adj[i];
-		while (head)
-		{
-			edge[E++] = createGraphNode(head->src, head->dest, head->cost);
+		while (head) {
+			edge[E++] = createGraphEdge(head->src, head->dest, head->cost);
             head = head->next;
         }
 	}
-	sort(edge, E, compare);
+	sort(edge, E, greater);
 	int sum = 0;
 	printf("Edges are ");
-    for (int i = 0; i < E; i++)
-	{
+    for (int i = 0; i < E; i++) {
 		int x = findSetRoot(sets, edge[i]->src);
 		int y = findSetRoot(sets, edge[i]->dest);
-		if (x != y)
-		{
+		if (x != y) {
 			printf("(%d, %d, %d) ", edge[i]->src, edge[i]->dest, edge[i]->cost);
 			sum += edge[i]->cost;
 			unionSets(sets, x, y);
@@ -1077,8 +947,7 @@ void kruskalMST(Graph *gph)
 	printf("\nTotal MST cost: %d\n", sum);
 }
 
-int main16()
-{
+int main16() {
     Graph* gph = createGraph(9);
     addUndirectedEdge(gph, 0, 1, 4);
     addUndirectedEdge(gph, 0, 7, 8);
@@ -1095,35 +964,30 @@ int main16()
     addUndirectedEdge(gph, 6, 8, 6);
     addUndirectedEdge(gph, 7, 8, 7);
     kruskalMST(gph);
-    //printGraph(gph);
+    printGraph(gph);
     primsMST(gph);
     dijkstra(gph, 0);
     return 0;
 }
 
-void shortestPath(Graph *gph, int source)
-{
+void shortestPath(Graph *gph, int source) {
     int count = gph->count;
     int *cost = (int *)calloc(count, sizeof(int));
     int *path = (int *)calloc(count, sizeof(int));
     int curr, destination;
-    for (int i = 0; i < count; i++)
-    {
+    for (int i = 0; i < count; i++) {
         cost[i] = -1;
         path[i] = -1;
     }
     Queue* que = createQueue();
     QueueAdd(que, source);
     cost[source] = 0;
-    while (QueueSize(que) != 0)
-    {
+    while (QueueSize(que) != 0) {
         curr = QueueRemove(que);
-        GraphNode *head = gph->adj[curr];
-        while (head)
-        {
+        GraphEdge *head = gph->adj[curr];
+        while (head) {
             destination = head->dest;
-            if (cost[destination] == -1)
-            {
+            if (cost[destination] == -1) {
                 cost[destination] = cost[curr] + 1;
                 path[destination] = curr;
                 QueueAdd(que, destination);
@@ -1135,8 +999,7 @@ void shortestPath(Graph *gph, int source)
         printf("%d to %d cost %d \n", path[i], i, cost[i]);
 }
 
-int main17()
-{
+int main17() {
     Graph* gph = createGraph(9);
     addUndirectedEdge(gph, 0, 1, 1);
     addUndirectedEdge(gph, 0, 7, 1);
@@ -1156,14 +1019,12 @@ int main17()
     return 0;
 }
 
-void bellmanFordshortestPath(Graph *gph, int source)
-{
+void bellmanFordshortestPath(Graph *gph, int source) {
     int count = gph->count;
     int previous[count];
     int dist[count];
     int visited[count];
-    for(int i = 0;i<count;i++)
-    {
+    for(int i = 0;i<count;i++) {
         previous[i] = -1;
         dist[i] = 99999;
         visited[i] = 0;
@@ -1174,17 +1035,13 @@ void bellmanFordshortestPath(Graph *gph, int source)
 	run for Edges number of times.
 	Which make the total complexity as O(V*E)
 	*/
-    for (int i = 0; i < count - 1; i++)
-    {
-        for (int j = 0; j < count; j++)
-        {
-            GraphNode *head = gph->adj[j];
-            while (head)
-            {
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = 0; j < count; j++) {
+            GraphEdge *head = gph->adj[j];
+            while (head) {
                 int newcost = dist[j] + head->cost;
                 int k = head->dest;
-                if (dist[k] > newcost)
-                {
+                if (dist[k] > newcost) {
                     dist[k] = newcost;
                     previous[k] = j;
                 }
@@ -1196,8 +1053,7 @@ void bellmanFordshortestPath(Graph *gph, int source)
         printf("%d to %d weight %d\n", previous[i], i, dist[i]);
 }
 
-int main18()
-{
+int main18() {
     Graph* gph = createGraph(5);
     addDirectedEdge(gph, 0, 1, 3);
     addDirectedEdge(gph, 0, 4, 2);
@@ -1210,60 +1066,46 @@ int main18()
     return 0;
 }
 
-int isEulerian(Graph *graph)
-{
+int isEulerian(Graph *graph) {
     //Check if all non - zero degree nodes are connected
-    if (isConnected(graph) == 0)
-    {
+    if (isConnected(graph) == 0) {
         printf("graph is not Eulerian.\n");
         return 0;
-    }
-    else
-    {
+    } else {
         int count = graph->count;
         //Count odd degree
         int odd = 0;
         int* inDegree = (int *)calloc(count, sizeof(int));
         int* outDegree = (int *)calloc(count, sizeof(int));
 
-        for (int i = 0; i < count; i++)
-        {
-            GraphNode *head = graph->adj[i];
-            while (head)
-            {
+        for (int i = 0; i < count; i++) {
+            GraphEdge *head = graph->adj[i];
+            while (head) {
                 outDegree[i] += 1;
                 inDegree[head->dest] += 1;
                 head = head->next;
             }
         }
-        for (int i = 0; i < count; i++)
-        {
-            if ((inDegree[i] + outDegree[i]) % 2 != 0)
-            {
+        for (int i = 0; i < count; i++) {
+            if ((inDegree[i] + outDegree[i]) % 2 != 0) {
                 odd += 1;
             }
         }
 
-        if (odd > 2)
-        {
+        if (odd > 2) {
             printf("graph is not Eulerian.\n");
             return 0;
-        }
-        else if (odd == 2)
-        {
+        } else if (odd == 2) {
             printf("graph is Semi-Eulerian.\n");
             return 1;
-        }
-        else if (odd == 0)
-        {
+        } else if (odd == 0) {
             printf("graph is Eulerian.\n");
             return 2;
         }
     }
 }
 
-int main19()
-{
+int main19() {
     Graph* gph = createGraph(5);
     addDirectedEdge(gph, 1, 0, 1);
     addDirectedEdge(gph, 0, 2, 1);
@@ -1274,16 +1116,14 @@ int main19()
     return 0;
 }
 
-int isStronglyConnected2(Graph *graph)
-{
+int isStronglyConnected2(Graph *graph) {
     int count = graph->count;
     int *visited = (int *)calloc(count, sizeof(int));
-    GraphNode *head;
+    GraphEdge *head;
     Graph *gReversed;
     int index;
     //Find a vertex with non - zero degree
-    for (index = 0; index < count; index++)
-    {
+    for (index = 0; index < count; index++) {
         head = graph->adj[index];
         if (head)
             break;
@@ -1291,8 +1131,7 @@ int isStronglyConnected2(Graph *graph)
     //DFS traversal of graph from a vertex with non - zero degree
     dfsUtil(graph, index, visited);
 
-    for (int i = 0; i < count; i++)
-    {
+    for (int i = 0; i < count; i++) {
         head = graph->adj[i];
         if (visited[i] == 0 && head)
             return 0;
@@ -1303,8 +1142,7 @@ int isStronglyConnected2(Graph *graph)
         visited[i] = 0;
     dfsUtil(gReversed, index, visited);
 
-    for (int i = 0; i < count; i++)
-    {
+    for (int i = 0; i < count; i++) {
         head = graph->adj[i];
         if (visited[i] == 0 && head)
             return 0;
@@ -1312,22 +1150,19 @@ int isStronglyConnected2(Graph *graph)
     return 1;
 }
 
-int isEulerianCycle(Graph *graph)
-{
+int isEulerianCycle(Graph *graph) {
     //Check if all non - zero degree count are connected
     int count = graph->count;
-    GraphNode *head;
+    GraphEdge *head;
     int *inDegree = (int *)calloc(count, sizeof(int));
     int *outDegree = (int *)calloc(count, sizeof(int));
     if (isStronglyConnected2(graph) == 0)
         return 0;
 
     //Check if in degree and out degree of every vertex is same
-    for (int i = 0; i < count; i++)
-    {
+    for (int i = 0; i < count; i++) {
         head = graph->adj[i];
-        while (head)
-        {
+        while (head) {
             outDegree[i] += 1;
             inDegree[head->dest] += 1;
             head = head->next;
@@ -1339,8 +1174,7 @@ int isEulerianCycle(Graph *graph)
     return 1;
 }
 
-int main20()
-{
+int main20() {
     Graph* gph = createGraph(5);
     addDirectedEdge(gph, 0, 1, 1);
     addDirectedEdge(gph, 1, 2, 1);
@@ -1352,13 +1186,11 @@ int main20()
     return 0;
 }
 
-void DFSRec(Graph *gph, int index, int *visited)
-{
+void DFSRec(Graph *gph, int index, int *visited) {
     int destination;
     visited[index] = 1;
-    GraphNode *head = gph->adj[index];
-    while (head)
-    {
+    GraphEdge *head = gph->adj[index];
+    while (head) {
         destination = head->dest;
         if (visited[destination] == 0)
             DFSRec(gph, destination, visited);
@@ -1366,8 +1198,7 @@ void DFSRec(Graph *gph, int index, int *visited)
     }
 }
 
-int main()
-{
+int main() {
     main1();
     main2();
     main3();

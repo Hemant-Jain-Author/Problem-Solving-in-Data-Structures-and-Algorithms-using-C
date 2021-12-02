@@ -2,116 +2,100 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct trieNode_t
-{
-    int flag;
-    char ch;
-    struct trieNode_t *child[26];
+typedef struct TrieNode {
+    int isLastChar;
+    struct TrieNode *child[26];
 } TrieNode;
 
-TrieNode *createNode()
-{
-    TrieNode *temp = (TrieNode *)malloc(sizeof(TrieNode));
+TrieNode *createNode() {
+    TrieNode *node = (TrieNode *)malloc(sizeof(TrieNode));
     for (int i = 0; i < 26; i++)
-        temp->child[i] = NULL;
-    return temp;
+        node->child[i] = NULL;
+    node->isLastChar = 0; 
+    return node;
 }
 
-void toLowerCase(char *str)
-{
-    int length = strlen(str);
-    for (int i = 0; i < length; i++)
-        if (str[i] >= 65 && str[i] <= (65 + 25))
-            str[i] += 32;
+typedef struct Trie {
+    TrieNode *root;
+} Trie;
+
+Trie *createTrie(){
+    Trie *trie = (Trie*)malloc(sizeof(Trie));
+    trie->root = createNode(); // first node with dummy value.
+    return trie;
 }
 
-void trieInserUtil(TrieNode *root, char *str)
-{
-    if (*(str + 1) == '\0')
-    {
-        if (root->child[*str - 'a'] == NULL)
-        {
-            root->child[*str - 'a'] = createNode();
-        }
-        root->child[*str - 'a']->flag = 1;
-        root->child[*str - 'a']->ch = *str;
+TrieNode* addTrieUtil(TrieNode *curr, char *str, int start) {
+    if(curr == NULL)
+        curr = createNode();
+    
+    if(strlen(str) == start)
+        curr->isLastChar = 1;
+    else{
+        int index = (str[start] > 'a' && str[start] < 'z') ? str[start] - 'a' : str[start] - 'A';
+        curr->child[index] = addTrieUtil(curr->child[index], str, start + 1);
+    }   
+    return curr;
+}
+
+void addTrie(Trie *trie, char *str) {
+    if (str == NULL || *str == '\0')
+        return;
+    addTrieUtil(trie->root, str, 0);
+}
+
+void removeTrieUtil(TrieNode *curr, char *str, int start) {
+    if(curr == NULL)
+        return;
+    
+    if(strlen(str) == start){
+        curr->isLastChar = 0;
         return;
     }
-    else
-    {
-        if (root->child[*str - 'a'] == NULL)
-        {
-            root->child[*str - 'a'] = createNode();
-            root->child[*str - 'a']->flag = 0;
-        }
-        root->child[*str - 'a']->ch = *str;
-        trieInserUtil(root->child[*str - 'a'], (str + 1));
-    }
+    int index = (str[start] > 'a' && str[start] < 'z') ? str[start] - 'a' : str[start] - 'A';
+    removeTrieUtil(curr->child[index], str, start + 1);  
 }
-TrieNode *trieInsert(TrieNode *root, char *str)
-{
-    toLowerCase(str);
+
+void removeTrie(Trie *trie, char *str) {
     if (str == NULL || *str == '\0')
-        return root;
-    if (root == NULL)
-    {
-        root = createNode();
-        trieInserUtil(root, str);
-    }
-    else
-    {
-        trieInserUtil(root, str);
-    }
-    return root;
+        return;
+    removeTrieUtil(trie->root, str, 0);
 }
 
-int findNode(TrieNode *root, char *str)
-{
-    toLowerCase(str);
-    if (str == NULL)
-    {
-        printf("\n Input string empty.\n");
+int findTrieUtil(TrieNode *curr, char *str, int start) {
+    if (curr == NULL)
         return 0;
-    }
-    if (root == NULL)
-    {
-        printf("\n Trie empty \n");
-        return 0;
-    }
-    while (root->child[*str - 'a'] && *(str + 1) != '\0' && root->child[*str - 'a']->ch == *str)
-    {
-        root = root->child[*str - 'a'];
-        str++;
-    }
-    //char does not match  or  char index child does not exist
-    if (!root->child[*str - 'a'] || root->child[*str - 'a']->ch != *str)
-    {
-        printf("\n Node not found \n");
-        return 0;
-    }
-    if (*(str + 1) == '\0')
-    {
-        if (root->child[*str - 'a']->ch == *str && root->child[*str - 'a']->flag == 1)
-        {
-            printf("\n Node found \n");
-            return 1;
-        }
-    }
-    printf("\n Node not found \n");
-    return 0;
+
+    if(strlen(str) == start)
+        return curr->isLastChar;
+
+    int index = (str[start] > 'a' && str[start] < 'z') ? str[start] - 'a' : str[start] - 'A';
+    return findTrieUtil(curr->child[index], str, start + 1);
 }
 
-int main()
-{
-    TrieNode *root = NULL;
-    char a[] = "hemant";
-    char b[] = "heman";
-    char c[] = "hemantjain";
-    char d[] = "jain";
-    root = trieInsert(root, a);
-    root = trieInsert(root, d);
-    printf("%d", findNode(root, a));
-    printf("%d", findNode(root, b));
-    printf("%d", findNode(root, c));
-    printf("%d", findNode(root, d));
+int findTrie(Trie *trie, char *str) {
+    if (str == NULL || *str == '\0')
+        return 0;
+    return findTrieUtil(trie->root, str, 0);
 }
+
+int main() {
+    Trie *trie = createTrie();
+    addTrie(trie, "banana");
+    addTrie(trie, "apple");
+    addTrie(trie, "Apple");
+    addTrie(trie, "APPLE");
+    addTrie(trie, "mango");
+
+    printf("find apple : %d\n", findTrie(trie, "apple"));
+    printf("find banana : %d\n", findTrie(trie, "banana"));
+    printf("find grapes : %d\n", findTrie(trie, "grapes"));
+    printf("find mango : %d\n", findTrie(trie, "mango"));
+}
+
+/*
+find apple : 1
+find banana : 1
+find grapes : 0
+find mango : 1
+*/

@@ -5,7 +5,7 @@
 #define MAX_CAPACITY 100
 #define ERROR_VALUE -999
 
-typedef struct Queue_t
+typedef struct Queue
 {
 	int front;
 	int back;
@@ -13,8 +13,7 @@ typedef struct Queue_t
 	int data[MAX_CAPACITY];
 } Queue;
 
-Queue* createQueue()
-{
+Queue* createQueue() {
 	Queue* que = (Queue*)malloc(sizeof(Queue));
 	que->back = 0;
 	que->front = 0;
@@ -22,10 +21,8 @@ Queue* createQueue()
 	return que;
 }
 
-void QueueAdd(Queue *que, int value)
-{
-	if (que->size == MAX_CAPACITY)
-	{
+void QueueAdd(Queue *que, int value) {
+	if (que->size == MAX_CAPACITY) {
 		printf("Queue is full.\n");
 		return;
 	}
@@ -34,11 +31,9 @@ void QueueAdd(Queue *que, int value)
 	que->back = (que->back + 1) % MAX_CAPACITY;
 }
 
-int QueueRemove(Queue *que)
-{
+int QueueRemove(Queue *que) {
 	int value;
-	if (que->size == 0)
-	{
+	if (que->size == 0) {
 		printf("Queue is empty.\n");
 		return ERROR_VALUE;
 	}
@@ -48,21 +43,17 @@ int QueueRemove(Queue *que)
 	return value;
 }
 
-int QueueFront(Queue *que)
-{
+int QueueFront(Queue *que) {
 	return que->data[que->front];
 }
 
-int QueueBack(Queue *que)
-{
+int QueueBack(Queue *que) {
 	return que->data[que->back-1];
 }
 
-int QueueRemoveBack(Queue *que)
-{
+int QueueRemoveBack(Queue *que) {
 	int value;
-	if (que->size == 0)
-	{
+	if (que->size == 0) {
 		printf("Queue is empty.\n");
 		return ERROR_VALUE;
 	}
@@ -72,54 +63,44 @@ int QueueRemoveBack(Queue *que)
 	return value;
 }
 
-int QueueIsEmpty(Queue *que)
-{
+int QueueIsEmpty(Queue *que) {
 	return que->size == 0;
 }
 
-int QueueSize(Queue *que)
-{
+int QueueSize(Queue *que) {
 	return que->size;
 }
 
-int main1()
-{
-	Queue* que = createQueue();
-	for (int i = 0; i < 11; i++)
-	{
-		QueueAdd(que, i);
-	}
-	while( !QueueIsEmpty(que))
-	{
-		printf("%d ", QueueRemove(que));
-	}
-	return 0;
+int main1() {
+    Queue* queue = createQueue();
+    QueueAdd(queue, 1);
+    QueueAdd(queue, 2);
+    QueueAdd(queue, 3);
+
+    while(!QueueIsEmpty(queue))
+        printf("%d ", QueueRemove(queue));
+    return 0;
 }
 
-void printArray(int *arr, int size)
-{
+void printArray(int *arr, int size) {
 	for (int i = 0; i < size; i++)
 		printf(" %d ", arr[i]);
 	printf("\n");
 }
 
-int CircularTour(int arr[][2], int n)
-{
+int CircularTour(int arr[][2], int n) {
 	Queue* que = createQueue();
 	int nextPump = 0, prevPump;
 	int count = 0;
 	int petrol = 0;
 
-	while (QueueSize(que) != n)
-	{
-		while (petrol >= 0 && QueueSize(que) != n)
-		{
+	while (QueueSize(que) != n) {
+		while (petrol >= 0 && QueueSize(que) != n) {
 			QueueAdd(que, nextPump);
 			petrol += (arr[nextPump][0] - arr[nextPump][1]);
 			nextPump = (nextPump + 1) % n;
 		}
-		while (petrol < 0 && QueueSize(que) > 0)
-		{
+		while (petrol < 0 && QueueSize(que) > 0) {
 			prevPump = QueueRemove(que);
 			petrol -= (arr[prevPump][0] - arr[prevPump][1]);
 		}
@@ -133,31 +114,26 @@ int CircularTour(int arr[][2], int n)
 		return -1;
 }
 
-int main2()
-{
+int main2() {
 	// Testing code
 	int tour[3][2] = { { 8, 6 },{ 1, 4 },{ 7, 6 } };
-	printf(" Circular Tour : %d ", CircularTour(tour, 3));
+	printf("Circular Tour : %d ", CircularTour(tour, 3));
 	return 0;
 }
 
-int convertXY(int src, int dst)
-{
-	
+int convertXY(int src, int dst) {
 	int arr[100];
 	int steps = 0;
 	int index = 0;
 	int value;
 	Queue* que = createQueue();	
 	QueueAdd(que, src);
-	while (QueueSize(que) != 0)
-	{
+	while (QueueSize(que) != 0) {
 		value = QueueRemove(que);
 		arr[index++] = value;
 
-		if (value == dst)
-		{
-			printArray(arr, index);
+		if (value == dst) {
+			//printArray(arr, index);
 			return steps;
 		}
 		steps++;
@@ -169,17 +145,14 @@ int convertXY(int src, int dst)
 	return -1;
 }
 
-int main3()
-{
+int main3() {
 	printf("steps : %d \n", convertXY(2, 7));
 	return 0;
 }
 
-void maxSlidingWindows(int arr[], int size, int k)
-{
+void maxSlidingWindows(int arr[], int size, int k) {
 	Queue* que = createQueue();
-	for (int i = 0; i < size; i++)
-	{
+	for (int i = 0; i < size; i++) {
 		//Remove out of range elements
 		if (QueueSize(que) && QueueFront(que) <= i - k)
 			QueueRemove(que);
@@ -195,8 +168,7 @@ void maxSlidingWindows(int arr[], int size, int k)
 	}
 }
 
-int main4()
-{
+int main4() {
 	int arr[] = { 11, 2, 75, 92, 59, 90, 55 };
 	int k = 3;
 	maxSlidingWindows(arr, 7, 3);
@@ -204,12 +176,10 @@ int main4()
 	//Output 75, 92, 92, 92, 90
 }
 
-int minOfMaxSlidingWindows(int arr[], int size, int k)
-{
+int minOfMaxSlidingWindows(int arr[], int size, int k) {
 	Queue* que = createQueue();
 	int minVal = 999999;
-	for (int i = 0; i < size; i++)
-	{
+	for (int i = 0; i < size; i++) {
 		//Remove out of range elements 
 		if (QueueSize(que) && QueueFront(que) <= i - k)
 			QueueRemove(que);
@@ -225,8 +195,7 @@ int minOfMaxSlidingWindows(int arr[], int size, int k)
 	return minVal;
 }
 
-int main5()
-{
+int main5() {
 	int arr[] = { 11, 2, 75, 92, 59, 90, 55 };
 	int k = 3;
 	minOfMaxSlidingWindows(arr, 7, 3);
@@ -234,12 +203,10 @@ int main5()
 	//Output 75
 }
 
-void maxOfMinSlidingWindows(int arr[], int size, int k)
-{
+void maxOfMinSlidingWindows(int arr[], int size, int k) {
 	Queue* que = createQueue();
 	int maxVal = -999999;
-	for (int i = 0; i < size; i++)
-	{
+	for (int i = 0; i < size; i++) {
 		//Remove out of range elements 
 		if (QueueSize(que) && QueueFront(que) <= i - k)
 			QueueRemove(que);
@@ -254,8 +221,7 @@ void maxOfMinSlidingWindows(int arr[], int size, int k)
 	printf("Max of min is :: %d ", maxVal);
 }
 
-int main6()
-{
+int main6() {
 	int arr[] = { 11, 2, 75, 92, 59, 90, 55 };
 	int k = 3;
 	maxOfMinSlidingWindows(arr, 7, 3);
@@ -263,19 +229,16 @@ int main6()
 	//Output  59, as minimum values in sliding windows are [2, 2, 59, 59, 55]
 }
 
-void firstNegSlidingWindows(int arr[], int size, int k)
-{
+void firstNegSlidingWindows(int arr[], int size, int k) {
 	Queue* que = createQueue();
-	for (int i = 0; i < size; i++)
-	{
+	for (int i = 0; i < size; i++) {
 		//Remove out of range elements 
 		if (QueueSize(que) && QueueFront(que) <= i - k)
 			QueueRemove(que);
 		if (arr[i] < 0)
 			QueueAdd(que, i);
 		//window of size k
-		if (i >= (k - 1))
-		{
+		if (i >= (k - 1)) {
 			if (QueueSize(que) > 0)
 				printf("%d ", arr[QueueFront(que)]);
 			else
@@ -284,8 +247,7 @@ void firstNegSlidingWindows(int arr[], int size, int k)
 	}
 }
 
-int main7()
-{
+int main7() {
 	int arr[] = { 3, -2, -6, 10, -14, 50, 14, 21 };
 	int k = 3;
 	firstNegSlidingWindows(arr, 8, 3);
@@ -295,6 +257,7 @@ int main7()
 
 int main(){
 	main1();
+	
 	printf("\n");
 	main2();
 	printf("\n");
@@ -307,4 +270,15 @@ int main(){
 	main6();
 	printf("\n");
 	main7();
+	
 }
+
+/*
+1 2 3 
+Circular Tour : 2 
+steps : 3 
+75 92 92 92 90 
+Min of max is :: 75 
+Max of min is :: 59 
+-2 -2 -6 -14 -14 NAN
+*/

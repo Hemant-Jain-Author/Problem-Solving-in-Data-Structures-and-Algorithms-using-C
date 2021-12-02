@@ -2,40 +2,36 @@
 #include <stdlib.h>
 #include <math.h>
 
-typedef struct Point_t
-{
+typedef struct Point {
 	int x; 
 	int y;
 } Point;
 
-Point* createPoint(int a, int b)
-{
+Point* createPoint(int a, int b) {
 	Point *pt = (Point *)malloc(sizeof(Point));
 	pt->x = a;
 	pt->y = b;
 	return pt;
 }
 
-int xCompare(Point *p1, Point *p2)
-{
+int xCompare(Point *p1, Point *p2) {
 	return (p1->x > p2->x);
 }
 
-int yCompare(Point *p1, Point *p2)
-{
+int yCompare(Point *p1, Point *p2) {
 	return (p1->y > p2->y);
 }
 
-void sort(Point* arr[], int size, int (*comp)(Point* p1, Point* p2))
-{
+double min(double x, double y) {
+	return (x < y)? x : y;
+}
+
+void sort(Point* arr[], int size, int (*comp)(Point* p1, Point* p2)) {
     int i, j;
 	Point* temp;
-    for (i = 0; i < (size - 1); i++)
-    {
-        for (j = 0; j < size - i - 1; j++)
-        {
-            if (comp(arr[j], arr[j + 1]))
-            {
+    for (i = 0; i < (size - 1); i++) {
+        for (j = 0; j < size - i - 1; j++) {
+            if (comp(arr[j], arr[j + 1])) {
                 /* Swapping */
                 temp = arr[j];
                 arr[j] = arr[j + 1];
@@ -45,13 +41,10 @@ void sort(Point* arr[], int size, int (*comp)(Point* p1, Point* p2))
     }
 }
 
-double closestPairBF(int arr[][2], int n)
-{
+double closestPairBF(int arr[][2], int n) {
 	double dmin = 999999;
-	for (int i = 0; i < n - 1 ; i++)
-	{
-		for (int j = i + 1; j < n ; j++)
-		{
+	for (int i = 0; i < n - 1 ; i++) {
+		for (int j = i + 1; j < n ; j++) {
 			double val = sqrt((arr[i][0] - arr[j][0]) * (arr[i][0] - arr[j][0]) + 
 								(arr[i][1] - arr[j][1]) * (arr[i][1] - arr[j][1]));
 			dmin = min(dmin, val);
@@ -60,37 +53,30 @@ double closestPairBF(int arr[][2], int n)
 	return dmin;
 }
 
-double distance(Point *a, Point *b)
-{
+double distance(Point *a, Point *b) {
 	return sqrt((a->x - b->x) * (a->x - b->x) + (a->y - b->y) * (a->y - b->y));
 }
 
-double stripMin(Point* q[], int n, double d)
-{
+double stripMin(Point* q[], int n, double d) {
 	double dmin = d;
 
 	// Find the distance between all the points in the strip. 
 	// Array q is sorted according to the y axis coordinate.
 	// The inner loop will run at most 6 times for each point.
-	for (int i = 0; i < n; ++i)
-	{
-		for (int j = i + 1; j < n && (q[j]->y - q[i]->y) < dmin; ++j)
-		{
+	for (int i = 0; i < n; ++i) {
+		for (int j = i + 1; j < n && (q[j]->y - q[i]->y) < dmin; ++j) {
 			dmin = min(dmin, distance(q[i],q[j]));
 		}
 	}
 	return dmin;
 }
 
-double closestPairUtil(Point* p[], int start, int stop, Point* q[], int n)
-{
-	if (stop - start < 1)
-	{
+double closestPairUtil(Point* p[], int start, int stop, Point* q[], int n) {
+	if (stop - start < 1) {
 		return 999999;
 	}
 
-	if (stop - start == 1)
-	{
+	if (stop - start == 1) {
 		return distance(p[start], p[stop]);
 	}
 
@@ -105,10 +91,8 @@ double closestPairUtil(Point* p[], int start, int stop, Point* q[], int n)
 	// Points are already sorted according to y axis.
 	Point* strip[n];
 	int j = 0;
-	for (int i = 0; i < n; i++)
-	{
-		if (abs(q[i]->x - p[mid]->x) < d)
-		{
+	for (int i = 0; i < n; i++) {
+		if (abs(q[i]->x - p[mid]->x) < d) {
 			strip[j] = q[i];
 			j++;
 		}
@@ -117,12 +101,10 @@ double closestPairUtil(Point* p[], int start, int stop, Point* q[], int n)
 	return min(d, stripMin(strip, j, d));
 }
 
-double closestPairDC(int arr[][2], int n)
-{
+double closestPairDC(int arr[][2], int n) {
 	Point* p[n];
 	Point* q[n];
-	for (int i = 0; i < n; i++)
-	{
+	for (int i = 0; i < n; i++) {
 		p[i] = createPoint(arr[i][0], arr[i][1]);
 		q[i] = createPoint(arr[i][0], arr[i][1]);
 	}
@@ -131,8 +113,7 @@ double closestPairDC(int arr[][2], int n)
 	return closestPairUtil(p, 0, n - 1, q, n);
 }
 
-int main()
-{
+int main() {
 	int arr[][2] = {{648, 896}, {269, 879}, {250, 922}, {453, 347}, {213, 17}};
 	printf("Smallest distance is: %lf\n" , closestPairBF(arr, 5) );
 	printf("Smallest distance is: %lf\n" , closestPairDC(arr, 5) );

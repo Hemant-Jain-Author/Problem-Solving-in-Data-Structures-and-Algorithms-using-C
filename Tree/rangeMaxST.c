@@ -17,8 +17,7 @@ int getMaxUtil(RangeMaxST*  tree, int segStart, int segEnd, int queryStart, int 
 int updateUtil(RangeMaxST*  tree, int segStart, int segEnd, int ind, int val, int index);
 int max(int first, int second);
 
-RangeMaxST* createRangeMaxST(int input[], int n)
-{
+RangeMaxST* createRangeMaxST(int input[], int n) {
 	RangeMaxST* tree = (RangeMaxST*)malloc(sizeof(RangeMaxST));
 	// Height of segment tree.
 	int x = ceil(log(n)/log(2));
@@ -31,11 +30,9 @@ RangeMaxST* createRangeMaxST(int input[], int n)
 	return tree;
 }
 
-int constructST(RangeMaxST*  tree, int* input, int start, int end, int index)
-{
+int constructST(RangeMaxST*  tree, int* input, int start, int end, int index) {
 	// Store it in current node of the segment tree and return
-	if (start == end)
-	{
+	if (start == end) {
 		tree->segArr[index] = input[start];
 		return input[start];
 	}
@@ -49,24 +46,20 @@ int constructST(RangeMaxST*  tree, int* input, int start, int end, int index)
 	 return tree->segArr[index];
 }
 
-int max(int first, int second)
-{
+int max(int first, int second) {
 	return (first > second)? first :  second;
 }
 
-int getMax(RangeMaxST* tree, int start, int end)
-{
+int getMax(RangeMaxST* tree, int start, int end) {
 	// Check for error conditions.
-	if (start > end || start < 0 || end > tree->n - 1)
-	{
+	if (start > end || start < 0 || end > tree->n - 1) {
 		printf("Invalid Input.\n");
 		return -999999;
 	}
 	return getMaxUtil(tree, 0, tree->n - 1, start, end, 0);
 }
 
-int getMaxUtil(RangeMaxST* tree, int segStart, int segEnd, int queryStart, int queryEnd, int index)
-{
+int getMaxUtil(RangeMaxST* tree, int segStart, int segEnd, int queryStart, int queryEnd, int index) {
 	if (queryStart <= segStart && segEnd <= queryEnd) // complete overlapping case.
 	{
 		return tree->segArr[index];
@@ -83,11 +76,9 @@ int getMaxUtil(RangeMaxST* tree, int segStart, int segEnd, int queryStart, int q
 		getMaxUtil(tree, mid + 1, segEnd, queryStart, queryEnd, 2 * index + 2));
 }
 
-void update(RangeMaxST* tree, int ind, int val)
-{
+void update(RangeMaxST* tree, int ind, int val) {
 	// Check for error conditions.
-	if (ind < 0 || ind > tree->n - 1)
-	{
+	if (ind < 0 || ind > tree->n - 1) {
 		printf("Invalid Input.\n");
 		return;
 	}
@@ -96,22 +87,18 @@ void update(RangeMaxST* tree, int ind, int val)
 	updateUtil(tree, 0, tree->n - 1, ind, val, 0);
 }
 
-int updateUtil(RangeMaxST* tree, int segStart, int segEnd, int ind, int val, int index)
-{
+int updateUtil(RangeMaxST* tree, int segStart, int segEnd, int ind, int val, int index) {
 	// Update index lies outside the range of current segment.
 	// So minimum will not change.
-	if (ind < segStart || ind > segEnd)
-	{
+	if (ind < segStart || ind > segEnd) {
 		return tree->segArr[index];
 	}
 
 	// If the input index is in range of this node, then update the
 	// value of the node and its children
 
-	if (segStart == segEnd)
-	{
-		if (segStart == ind)
-		{ // Index value need to be updated.
+	if (segStart == segEnd) {
+		if (segStart == ind) { // Index value need to be updated.
 			tree->segArr[index] = val;
 			return val;
 		}
@@ -131,8 +118,7 @@ int updateUtil(RangeMaxST* tree, int segStart, int segEnd, int ind, int val, int
 	return tree->segArr[index];
 }
 
-int main()
-{
+int main() {
 	int arr[] = {1, 8, 2, 7, 3, 6, 4, 5};
 	RangeMaxST *tree = createRangeMaxST(arr, 8);
 	printf("Max value in the range(1, 5): %d\n",  getMax(tree, 1, 5));

@@ -7,124 +7,110 @@
 #define MAX_CAPACITY 50
 #define ERROR_VALUE -999
 
-typedef struct stack
-{
-	int top;
-	int data[MAX_CAPACITY];
-} Stack;
-
-int min(int a, int b)
-{
+int min(int a, int b) {
 	return a > b ? b : a;
 }
 
-int max(int a, int b)
-{
+int max(int a, int b) {
 	return a < b ? b : a;
 }
-void StackInit(Stack *stk);
-void StackPush(Stack *stk, int value);
-int StackPop(Stack *stk);
-int StackTop(Stack *stk);
-int StackIsEmpty(Stack *stk);
-int StackSize(Stack *stk);
 
-void StackInit(Stack *stk)
+typedef struct Stack
 {
-	stk->top = -1;
+    int top;
+    int *data;
+    int capacity;
+} Stack;
+
+Stack* createStack() {
+    Stack *stk = (Stack*)malloc(sizeof(Stack));
+    stk->data = (int *)malloc(MAX_CAPACITY * sizeof(int));
+    stk->top = -1;
+    stk->capacity = MAX_CAPACITY;
+    return stk;
 }
 
-void StackPush(Stack *stk, int value)
-{
-	if (stk->top < MAX_CAPACITY - 1)
-	{
-		stk->top++;
-		stk->data[stk->top] = value;
-	}
-	else
-	{
-		printf("stack overflow\n");
-	}
+void StackPush(Stack *stk, int value) {
+    if (stk->top + 1 == stk->capacity){
+        printf("Stack is full.\n");
+        return;
+    }
+    stk->top++;
+    stk->data[stk->top] = value;
 }
 
-int StackPop(Stack *stk)
-{
-	if (stk->top >= 0)
-	{
-		int value = stk->data[stk->top];
-		stk->top--;
-		return value;
-	}
-	printf("stack empty\n");
-	return ERROR_VALUE;
+int StackPop(Stack *stk) {
+    if (stk->top == -1) {
+        printf("stack empty.\n");
+        return -99999;
+    }
+    
+    int value = stk->data[stk->top];
+    stk->top--;
+    return value;
 }
 
-int StackTop(Stack *stk)
-{
-	int value = stk->data[stk->top];
-	return value;
+int StackTop(Stack *stk) {
+    int value = stk->data[stk->top];
+    return value;
 }
 
-int StackIsEmpty(Stack *stk)
-{
-	return (stk->top == -1);
+int StackIsEmpty(Stack *stk) {
+    return (stk->top == -1);
 }
 
-int StackSize(Stack *stk)
-{
-	return (stk->top + 1);
+int StackSize(Stack *stk) {
+    return (stk->top + 1);
 }
 
-void StackPrint(Stack *stk)
-{
-	printf("Stack :: ");
-	for (int i = stk->top; i >= 0; i--)
-	{
-		printf("%d ", stk->data[i]);
-	}
-	printf("\n");
+void StackPrint(Stack *stk) {
+    printf("[");
+    for (int i = stk->top; i >= 0; i--) {
+        printf("%d ", stk->data[i]);
+    }
+    printf("]\n");
 }
 
-typedef struct Queue_t
-{
-	Stack stk1;
-	Stack stk2;
+typedef struct Queue {
+	Stack* stk1;
+	Stack* stk2;
 }Queue;
 
-void QueueInit(Queue* que)
-{
-	StackInit(&que->stk1);
-	StackInit(&que->stk2);
+Queue* createQueue() {
+	Queue* que = (Queue*)malloc(sizeof(Queue));
+	que->stk1 = createStack();	
+	que->stk2 = createStack();
+	return que;
 }
 
-void QueueAdd(Queue* que, int value)
-{
-	StackPush(&que->stk1, value);
+void QueueAdd(Queue* que, int value) {
+	StackPush(que->stk1, value);
 }
 
-int QueueRemove(Queue* que)
-{
+int QueueRemove(Queue* que) {
 	int value;
-	if (StackIsEmpty(&que->stk2)) {	
-		while (!StackIsEmpty(&que->stk1)) {
-			value = StackPop(&que->stk1);
-			StackPush(&que->stk2, value);
+	if (StackIsEmpty(que->stk2)) {	
+		while (!StackIsEmpty(que->stk1)) {
+			value = StackPop(que->stk1);
+			StackPush(que->stk2, value);
 		}
 	}
-	return StackPop(&que->stk2);
+	return StackPop(que->stk2);
 }
 
-int main()
-{
-	Queue que;
-	QueueInit(&que);
-	QueueAdd(&que, 1);
-	QueueAdd(&que, 2);
-	QueueAdd(&que, 3);
-    QueueAdd(&que, 4);
-	QueueAdd(&que, 5);
-	QueueAdd(&que, 6);
-	printf("%d  ", QueueRemove(&que));
-	printf("%d  ", QueueRemove(&que));
-	printf("%d  ", QueueRemove(&que));
+int QueueSize(Queue* que) {
+	return StackSize(que->stk1) + StackSize(que->stk2);
+}
+
+int main() {
+	Queue* que = createQueue();
+	QueueAdd(que, 1);
+	QueueAdd(que, 2);
+	QueueAdd(que, 3);
+    QueueAdd(que, 4);
+	QueueAdd(que, 5);
+	QueueAdd(que, 6);
+	while(QueueSize(que) > 0)
+		printf("%d  ", QueueRemove(que));
+
 }

@@ -5,35 +5,44 @@ typedef struct Node
 {
     int value;
     struct Node *next;
-} ListNode;
+} Node;
 
-int insertNode(ListNode **ptrHead, int value)
-{
-    ListNode *tempNode = (ListNode *)malloc(sizeof(ListNode));
-    if (!tempNode)
-        return -1;
-    tempNode->value = value;
-    tempNode->next = *ptrHead;
-    *ptrHead = tempNode;
-    return 1;
+Node* createNode(int value, Node* next) {
+    Node *node = (Node*)malloc(sizeof(Node));
+    node->value = value;
+    node->next = next;
+    return node;
 }
 
-int findLenght(ListNode *head)
+typedef struct LinkedList
 {
+    Node *head;
+} LinkedList;
+
+LinkedList* createLinkedList(){
+    LinkedList* list = (LinkedList*)malloc(sizeof(LinkedList));
+    list->head = NULL;
+    return list;
+}
+
+void insertNode(LinkedList* list, int value) {
+    list->head = createNode(value, list->head);
+}
+
+int findLength(LinkedList* list) {
+    Node *head = list->head;
     int count = 0;
-    while (head)
-    {
+    while (head) {
         count++;
         head = head->next;
     }
     return count;
 }
 
-ListNode *nthNodeFromBegening(ListNode *head, int index)
-{
+Node* nthNodeFromBeginning(LinkedList* list, int index) {
+    Node *head = list->head;
     int count = 0;
-    while (head && count < index - 1)
-    {
+    while (head && count < index - 1) {
         count++;
         head = head->next;
     }
@@ -44,52 +53,41 @@ ListNode *nthNodeFromBegening(ListNode *head, int index)
         return NULL;
 }
 
-ListNode *nthNodeFromEnd1(ListNode *head, int index)
-{
-    int size = findLenght(head);
-    int startIndex;
-    if (size && size < index)
-    {
-        printf("list does not have % elements", index);
+Node *nthNodeFromEnd(LinkedList* list, int index) {
+    Node *head = list->head;
+    int size = findLength(list);
+    if (size && size < index) {
+        printf("list does not have %d elements", index);
         return NULL;
     }
-    startIndex = size - index + 1;
-    return nthNodeFromBegening(head, index);
+    int startIndex = size - index + 1;
+    return nthNodeFromBeginning(list, startIndex);
 }
 
-ListNode *nthNodeFromEnd2(ListNode *head, int index)
-{
+Node *nthNodeFromEnd2(LinkedList* list, int index) {
     int count = 0;
-    ListNode *temp = NULL;
-    ListNode *curr = head;
-    while (curr && count < index - 1)
-    {
+    Node *head = list->head;
+    Node *first = head;
+    while (first && count < index ) {
         count++;
-        curr = curr->next;
+        first = first->next;
     }
-
-    if (!curr)
+    if (count != index)
         return NULL;
 
-    temp = head;
-
-    while (curr)
-    {
-        temp = temp->next;
-        curr = curr->next;
+    while (first) {
+        head = head->next;
+        first = first->next;
     }
-    return temp;
+    return head;
 }
 
-ListNode *nthNodeFromEnd3(ListNode *head, int index)
-{
+Node *nthNodeFromEndUtil(Node* head, int index) {
     static int count = 0;
-    ListNode *retval;
-
     if (!head)
         return NULL;
 
-    retval = nthNodeFromEnd3(head->next, index);
+    Node *retval = nthNodeFromEndUtil(head->next, index);
     if (retval)
         return retval;
 
@@ -100,334 +98,254 @@ ListNode *nthNodeFromEnd3(ListNode *head, int index)
         return NULL;
 }
 
-void printList(ListNode *head)
-{
-    printf("printList: ");
-    while (head)
-    {
-        printf(" %d ", head->value);
-        head = head->next;
-    }
-    printf("\n");
+Node *nthNodeFromEnd3(LinkedList* list, int index) {
+    return nthNodeFromEndUtil(list->head, index);
 }
 
-int sortedInsert(ListNode **ptrHead, int value)
-{
-    ListNode *head = *ptrHead;
-    ListNode *tempNode = (ListNode *)malloc(sizeof(ListNode));
-    printf("Insert element %d \n", value);
-    if (!tempNode)
-        return -1;
-    tempNode->value = value;
-    tempNode->next = NULL;
-    if (head == NULL || head->value > value)
-    {
-        tempNode->next = *ptrHead;
-        *ptrHead = tempNode;
-        return 1;
+void printList(LinkedList* list) {
+    Node* head = list->head;
+    printf("[ ");
+    while (head) {
+        printf("%d ", head->value);
+        head = head->next;
     }
+    printf("]\n");
+}
+
+void sortedInsert(LinkedList* list, int value) {
+    Node *head = list->head;
+    Node *tempNode = createNode(value, NULL); 
+    
+    if (head == NULL || head->value > value) {
+        tempNode->next = head;
+        list->head = tempNode;
+        return;
+    }
+
     while (head->next != NULL &&
-           head->next->value < value)
-    {
+           head->next->value < value) {
         head = head->next;
     }
+
     tempNode->next = head->next;
     head->next = tempNode;
-    return 1;
 }
-int insertAtEnd(ListNode **ptrHead, int value)
-{
-    ListNode *head = *ptrHead;
-    ListNode *tempNode = (ListNode *)malloc(sizeof(ListNode));
-    if (!tempNode)
-        return -1;
-    tempNode->value = value;
-    tempNode->next = NULL;
-    if (head == NULL)
-    {
-        tempNode->next = *ptrHead;
-        *ptrHead = tempNode;
-        return 1;
+
+void insertAtEnd(LinkedList* list, int value) {
+    Node *head = list->head;
+    Node *tempNode = createNode(value, NULL);
+
+    if (head == NULL) {
+        list->head = tempNode;
+        return;
     }
-    while (head->next != NULL)
-    {
+
+    while (head->next != NULL) {
         head = head->next;
     }
-    tempNode->next = head->next;
     head->next = tempNode;
-    return 1;
 }
-int insertNodeEnd2(ListNode **ptrHead, ListNode **ptrTail, int value)
-{
-    printf("Insert Node:: %d", value);
-    ListNode *tempPtr = (ListNode *)malloc(sizeof(ListNode));
-    if (!tempPtr)
-        return -1;
-    tempPtr->value = value;
-    tempPtr->next = NULL;
-    if (*ptrHead == NULL)
-    {
-        *ptrTail = *ptrHead = tempPtr;
-    }
-    else
-    {
-        ListNode *tail = *ptrTail;
-        tail->next = tempPtr;
-        *ptrTail = tempPtr;
-    }
-    return 1;
-}
-int searchList(ListNode *head, int value)
-{
-    while (head)
-    {
+
+int searchList(LinkedList* list, int value) {
+    Node *head = list->head;
+    while (head) {
         if (head->value == value)
-        {
-            printf("\nThe value is found\n");
             return 1;
-        }
+
         head = head->next;
     }
-    printf("\nThe value not found\n");
     return 0;
 }
 
-void deleteFirstNodes(ListNode **ptrHead)
-{
-    ListNode *currNode = *ptrHead;
-    ListNode *nextNode;
-
-    if (currNode == NULL)
+void deleteFirstNodes(LinkedList* list) {
+    Node *head = list->head;
+    if (head == NULL)
         return;
 
-    nextNode = currNode->next;
-    free(currNode);
-
-    *ptrHead = nextNode;
+    Node *next = head->next;
+    free(head);
+    list->head = next;
 }
 
-void deleteNode(ListNode **ptrHead, int delValue)
-{
-    printf("\nDelete Node \n");
-    ListNode *currNode = *ptrHead;
-    ListNode *nextNode;
+void deleteNode(LinkedList* list, int delValue) {
+    Node *head = list->head;
+    if(head == NULL)
+        return;
 
-    if (currNode && currNode->value == delValue) /*first node */
+    if (head->value == delValue) /*first node */
     {
-        *ptrHead = currNode->next;
-        free(currNode);
+        list->head = head->next;
+        free(head);
         return;
     }
 
-    while (currNode != NULL)
-    {
-        nextNode = currNode->next;
-        if (nextNode && nextNode->value == delValue)
-        {
-            currNode->next = nextNode->next;
+    Node *nextNode;
+    while (head != NULL) {
+        nextNode = head->next;
+        if (nextNode && nextNode->value == delValue) {
+            head->next = nextNode->next;
             free(nextNode);
             return;
         }
-        else
-        {
-            currNode = nextNode;
-        }
+        head = nextNode;
     }
 }
 
-void deleteNodes(ListNode **ptrHead, int delValue)
-{
-    ListNode *currNode = *ptrHead;
-    ListNode *nextNode;
-    ListNode *delNode;
-
-    while (currNode != NULL && currNode->value == delValue) /*first node */
+void deleteNodes(LinkedList* list, int delValue) {
+    Node *curr = list->head;
+    Node *delNode;
+    while (curr != NULL && curr->value == delValue) /*first node */
     {
-        *ptrHead = currNode->next;
-        delNode = currNode;
-        currNode = currNode->next;
+        delNode = curr;
+        curr = curr->next;
         free(delNode);
+        list->head = curr;
     }
 
-    while (currNode != NULL)
-    {
-        nextNode = currNode->next;
-        if (nextNode && nextNode->value == delValue)
-        {
-            currNode->next = nextNode->next;
+    Node *nextNode;
+    while (curr != NULL) {
+        nextNode = curr->next;
+        if (nextNode && nextNode->value == delValue) {
+            curr->next = nextNode->next;
             free(nextNode);
+            continue;
         }
-        else
-        {
-            currNode = nextNode;
-        }
+        curr = nextNode;
     }
 }
 
-void deleteListPtr(ListNode **ptrHead, ListNode *ptrDel)
-{
-    ListNode *currNode = *ptrHead;
-    ListNode *nextNode;
+void deleteListPtr(LinkedList* list, Node *ptrDel) {
+    Node *curr = list->head;
+    Node *nextNode;
 
     if (ptrDel == NULL)
         return;
 
-    if (currNode == ptrDel) /*first node*/
+    if (curr == ptrDel) /*first node*/
     {
-        *ptrHead = currNode->next;
-        free(currNode);
+        list->head = curr->next;
+        free(curr);
         return;
     }
-    while (currNode != NULL)
-    {
-        nextNode = currNode->next;
-        if (nextNode == ptrDel) /*node to be deleated*/
+    while (curr != NULL) {
+        nextNode = curr->next;
+        if (nextNode == ptrDel) /*node to be deleted*/
         {
-            currNode->next = nextNode->next;
+            curr->next = nextNode->next;
             free(nextNode);
             return;
         }
-        currNode = nextNode;
+        curr = nextNode;
     }
 }
 
-void deleteList(ListNode **ptrHead)
-{
-    ListNode *deleteMe = *ptrHead;
-    ListNode *nextNode;
-    while (deleteMe != NULL)
-    {
+void deleteList(LinkedList* list) {
+    Node *deleteMe = list->head;
+    Node *nextNode;
+    while (deleteMe != NULL) {
         nextNode = deleteMe->next;
         free(deleteMe);
         deleteMe = nextNode;
     }
-    *ptrHead = NULL;
+    list->head = NULL;
 }
 
-void reverseList(ListNode **ptrHead)
-{
-    ListNode *tempNode = *ptrHead;
-    ListNode *prevNode;
-    ListNode *nextNode;
-    if (!tempNode)
-    {
-        return;
+void reverseList(LinkedList* list) {
+    Node *curr = list->head;
+    Node *prev = NULL;
+    Node *next = NULL;
+    while (curr != NULL) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
     }
-    if (!tempNode->next)
-    {
-        return;
-    }
-    prevNode = tempNode;
-    tempNode = tempNode->next;
-    prevNode->next = NULL;
-    while (tempNode)
-    {
-        nextNode = tempNode->next;
-        tempNode->next = prevNode;
-        prevNode = tempNode;
-        tempNode = nextNode;
-    }
-    *ptrHead = prevNode;
+    list->head = prev;
+
 }
 
-ListNode *reverseRecurseUtil(ListNode *currentNode, ListNode *nextNode)
-{
-    ListNode *ret;
+Node *reverseRecurseUtil(Node *currentNode, Node *nextNode) {
     if (!currentNode)
         return NULL;
 
-    if (!currentNode->next)
-    {
+    if (!currentNode->next) {
         currentNode->next = nextNode;
         return currentNode;
     }
 
-    ret = reverseRecurseUtil(currentNode->next, currentNode);
+    Node *ret = reverseRecurseUtil(currentNode->next, currentNode);
     currentNode->next = nextNode;
     return ret;
 }
 
-void reverseRecurse(ListNode **ptrHead)
-{
-    *ptrHead = reverseRecurseUtil(*ptrHead, NULL);
+void reverseRecurse(LinkedList* list) {
+    list->head = reverseRecurseUtil(list->head, NULL);
 }
 
-void removeDuplicate(ListNode *head)
-{
-    ListNode *deleteMe;
-    while (head)
-    {
-        if ((head->next) && head->value == head->next->value)
-        {
+void removeDuplicate(LinkedList* list) {
+    Node *head = list->head;
+    Node *deleteMe;
+    while (head) {
+        if ((head->next) && head->value == head->next->value) {
             deleteMe = head->next;
             head->next = deleteMe->next;
             free(deleteMe);
-        }
-        else
-        {
+        } else {
             head = head->next;
         }
     }
 }
 
-void copyListReversed(ListNode *head, ListNode **ptrHead2)
-{
-    ListNode *tempNode = NULL;
-    ListNode *tempNode2 = NULL;
-    while (head)
-    {
-        tempNode2 = (ListNode *)malloc(sizeof(ListNode));
-        tempNode2->value = head->value;
-        tempNode2->next = tempNode;
-        tempNode = tempNode2;
+LinkedList* copyListReversed(LinkedList* list) {
+    LinkedList* list2 = createLinkedList();
+    Node *head = list->head;
+    Node *head2 = NULL;
+    while (head) {
+        head2 = createNode(head->value, head2); 
         head = head->next;
     }
-    *ptrHead2 = tempNode;
+    list2->head = head2;
+    return list2;
 }
 
-void copyList(ListNode *head, ListNode **ptrHead2)
-{
-    ListNode *headNode = NULL;
-    ListNode *tailNode = NULL;
-    ListNode *tempNode = NULL;
-
+LinkedList* copyList(LinkedList* list) {
+    Node *head = list->head;
+    LinkedList* list2 = createLinkedList();
     if (head == NULL)
-        return;
+        return list2;
 
-    headNode = (ListNode *)malloc(sizeof(ListNode));
-    tailNode = headNode;
-    headNode->value = head->value;
-    headNode->next = NULL;
+    list2->head = createNode(head->value, NULL);
+    Node *tailNode = list2->head;
     head = head->next;
 
-    while (head)
-    {
-        tempNode = (ListNode *)malloc(sizeof(ListNode));
-        tempNode->value = head->value;
-        tempNode->next = NULL;
-        tailNode->next = tempNode;
+    while (head) {
+        tailNode->next = createNode(head->value, NULL);
         tailNode = tailNode->next;
         head = head->next;
     }
-    *ptrHead2 = headNode;
+    return list2;
 }
 
-int compareList(ListNode *head1, ListNode *head2)
-{
+int compareListUtil(Node *head1, Node *head2) {
     if (head1 == NULL && head2 == NULL)
         return 1;
     else if ((head1 == NULL) || (head2 == NULL) || (head1->value != head2->value))
         return 0;
     else
-        return compareList(head1->next, head2->next);
+        return compareListUtil(head1->next, head2->next);
 }
 
-int compareList2(ListNode *head1, ListNode *head2)
-{
-    while (head1 == NULL && head2 == NULL )
-    {
+int compareList(LinkedList* list1, LinkedList* list2) {
+    return compareListUtil(list1->head, list2->head);
+}
+
+int compareList2(LinkedList* list1, LinkedList* list2) {
+    Node *head1 = list1->head;
+    Node *head2 = list2->head;
+    while (head1 != NULL && head2 != NULL ) {
         if (head1->value != head2->value)
             return 0;
+        
         head1 = head1->next;
         head2 = head2->next;
     }
@@ -437,64 +355,49 @@ int compareList2(ListNode *head1, ListNode *head2)
     return 0;
 }
 
-int loopDetect(ListNode *head)
-{
-    printf("loop detect");
-    ListNode *slowPtr;
-    ListNode *fastPtr;
-    slowPtr = fastPtr = head;
+int loopDetect(LinkedList* list) {
+    Node *slowPtr = list->head;
+    Node *fastPtr = list->head;
 
-    while (fastPtr->next && fastPtr->next->next)
-    {
+    while (fastPtr->next && fastPtr->next->next) {
         slowPtr = slowPtr->next;
         fastPtr = fastPtr->next->next;
-        if (slowPtr == fastPtr)
-        {
-            printf("\nloop found \n");
+        if (slowPtr == fastPtr) {
+            printf("Loop found \n");
             return 1;
         }
     }
-    printf("\nloop not found \n");
+    printf("Loop not found \n");
     return 0;
 }
 
-int reverseListloopDetect(ListNode *head)
-{
-    ListNode **ptrHead = &head;
-    ListNode *head2 = head;
-    reverseList(ptrHead);
-    if (*ptrHead == head2)
-    {
-        reverseList(ptrHead);
+int reverseListloopDetect(LinkedList* list) {
+    Node *head2 = list->head;
+    reverseList(list);
+    if (list->head == head2) {
+        reverseList(list);
         return 1;
-    }
-    else
-    {
-        reverseList(ptrHead);
+    } else {
+        reverseList(list);
         return 0;
     }
 }
 
-int loopTypeDetect(ListNode *const head)
-{
-    ListNode *slowPtr;
-    ListNode *fastPtr;
+int loopTypeDetect(LinkedList* list) {
+    Node *slowPtr = list->head;
+    Node *fastPtr = list->head;
 
-    slowPtr = fastPtr = head;
-    while (fastPtr->next && fastPtr->next->next)
-    {
-        if (head == fastPtr->next || head == fastPtr->next->next)
-        {
-            printf("circular list detected\n");
+    while (fastPtr->next && fastPtr->next->next) {
+        if (list->head == fastPtr->next || list->head == fastPtr->next->next) {
+            printf("Circular list detected\n");
             return 2;
         }
 
         slowPtr = slowPtr->next;
         fastPtr = fastPtr->next->next;
 
-        if (slowPtr == fastPtr)
-        {
-            printf("loop detected\n");
+        if (slowPtr == fastPtr) {
+            printf("Loop detected\n");
             return 1;
         }
     }
@@ -502,57 +405,46 @@ int loopTypeDetect(ListNode *const head)
     return 0;
 }
 
-void makeLoop(ListNode *head)
-{
-    ListNode *temp = head;
-    while (temp)
-    {
-        if (temp->next == NULL)
-        {
-            temp->next = head;
+void makeLoop(LinkedList* list) {
+    Node *temp = list->head;
+    while (temp) {
+        if (temp->next == NULL) {
+            temp->next = list->head;
             return;
         }
         temp = temp->next;
     }
 }
 
-void removeLoop(ListNode **ptrHead)
-{
-    int loopLength;
-    ListNode *slowPtr, *fastPtr, *head;
-    slowPtr = fastPtr = head = *ptrHead;
-    ListNode *loopNode = NULL;
-    while (fastPtr->next && fastPtr->next->next)
-    {
+void removeLoop(LinkedList* list) {
+    Node *slowPtr, *fastPtr, *head;
+    slowPtr = fastPtr = head = list->head;
+    Node *loopNode = NULL;
+    while (fastPtr->next && fastPtr->next->next) {
         fastPtr = fastPtr->next->next;
         slowPtr = slowPtr->next;
 
-        if (fastPtr == slowPtr || fastPtr->next == slowPtr)
-        {
+        if (fastPtr == slowPtr || fastPtr->next == slowPtr) {
             loopNode = slowPtr;
             break;
         }
     }
 
-    if (loopNode)
-    {
-        ListNode *temp = loopNode->next;
-        loopLength = 1;
-        while (temp != loopNode)
-        {
+    if (loopNode) {
+        Node *temp = loopNode->next;
+        int loopLength = 1;
+        while (temp != loopNode) {
             loopLength++;
             temp = temp->next;
         }
         temp = head;
-        ListNode *breakNode = head;
+        Node *breakNode = head;
 
-        for (int i = 1; i < loopLength; i++)
-        {
+        for (int i = 1; i < loopLength; i++) {
             breakNode = breakNode->next;
         }
 
-        while (temp != breakNode->next)
-        {
+        while (temp != breakNode->next) {
             temp = temp->next;
             breakNode = breakNode->next;
         }
@@ -560,174 +452,371 @@ void removeLoop(ListNode **ptrHead)
     }
 }
 
-ListNode *findIntersecton(ListNode *head, ListNode *head2)
-{
+Node *findIntersecton(LinkedList* list1, LinkedList* list2) {
     int l1 = 0;
-    int l2 = 0;
-    ListNode *tempHead = head;
-    ListNode *tempHead2 = head2;
-
-    while (tempHead)
-    {
+    Node *tempHead = list1->head;
+    while (tempHead) {
         l1++;
         tempHead = tempHead->next;
     }
-    while (tempHead2)
-    {
+
+    int l2 = 0;
+    Node *tempHead2 = list2->head;
+    while (tempHead2) {
         l2++;
         tempHead2 = tempHead2->next;
     }
 
-    int diff;
-    if (l1 < 12)
-    {
-        ListNode *temp = head;
+    Node* head = list1->head;
+    Node* head2 = list2->head;
+
+    int diff = l1 - l2;
+    if (l1 < l2) {
+        Node *temp = head;
         head = head2;
         head2 = temp;
         diff = l2 - l1;
     }
-    else
-    {
-        diff = l1 - l2;
+    
+    while (diff > 0) {
+        head = head->next;
+        diff--;
     }
 
-    for (; diff > 0; diff--)
-    {
-        head = head->next;
-    }
-    while (head != head2)
-    {
+    while (head != head2) {
         head = head->next;
         head2 = head2->next;
     }
+
     return head;
 }
 
-int main()
-{
+Node *findIntersecton2(LinkedList* list1, LinkedList* list2) {
+    Node* head1 = list1->head;
+    Node* head2 = list2->head;
 
-    ListNode *head = NULL;
-    insertNode(&head, 1);
-    insertNode(&head, 1);
-    insertNode(&head, 1);
-    insertNode(&head, 1);
-    insertNode(&head, 1);
-    printList(head);
-
-    int arr[5] = {1, 2, 3, 4, 5};
-    int i;
-
-    for (i = 0; i < 5; i++)
-    {
-        insertNode(&head, arr[i]);
-    }
-    ListNode *head2 = head;
-    for (i = 0; i < 3; i++)
-    {
-        insertNode(&head, 10);
-    }
-    for (i = 0; i < 5; i++)
-    {
-        insertNode(&head2, 20);
+    while (head1 && head2) {
+        head1 = head1->next;
+        head2 = head2->next;
     }
 
-    printList(head);
-    printList(head2);
-
-    ListNode *intersection = findIntersecton(head, head2);
-    printf("\nvalue at the intersection is %d \n", intersection->value);
-
-    for (i = 0; i < 5; i++)
-    {
-        insertNode(&head, arr[i]);
+    Node* diff;
+    if(!head1){
+        diff = head2;
+        head1 = list1->head;
+        head2 = list2->head;
+        while(diff) {
+            diff = diff->next;
+            head2 = head2->next;
+        }
+    } else {
+        diff = head1;
+        head1 = list1->head;
+        head2 = list2->head;
+        while(diff){
+            diff = diff->next;
+            head1 = head1->next;
+        }
     }
 
-    printList(head);
-
-    deleteList(&head);
-
-    printList(head);
-
-    int arr2[5] = {1, 5, 3, 2, 4};
-
-    head = NULL;
-
-    for (i = 0; i < 5; i++)
-    {
-        sortedInsert(&head, arr2[i]);
+    while (head1 != head2) {
+        head1 = head1->next;
+        head2 = head2->next;
     }
-    printList(head);
+    return head1;
+}
 
-    searchList(head, 6);
-    searchList(head, 5);
+int main1() {
+    LinkedList* list = createLinkedList();
+    insertNode(list, 1);
+    insertNode(list, 2);
+    insertNode(list, 3);
+    insertNode(list, 4);
+    printList(list);
+    printf("Length is : %d\n", findLength(list));
+    printf("Search : %d\n", searchList(list, 3));
+    printf("Search : %d\n", searchList(list, 5));
+    
+    deleteNodes(list, 3);
+    printList(list);
 
-    deleteNode(&head, 5);
-    printList(head);
+    deleteNodes(list, 5);
+    printList(list);
+    return 0;
+}
+/*
+[ 4  3  2  1 ]
+Length is : 4
+Search : 1
+Search : 0
+[ 4  2  1 ]
+[ 4  2  1 ]
+*/
 
-    deleteNode(&head, 3);
-    printList(head);
-
-    for (i = 0; i < 5; i++)
-    {
-        sortedInsert(&head, arr2[i]);
+int main2() {
+    LinkedList* list = createLinkedList();
+    int arr[] = {1, 5, 3, 2, 4};
+    for (int i = 0; i < 5; i++) {
+        sortedInsert(list, arr[i]);
     }
-    printList(head);
+    printList(list);
+    return 0;
+}
 
-    removeDuplicate(head);
-    printList(head);
+/*
+[ 1  2  3  4  5 ]
+*/
 
-    reverseList(&head);
-    printList(head);
+int main3() {
+    LinkedList* list = createLinkedList();
+    insertNode(list, 1);
+    insertNode(list, 2);
+    insertNode(list, 3);
+    insertNode(list, 4);
+    printList(list);
 
-    reverseRecurse(&head);
-    printList(head);
+    reverseList(list);
+    printList(list);
 
-    deleteNode(&head, 1);
-    printList(head);
+    reverseRecurse(list);
+    printList(list);
 
-    deleteNode(&head, 5);
-    printList(head);
 
-    deleteNode(&head, 3);
-    printList(head);
+    LinkedList* list2 = copyList(list);
+    printList(list2);
 
-    for (i = 0; i < 5; i++)
-    {
-        insertNode(&head, arr[i]);
-        insertNode(&head, arr[i]);
-        insertNode(&head, arr[i]);
+    LinkedList* list3 =  copyListReversed(list);
+    printList(list3);
+
+    printf("Compare list : %d\n", compareList(list, list2));
+    printf("Compare list : %d\n", compareList(list, list3));
+    printf("Compare list : %d\n", compareList2(list, list2));
+    printf("Compare list : %d\n", compareList2(list, list3));
+    return 0;
+}
+
+/*
+[ 4  3  2  1 ]
+[ 1  2  3  4 ]
+[ 4  3  2  1 ]
+[ 4  3  2  1 ]
+[ 1  2  3  4 ]
+Compare list : 1
+Compare list : 0
+Compare list : 1
+Compare list : 0
+*/
+
+int main4() {
+    LinkedList* list = createLinkedList();
+    insertNode(list, 1);
+    insertNode(list, 2);
+    insertNode(list, 3);
+    insertNode(list, 4);
+    printList(list);
+    printf("Nth Node : %d\n", nthNodeFromBeginning(list, 2)->value);
+    printf("Nth Node : %d\n", nthNodeFromEnd(list, 2)->value);
+    printf("Nth Node : %d\n", nthNodeFromEnd2(list, 2)->value);
+    printf("Nth Node : %d\n", nthNodeFromEnd3(list, 2)->value);
+    return 0;
+}
+/*
+[ 4  3  2  1 ]
+Nth Node : 3
+Nth Node : 2
+Nth Node : 2
+Nth Node : 2
+*/
+
+int main5() {
+    LinkedList* list = createLinkedList();
+    int arr[] = {1, 5, 3, 2, 4};
+    for (int i = 0; i < 5; i++)
+        sortedInsert(list, arr[i]);
+
+    for (int i = 0; i < 5; i++)
+        sortedInsert(list, arr[i]);
+    
+    printList(list);
+    removeDuplicate(list);
+    printList(list);
+    return 0;
+}
+/*
+[ 1  1  2  2  3  3  4  4  5  5 ]
+[ 1  2  3  4  5 ]
+*/
+
+int main6() {
+    LinkedList* list = createLinkedList();
+    insertNode(list, 1);
+    insertNode(list, 2);
+    insertNode(list, 3);
+    insertNode(list, 4);
+    printList(list);
+
+    loopDetect(list);
+    loopTypeDetect(list);
+
+    makeLoop(list);
+    loopDetect(list);
+    loopTypeDetect(list);
+
+    removeLoop(list);
+    printList(list);
+    return 0;
+}
+/*
+[ 4  3  2  1 ]
+Loop not found 
+No loop detected
+Loop found 
+Circular list detected
+[ 4  3  2  1 ]
+*/
+
+int main7() {
+    LinkedList* list = createLinkedList();
+    insertNode(list, 1);
+    insertNode(list, 2);
+    insertNode(list, 3);
+
+    LinkedList* list2 = createLinkedList();
+    list2->head = list->head;
+    for (int i = 0; i < 5; i++)
+        insertNode(list, 10);
+
+    for (int i = 0; i < 3; i++)
+        insertNode(list2, 20);
+
+    printList(list);
+    printList(list2);
+
+    Node *intersection = findIntersecton(list, list2);
+    printf("Value at the intersection is %d \n", intersection->value);
+
+    Node *intersection2 = findIntersecton2(list, list2);
+    printf("Value at the intersection is %d \n", intersection2->value);
+    return 0;
+}
+/*
+[ 10  10  10  10  10  3  2  1 ]
+[ 20  20  20  3  2  1 ]
+Value at the intersection is 3 
+Value at the intersection is 3 
+*/
+
+
+void bubbleSort(LinkedList* list) {
+    Node* head = list->head;
+    if (head == NULL || head->next == NULL) {
+        return;
     }
-    printList(head);
-
-    copyList(head, &head2);
-    printList(head2);
-
-    ListNode *head3;
-    copyListReversed(head, &head3);
-    printList(head3);
-
-    deleteNodes(&head, 5);
-    printList(head);
-
-    deleteNodes(&head, 1);
-    printList(head);
-
-    deleteNodes(&head, 4);
-    printList(head);
-
-    loopDetect(head);
-    loopTypeDetect(head);
-
-    makeLoop(head);
-    for (i = 0; i < 5; i++)
-    {
-        insertNode(&head, arr[i]);
+    Node* curr = NULL;
+    Node* end = NULL;
+    int temp;
+    int flag = 1;
+    while(flag) {
+        flag = 0;
+        curr = head;
+        while (curr->next != end) {
+            if(curr->value > curr->next->value) {
+                flag = 1;
+                temp = curr->value;
+                curr->value = curr->next->value;
+                curr->next->value = temp;
+            }
+            curr = curr->next;
+        }
+        end = curr;
     }
-    loopDetect(head);
-    loopTypeDetect(head);
+}
 
-    removeLoop(&head);
-    printList(head);
+void selectionSort(LinkedList* list) {
+    Node* head = list->head;
+    if (head == NULL || head->next == NULL) {
+        return;
+    }
+    
+    Node* curr = NULL;
+    Node* end = NULL;
+    Node* maxNode;
+    int temp, max;
+    
+    while(head != end) {
+        curr = head;
+        max = curr->value;
+        maxNode = curr;
+        while (curr->next != end) {
+            if(max < curr->next->value) {
+                maxNode = curr->next;
+                max = curr->next->value;
+            }
+            curr = curr->next;
+        }
+        end = curr;
+        if(curr->value < max) {
+            temp = curr->value;
+            curr->value = max;
+            maxNode->value = temp;
+        }
+    }
+}
 
+void insertionSort(LinkedList* list) {
+    Node* head = list->head;
+    if (head == NULL || head->next == NULL) {
+        return;
+    }
+
+    Node* curr = NULL;
+    Node* stop = NULL;
+
+    stop = head->next;
+    while(stop != NULL) {
+        curr = head;
+        while (curr != stop) {
+            if(curr->value > stop->value) {
+                int temp = curr->value;
+                curr->value = stop->value;
+                stop->value = temp;
+            }
+            curr = curr->next;
+        }
+        stop = stop->next;
+    }
+}
+
+
+int main8() {
+    LinkedList* list = createLinkedList();
+    insertNode(list, 1);
+    insertNode(list, 1);
+    insertNode(list, 10);
+    insertNode(list, 9);
+    insertNode(list, 7);
+    insertNode(list, 2);
+    insertNode(list, 3);
+    insertNode(list, 5);
+    insertNode(list, 4);
+    insertNode(list, 6);
+    insertNode(list, 8);
+    printList(list);    
+    //bubbleSort(list);
+    //selectionSort(list);
+    insertionSort(list);
+    printList(list);
+    return 0; 
+}
+
+int main() {
+    main1();
+    main2();
+    main3();
+    main4();
+    main5();
+    main6();
+    main7();
+    main8();
     return 0;
 }

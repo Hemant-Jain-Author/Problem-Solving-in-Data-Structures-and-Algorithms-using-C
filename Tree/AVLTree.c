@@ -10,8 +10,7 @@ typedef struct Node_t
 	int height;
 }Node;
 
-Node* createNode(int d, Node* l, Node* r)
-{
+Node* createNode(int d, Node* l, Node* r) {
 	Node* node = (Node*)malloc(sizeof(Node));
 	node->data = d;
 	node->left = l;
@@ -25,8 +24,7 @@ typedef struct AVLTree_t
 	Node* root;
 }AVLTree;
 
-AVLTree*  createAVLTree()
-{
+AVLTree*  createAVLTree() {
 	AVLTree* tree = (AVLTree*) malloc (sizeof(AVLTree));
 	tree->root = NULL;
 	return tree;
@@ -47,26 +45,22 @@ Node* findMin(Node* curr);
 int height(Node* n);
 int getBalance(Node* node);
 
-int height(Node* n)
-{
+int height(Node* n) {
 	if (n == NULL)
 		return -1;
 
 	return n->height;
 }
 
-int getBalance(Node* node)
-{
+int getBalance(Node* node) {
 	return (node == NULL) ? 0 : height(node->left) - height(node->right);
 }
 
-void insertData(AVLTree* tree, int data)
-{
+void insertData(AVLTree* tree, int data) {
 	tree->root = insertDataUtil(tree->root, data);
 }
 
-Node* insertDataUtil(Node* node, int data)
-{
+Node* insertDataUtil(Node* node, int data) {
 	if (node == NULL)
 		return createNode(data, NULL, NULL);
 
@@ -80,8 +74,7 @@ Node* insertDataUtil(Node* node, int data)
 	node->height = max(height(node->left), height(node->right)) + 1;
 	int balance = getBalance(node);
 
-	if (balance > 1)
-	{
+	if (balance > 1) {
 		if (data < node->left->data) // Left Left Case
 			return rightRotate(node);
 		
@@ -89,8 +82,7 @@ Node* insertDataUtil(Node* node, int data)
 			return leftRightRotate(node);
 	}
 
-	if (balance < -1)
-	{
+	if (balance < -1) {
 		if (data > node->right->data) // Right Right Case
 			return leftRotate(node);
 
@@ -100,8 +92,7 @@ Node* insertDataUtil(Node* node, int data)
 	return node;
 }
 
-Node* rightRotate(Node* x)
-{
+Node* rightRotate(Node* x) {
 	Node* y = x->left;
 	Node* T = y->right;
 
@@ -117,8 +108,7 @@ Node* rightRotate(Node* x)
 	return y;
 }
 
-Node* leftRotate(Node* x)
-{
+Node* leftRotate(Node* x) {
 	Node* y = x->right;
 	Node* T = y->left;
 
@@ -134,30 +124,25 @@ Node* leftRotate(Node* x)
 	return y;
 }
 
-Node* rightLeftRotate(Node* x)
-{
+Node* rightLeftRotate(Node* x) {
 	x->right = rightRotate(x->right);
 	return leftRotate(x);
 }
 
-Node* leftRightRotate(Node* x)
-{
+Node* leftRightRotate(Node* x) {
 	x->left = leftRotate(x->left);
 	return rightRotate(x);
 }
 
-void deleteData(AVLTree* tree, int data)
-{
+void deleteData(AVLTree* tree, int data) {
 	tree->root = deleteDataUtil(tree->root, data);
 }
 
-Node* deleteDataUtil(Node* node, int data)
-{
+Node* deleteDataUtil(Node* node, int data) {
 	if (node == NULL)
 		return NULL;
 
-	if (node->data == data)
-	{
+	if (node->data == data) {
 		if (node->left == NULL && node->right == NULL)
 			return NULL;
 		else if (node->left == NULL)
@@ -182,8 +167,7 @@ Node* deleteDataUtil(Node* node, int data)
 	node->height = max(height(node->left), height(node->right)) + 1;
 	int balance = getBalance(node);
 
-	if (balance > 1)
-	{
+	if (balance > 1) {
 		if (data >= node->left->data) // Left Left Case
 			return rightRotate(node);
 
@@ -191,8 +175,7 @@ Node* deleteDataUtil(Node* node, int data)
 			return leftRightRotate(node);
 	}
 
-	if (balance < -1)
-	{
+	if (balance < -1) {
 		if (data <= node->right->data) // Right Right Case
 			return leftRotate(node);
 		
@@ -202,8 +185,7 @@ Node* deleteDataUtil(Node* node, int data)
 	return node;
 }
 
-Node* findMin(Node* curr)
-{
+Node* findMin(Node* curr) {
 	Node* node = curr;
 	if (node == NULL)
 		return NULL;
@@ -214,20 +196,17 @@ Node* findMin(Node* curr)
 	return node;
 }
 
-void printTree(AVLTree* tree)
-{
+void printTree(AVLTree* tree) {
 	char str[100] = "";
 	printTreeUtil(tree->root, str,  0);
 	printf("\n");
 }
 
-void printTreeUtil(Node* node, char* indent, int isLeft)
-{
+void printTreeUtil(Node* node, char* indent, int isLeft) {
 	if (node == NULL)
 		return;
 
-	if (isLeft)
-	{
+	if (isLeft) {
 		printf("%s%s", indent, "L:");
 		strcat(indent, "|  ");
 	}
@@ -243,13 +222,11 @@ void printTreeUtil(Node* node, char* indent, int isLeft)
 	indent[strlen(indent) - 3] = '\0';
 }
 
-int max(int a, int b)
-{
+int max(int a, int b) {
 	return (a > b) ? a : b;
 }
 
-int main()
-{
+int main() {
 	AVLTree *tree = createAVLTree();
 	insertData(tree, 1);
 	insertData(tree, 2);

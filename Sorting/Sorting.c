@@ -1,34 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
-int less(int value1, int value2)
-{
+int less(int value1, int value2) {
     return value1 < value2;
 }
 
-int more(int value1, int value2)
-{
+int greater(int value1, int value2) {
     return value1 > value2;
 }
 
-void swap(int arr[], int x, int y)
-{
+void swap(int arr[], int x, int y) {
     int temp = arr[x];
     arr[x] = arr[y];
     arr[y] = temp;
 }
 
-void BubbleSort(int arr[], int size)
-{
-    int i, j, temp;
-    for (i = 0; i < (size - 1); i++)
-    {
-        for (j = 0; j < size - i - 1; j++)
-        {
-            if (more(arr[j], arr[j + 1]))
-            {
+void BubbleSort(int arr[], int size) {
+    for (int i = 0; i < (size - 1); i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (greater(arr[j], arr[j + 1])) {
                 /* Swapping */
-                temp = arr[j];
+                int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
             }
@@ -36,18 +29,13 @@ void BubbleSort(int arr[], int size)
     }
 }
 
-void BubbleSort2(int arr[], int size)
-{
-    int i, j, temp, swapped = 1;
-    for (i = 0; i < (size - 1) && swapped; i++)
-    {
+void BubbleSort2(int arr[], int size) {
+    for (int i = 0, swapped = 1; i < (size - 1) && swapped; i++) {
         swapped = 0;
-        for (j = 0; j < size - i - 1; j++)
-        {
-            if (more(arr[j], arr[j + 1]))
-            {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (greater(arr[j], arr[j + 1])) {
                 /* Swapping */
-                temp = arr[j];
+                int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
                 swapped = 1;
@@ -56,30 +44,23 @@ void BubbleSort2(int arr[], int size)
     }
 }
 
-void InsertionSort(int arr[], int size)
-{
+void InsertionSort(int arr[], int size) {
     int temp, j;
-    for (int i = 1; i < size; i++)
-    {
+    for (int i = 1; i < size; i++) {
         temp = arr[i];
-        for (j = i; (j > 0 && more(arr[j - 1], temp)); j--)
-        {
+        for (j = i; (j > 0 && greater(arr[j - 1], temp)); j--) {
             arr[j] = arr[j - 1];
         }
         arr[j] = temp;
     }
 }
 
-void SelectionSort(int arr[], int size)
-{
-    int i, j, max, temp;
-    for (i = 0; i < size - 1; i++)
-    {
+void SelectionSort(int arr[], int size) {
+    int max, temp;
+    for (int i = 0; i < size - 1; i++) {
         max = 0;
-        for (j = 1; j <= (size - 1 - i); j++)
-        {
-            if (arr[j] > arr[max])
-            {
+        for (int j = 1; j <= (size - 1 - i); j++) {
+            if (arr[j] > arr[max]) {
                 max = j;
             }
         }
@@ -89,16 +70,12 @@ void SelectionSort(int arr[], int size)
     }
 }
 
-void SelectionSort2(int arr[], int size)
-{
-    int i, j, min, temp;
-    for (i = 0; i < size - 1; i++)
-    {
+void SelectionSort2(int arr[], int size) {
+    int min, temp;
+    for (int i = 0; i < size - 1; i++) {
         min = i;
-        for (j = i + 1; j < size; j++)
-        {
-            if (arr[j] < arr[min])
-            {
+        for (int j = i + 1; j < size; j++) {
+            if (arr[j] < arr[min]) {
                 min = j;
             }
         }
@@ -108,8 +85,7 @@ void SelectionSort2(int arr[], int size)
     }
 }
 
-void QuickSortUtil(int arr[], int lower, int upper)
-{
+void QuickSortUtil(int arr[], int lower, int upper) {
     if (upper <= lower)
         return;
 
@@ -118,18 +94,14 @@ void QuickSortUtil(int arr[], int lower, int upper)
     int start = lower;
     int stop = upper;
 
-    while (lower < upper)
-    {
-        while (lower < upper && arr[lower] <= pivot)
-        {
+    while (lower < upper) {
+        while (lower < upper && arr[lower] <= pivot) {
             lower++;
         }
-        while (lower <= upper && arr[upper] > pivot)
-        {
+        while (lower <= upper && arr[upper] > pivot) {
             upper--;
         }
-        if (lower < upper)
-        {
+        if (lower < upper) {
             swap(arr, upper, lower);
         }
     }
@@ -139,13 +111,11 @@ void QuickSortUtil(int arr[], int lower, int upper)
     QuickSortUtil(arr, upper + 1, stop);  // pivot + 1 is the lower for right sub array.
 }
 
-void QuickSort(int arr[], int size)
-{
+void QuickSort(int arr[], int size) {
     QuickSortUtil(arr, 0, size - 1);
 }
 
-void QuickSelectUtil(int arr[], int lower, int upper, int k)
-{
+void QuickSelectUtil(int arr[], int lower, int upper, int k) {
     if (upper <= lower)
         return;
 
@@ -154,18 +124,14 @@ void QuickSelectUtil(int arr[], int lower, int upper, int k)
     int start = lower;
     int stop = upper;
 
-    while (lower < upper)
-    {
-        while (lower < upper && arr[lower] <= pivot)
-        {
+    while (lower < upper) {
+        while (lower < upper && arr[lower] <= pivot) {
             lower++;
         }
-        while (lower <= upper && arr[upper] > pivot)
-        {
+        while (lower <= upper && arr[upper] > pivot) {
             upper--;
         }
-        if (lower < upper)
-        {
+        if (lower < upper) {
             swap(arr, upper, lower);
         }
     }
@@ -176,40 +142,35 @@ void QuickSelectUtil(int arr[], int lower, int upper, int k)
     if (k > upper)
         QuickSelectUtil(arr, upper + 1, stop, k); // pivot + 1 is the lower for right sub array.
 }
-int QuickSelect(int *a, int count, int index)
-{
-    QuickSelectUtil(a, 0, count - 1, index - 1);
-    return a[index - 1];
+int QuickSelect(int *a, int count, int k) {
+    QuickSelectUtil(a, 0, count - 1, k - 1);
+    return a[k - 1];
 }
 
-void Merge(int *arr, int *tempArray, int lowerIndex, int middleIndex, int upperIndex)
-{
+void Merge(int *arr, int *tempArray, int lowerIndex, int middleIndex, int upperIndex) {
     int lowerStart = lowerIndex;
     int lowerStop = middleIndex;
     int upperStart = middleIndex + 1;
     int upperStop = upperIndex;
     int count = lowerIndex;
-    while (lowerStart <= lowerStop && upperStart <= upperStop)
-    {
+    while (lowerStart <= lowerStop && upperStart <= upperStop) {
         if (arr[lowerStart] < arr[upperStart])
             tempArray[count++] = arr[lowerStart++];
         else
             tempArray[count++] = arr[upperStart++];
     }
-    while (lowerStart <= lowerStop)
-    {
+    while (lowerStart <= lowerStop) {
         tempArray[count++] = arr[lowerStart++];
     }
-    while (upperStart <= upperStop)
-    {
+    while (upperStart <= upperStop) {
         tempArray[count++] = arr[upperStart++];
     }
-    for (int i = lowerIndex; i <= upperIndex; i++)
+    for (int i = lowerIndex; i <= upperIndex; i++) {
         arr[i] = tempArray[i];
+    }
 }
 
-void MergeSortUtil(int *arr, int *tempArray, int lowerIndex, int upperIndex)
-{
+void MergeSortUtil(int *arr, int *tempArray, int lowerIndex, int upperIndex) {
     if (lowerIndex >= upperIndex)
         return;
     int middleIndex = (lowerIndex + upperIndex) / 2;
@@ -218,54 +179,45 @@ void MergeSortUtil(int *arr, int *tempArray, int lowerIndex, int upperIndex)
     Merge(arr, tempArray, lowerIndex, middleIndex, upperIndex);
 }
 
-void MergeSort(int *arr, int size)
-{
-    int *tempArray = (int *)malloc(size * sizeof(int));
+void MergeSort(int *arr, int size) {
+    int tempArray[size];
     MergeSortUtil(arr, tempArray, 0, size - 1);
 }
 
-void printArray(int *arr, int size)
-{
-    printf("Array : ");
+void printArray(int *arr, int size) {
+    printf("[ ");
     for (int i = 0; i < size; i++)
-        printf(" %d ", arr[i]);
-    printf("\n");
+        printf("%d ", arr[i]);
+    printf("]\n");
 }
 
-void CountSort(int array[], int n, int range)
-{
+void CountSort(int array[], int n, int range) {
     int i, j = 0;
-    int *count = (int *)malloc((range + 1) * sizeof(int));
+    int count[range + 1];
     for (i = 0; i < range; i++)
         count[i] = 0;
 
     for (i = 0; i < n; i++)
         count[array[i]]++;
 
-    for (i = 0; i < range; i++)
-    {
-        for (; count[i] > 0; count[i]--)
-        {
+    for (i = 0; i < range; i++) {
+        for (; count[i] > 0; count[i]--) {
             array[j++] = i;
         }
     }
-    free(count);
 }
 
-void shellSort(int arr[], int n)
-{
+void shellSort(int arr[], int n) {
 	// Gap starts with n/2 and half in each iteration.
-	for (int gap = n / 2; gap > 0; gap /= 2)
-	{
+	for (int gap = n / 2; gap > 0; gap /= 2) {
 		// Do a gapped insertion sort.
-		for (int i = gap; i < n; i += 1)
-		{
+		for (int i = gap; i < n; i += 1) {
 			int curr = arr[i];
 
 			// Shift elements of already sorted list
 			// to find right position for curr value.
 			int j;
-			for (j = i; j >= gap && more(arr[j - gap], curr); j -= gap)
+			for (j = i; j >= gap && greater(arr[j - gap], curr); j -= gap)
 			{
 				arr[j] = arr[j - gap];
 			}
@@ -275,73 +227,63 @@ void shellSort(int arr[], int n)
 		}
 	}
 }
-/*
-void bucketSort(int arr[], int maxValue)
-{
+
+void bucketSort(int arr[], int size, int maxValue) {
     int numBucket = 5;
-	int length = strlen(arr)/strlen(int);
-	if (length == 0)
-	{
+	if (size == 0) {
 		return;
 	}
+    int bucket[numBucket][size];
+    int count[numBucket];
 
 	// Create empty buckets
-	std::vector<std::vector<int>> bucket(numBucket);
 	for (int i = 0; i < numBucket; i++)
-		bucket.push_back(std::vector<int>());
-
-	int div = std::ceil(static_cast<double>(maxValue) / numBucket);
+        count[i] = 0;
+        
+	int div = ceil((double)maxValue / numBucket);
 
 	// Add elements into the buckets
-	for (int i = 0; i < length; i++)
-	{
-		if (arr[i] < 0 || arr[i] > maxValue)
-		{
-			std::cout << "Value out of range." << std::endl;
+	for (int i = 0; i < size; i++) {
+		if (arr[i] < 0 || arr[i] > maxValue) {
+			printf("Value out of range.\n");
 			return;
 		}
 
 		int bucketIndex = (arr[i] / div);
 
 		// Maximum value will be assigned to last bucket.
-		if (bucketIndex >= numBucket)
-		{
+		if (bucketIndex >= numBucket) {
 			bucketIndex = numBucket - 1;
 		}
-		bucket[bucketIndex].push_back(arr[i]);
+		bucket[bucketIndex][count[bucketIndex]] = arr[i];
+        count[bucketIndex] += 1;
 	}
 
 	// Sort the elements of each bucket.
 	for (int i = 0; i < numBucket; i++)
-		std::sort(bucket[i].begin(), bucket[i].end());
+		BubbleSort(bucket[i], count[i]);
 
 	// Populate output from the sorted subarray.
-	int index = 0, count;
-	for (int i = 0; i < numBucket; i++)
-	{
-		std::vector<int> temp = bucket[i];
-		count = temp.size();
-		for (int j = 0; j < count; j++)
-		{
-			arr[index++] = temp[j];
+	int index = 0, cnt;
+	for (int i = 0; i < numBucket; i++) {
+		cnt = count[i];
+		for (int j = 0; j < cnt; j++) {
+			arr[index++] = bucket[i][j];
 		}
 	}
 }
-*/
+
 /* Testing code */
-int main1()
-{
+int main1() {
     int arr[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
     BubbleSort(arr, sizeof(arr) / sizeof(int));
     printArray(arr, sizeof(arr) / sizeof(int));
     
-
     int arr2[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
     InsertionSort(arr2, sizeof(arr2) / sizeof(int));
     printArray(arr2, sizeof(arr2) / sizeof(int));
  
-    //int arr3[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
-    int arr3[] = {9, 1, 8, 2, 7, 3, 6, 4, 5};
+    int arr3[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
     SelectionSort(arr3, sizeof(arr3) / sizeof(int));
     printArray(arr3, sizeof(arr3) / sizeof(int));
  
@@ -367,23 +309,24 @@ int main1()
     int arr9[] = {36, 32, 11, 6, 19, 31, 17, 3};
     shellSort(arr9, sizeof(arr9) / sizeof(int));
     printArray(arr9, sizeof(arr9) / sizeof(int));
+
+    int arr10[] = {1, 34, 7, 99, 5, 23, 45, 88, 77, 19, 91, 100};
+    bucketSort(arr10, sizeof(arr10) / sizeof(int), 100);
+    printArray(arr10, sizeof(arr10) / sizeof(int));
 }
 
-int Partition01(int arr[], int size)
-{
+int Partition01(int arr[], int size) {
     int left = 0;
     int right = size - 1;
     int count = 0;
-    while (left < right)
-    {
+    while (left < right) {
         while (arr[left] == 0)
             left += 1;
 
         while (arr[right] == 1)
             right -= 1;
 
-        if (left < right)
-        {
+        if (left < right) {
             swap(arr, left, right);
             count += 1;
         }
@@ -391,34 +334,27 @@ int Partition01(int arr[], int size)
     return count;
 }
 
-void Partition012(int arr[], int size)
-{
+void Partition012(int arr[], int size) {
     int left = 0;
     int right = size - 1;
     int i = 0;
-    while (i <= right)
-    {
-        if (arr[i] == 0)
-        {
+    while (i <= right) {
+        if (arr[i] == 0) {
             swap(arr, i, left);
             i += 1;
             left += 1;
         }
-        else if (arr[i] == 2)
-        {
+        else if (arr[i] == 2) {
             swap(arr, i, right);
             right -= 1;
-        }
-        else
-        {
+        } else {
             i += 1;
         }
     }
 }
 
 // Testing code
-int main2()
-{
+int main2() {
     int arr[] = {0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1};
     Partition01(arr, sizeof(arr) / sizeof(int));
     printArray(arr, sizeof(arr) / sizeof(int));
@@ -428,52 +364,39 @@ int main2()
     printArray(arr2, sizeof(arr2) / sizeof(int));
 }
 
-void RangePartition(int arr[], int size, int lower, int higher)
-{
+void RangePartition(int arr[], int size, int lower, int higher) {
     int start = 0;
     int end = size - 1;
     int i = 0;
-    while (i <= end)
-    {
-        if (arr[i] < lower)
-        {
+    while (i <= end) {
+        if (arr[i] < lower) {
             swap(arr, i, start);
             i += 1;
             start += 1;
-        }
-        else if (arr[i] > higher)
-        {
+        } else if (arr[i] > higher) {
             swap(arr, i, end);
             end -= 1;
-        }
-        else
-        {
+        } else {
             i += 1;
         }
     }
 }
 
 // Testing code
-int main3()
-{
+int main3() {
     int arr[] = {1, 21, 2, 20, 3, 19, 4, 18, 5, 17, 6, 16, 7, 15, 8, 14, 9, 13, 10, 12, 11};
     RangePartition(arr, sizeof(arr) / sizeof(int), 9, 12);
     printArray(arr, sizeof(arr) / sizeof(int));
 }
 
-int AbsMore(int value1, int value2, int ref)
-{
+int Absgreater(int value1, int value2, int ref) {
     return abs(value1 - ref) > abs(value2 - ref);
 }
 
-void AbsBubbleSort(int arr[], int size, int ref)
-{
-    for (int i = 0; i < (size - 1); i++)
-    {
-        for (int j = 0; j < (size - i - 1); j++)
-        {
-            if (AbsMore(arr[j], arr[j + 1], ref))
-            {
+void AbsBubbleSort(int arr[], int size, int ref) {
+    for (int i = 0; i < (size - 1); i++) {
+        for (int j = 0; j < (size - i - 1); j++) {
+            if (Absgreater(arr[j], arr[j + 1], ref)) {
                 swap(arr, j, j + 1);
             }
         }
@@ -481,42 +404,36 @@ void AbsBubbleSort(int arr[], int size, int ref)
 }
 
 // Testing code
-int main4()
-{
+int main4() {
     int array[] = {9, 1, 8, 2, 7, 3, 6, 4, 5};
     int ref = 5;
     AbsBubbleSort(array, sizeof(array) / sizeof(int), ref);
     printArray(array, sizeof(array) / sizeof(int));
 }
 
-int EqMore(int value1, int value2, int A)
-{
+int Eqgreater(int value1, int value2, int A) {
     value1 = A * value1 * value1;
     value2 = A * value2 * value2;
     return value1 > value2;
 }
 
-void ArrayReduction(int arr[], int size)
-{
+void ArrayReduction(int arr[], int size) {
     QuickSort(arr, size);
     int count = 1;
     int reduction = arr[0];
 
-    for (int i = 0; i < size; i++)
-    {
-        if (arr[i] - reduction > 0)
-        {
+    for (int i = 0; i < size; i++) {
+        if (arr[i] - reduction > 0) {
             printf("%d ", (size - i));
             reduction = arr[i];
             count += 1;
         }
     }
-    printf("\nTotal number of reductions %d ", count);
+    printf("\nTotal number of reductions %d\n", count);
 }
 
 //Testing code
-int main5()
-{
+int main5() {
     int arr[] = {5, 1, 1, 1, 2, 3, 5};
     ArrayReduction(arr, sizeof(arr) / sizeof(int));
 }
@@ -548,43 +465,32 @@ arr = [2, 3, 2, 4, 5, 12, 2, 3, 3, 3, 12]
 SortFrequency(arr)
 */
 /*
-void SortByOrder(int arr[], int size, int arr2[], int size2)
-{
+void SortByOrder(int arr[], int size, int arr2[], int size2) {
     HashTable ht;
     int value;
-    for (int i = 0; i < size; i++)
-    {
-        if (HashFind(ht, arr[i]))
-        {
+    for (int i = 0; i < size; i++) {
+        if (HashFind(ht, arr[i])) {
             value = HashGet(arr[i]);
             HashAdd(arr[i], value + 1);
-        }
-        else
-        {
+        } else {
             HashAdd(arr[i], 1);
         }
     }
 
-    for (int j = 0; j < size2; j++)
-    {
-        if (HashFind(ht, j))
-        {
+    for (int j = 0; j < size2; j++) {
+        if (HashFind(ht, j)) {
             value = HashGet(ht, j);
-            for (int k = 0; k < value; k++)
-            {
+            for (int k = 0; k < value; k++) {
                 printf("%d", k);
             }
             HashRemove(ht, j);
         }
     }
 
-    for (int i = 0; i < size; i++)
-    {
-        if (HashFind(ht, arr[i]))
-        {
+    for (int i = 0; i < size; i++) {
+        if (HashFind(ht, arr[i])) {
             value = HashGet(arr[i]);
-            for (int k = 0; k < value; k++)
-            {
+            for (int k = 0; k < value; k++) {
                 printf("%d", k);
             }
             HashRemove(ht, j);
@@ -593,32 +499,25 @@ void SortByOrder(int arr[], int size, int arr2[], int size2)
 }
 
 // Testing code
-int main6()
-{
+int main6() {
     int arr[] = {2, 1, 2, 5, 7, 1, 9, 3, 6, 8, 8};
     int arr2[] = {2, 1, 8, 3};
     SortByOrder(arr, sizeof(arr) / sizeof(int), arr2, sizeof(arr2) / sizeof(int));
 }
 */
 
-void merge(int arr1[], int size1, int arr2[], int size2)
-{
+void merge(int arr1[], int size1, int arr2[], int size2) {
     int index = 0;
-    while (index < size1)
-    {
-        if (arr1[index] <= arr2[0])
-        {
+    while (index < size1) {
+        if (arr1[index] <= arr2[0]) {
             index += 1;
-        }
-        else
-        {
+        } else {
             // always first element of arr2 is compared.
             arr1[index] ^= arr2[0] ^= arr1[index] ^= arr2[0];
             index += 1;
             // After swap arr2 may be unsorted.
             // Insertion of the element in proper sorted position.
-            for (int i = 0; i < (size2 - 1); i++)
-            {
+            for (int i = 0; i < (size2 - 1); i++) {
                 if (arr2[i] < arr2[i + 1])
                     break;
                 arr2[i] ^= arr2[i + 1] ^= arr2[i] ^= arr2[i + 1];
@@ -628,8 +527,7 @@ void merge(int arr1[], int size1, int arr2[], int size2)
 }
 
 // Testing code.
-int main7()
-{
+int main7() {
     int arr1[] = {1, 5, 9, 10, 15, 20};
     int arr2[] = {2, 3, 8, 13};
     merge(arr1, sizeof(arr1) / sizeof(int), arr2, sizeof(arr2) / sizeof(int));
@@ -637,14 +535,11 @@ int main7()
     printArray(arr2, sizeof(arr2) / sizeof(int));
 }
 
-int checkReverse(int arr[], int size)
-{
+int checkReverse(int arr[], int size) {
     int start = -1;
     int stop = -1;
-    for (int i = 0; i < (size - 1); i++)
-    {
-        if (arr[i] > arr[i + 1])
-        {
+    for (int i = 0; i < (size - 1); i++) {
+        if (arr[i] > arr[i + 1]) {
             start = i;
             break;
         }
@@ -653,10 +548,8 @@ int checkReverse(int arr[], int size)
     if (start == -1)
         return 1;
 
-    for (int i = start; i < (size - 1); i++)
-    {
-        if (arr[i] < arr[i + 1])
-        {
+    for (int i = start; i < (size - 1); i++) {
+        if (arr[i] < arr[i + 1]) {
             stop = i;
             break;
         }
@@ -665,67 +558,51 @@ int checkReverse(int arr[], int size)
     if (stop == -1)
         return 1;
 
-    // increasing property
-    // after reversal the sub array should fit in the array.
+    // increasing property after reversal the sub array should fit in the array.
     if (arr[start - 1] > arr[stop] || arr[stop + 1] < arr[start])
         return 0;
 
-    for (int i = stop + 1; i < size - 1; i++)
-    {
-        if (arr[i] > arr[i + 1])
-        {
+    for (int i = stop + 1; i < size - 1; i++) {
+        if (arr[i] > arr[i + 1]) {
             return 0;
         }
     }
     return 1;
 }
 
-int min(int X, int Y)
-{
-    if (X < Y)
-    {
-        return X;
-    }
-    return Y;
+int min(int X, int Y) {
+    return (X < Y) ? X : Y;
 }
 
-void UnionIntersectionSorted(int arr1[], int size1, int arr2[], int size2)
-{
+void UnionIntersectionSorted(int arr1[], int size1, int arr2[], int size2) {
     int first = 0, second = 0;
-    int *unionArr = (int *)malloc(sizeof(int) * (size1 + size2));
-    int *interArr = (int *)malloc(sizeof(int) * min(size1, size2));
+    int unionArr[size1 + size2];
+    int interArr[min(size1, size2)];
     int uIndex = 0;
     int iIndex = 0;
 
-    while (first < size1 && second < size2)
-    {
-        if (arr1[first] == arr2[second])
-        {
+    while (first < size1 && second < size2) {
+        if (arr1[first] == arr2[second]) {
             unionArr[uIndex++] = arr1[first];
             interArr[iIndex++] = arr1[first];
             first += 1;
             second += 1;
         }
-        else if (arr1[first] < arr2[second])
-        {
+        else if (arr1[first] < arr2[second]) {
             unionArr[uIndex++] = arr1[first];
             first += 1;
-        }
-        else
-        {
+        } else {
             unionArr[uIndex++] = arr2[second];
             second += 1;
         }
     }
 
-    while (first < size1)
-    {
+    while (first < size1) {
         unionArr[uIndex++] = arr1[first];
         first += 1;
     }
 
-    while (second < size2)
-    {
+    while (second < size2) {
         unionArr[uIndex++] = arr2[second];
         second += 1;
     }
@@ -733,20 +610,17 @@ void UnionIntersectionSorted(int arr1[], int size1, int arr2[], int size2)
     printArray(interArr, iIndex);
 }
 
-void UnionIntersectionUnsorted(int arr1[], int size1, int arr2[], int size2)
-{
+void UnionIntersectionUnsorted(int arr1[], int size1, int arr2[], int size2) {
     QuickSort(arr1, size1);
     QuickSort(arr2, size2);
     UnionIntersectionSorted(arr1, size1, arr2, size2);
 }
 
-int main8()
-{
+int main8() {
     int arr1[] = {1, 11, 2, 3, 14, 5, 6, 8, 9};
     int arr2[] = {2, 4, 5, 12, 7, 8, 13, 10};
     UnionIntersectionUnsorted(arr1, sizeof(arr1) / sizeof(int), arr2, sizeof(arr2) / sizeof(int));
 }
-
 
 int main(){
     main1();

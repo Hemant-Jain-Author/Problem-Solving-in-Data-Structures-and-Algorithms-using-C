@@ -2,75 +2,108 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct tstNode
-{
+typedef struct TSTNode {
     char data;
     unsigned isLastChar : 1;
-    struct tstNode *left, *equal, *right;
+    struct TSTNode *left, *equal, *right;
 } TSTNode;
 
-TSTNode *newNode(char data)
-{
-    TSTNode *temp = (TSTNode *)malloc(sizeof(TSTNode));
-    temp->data = data;
-    temp->isLastChar = 0;
-    temp->left = temp->equal = temp->right = NULL;
-    return temp;
+TSTNode* createNode(char data) {
+    TSTNode *node = (TSTNode *)malloc(sizeof(TSTNode));
+    node->data = data;
+    node->isLastChar = 0;
+    node->left = node->equal = node->right = NULL;
+    return node;
 }
-void insertTST(TSTNode **root, char *word)
-{
 
-    if (!(*root))
-        *root = newNode(*word);
+typedef struct TST {
+    TSTNode *root;
+} TST;
 
-    if ((*word) < (*root)->data)
-        insertTST(&((*root)->left), word);
-    else if ((*word) > (*root)->data)
-        insertTST(&((*root)->right), word);
-    else
-    {
-        if (*(word + 1))
-            insertTST(&((*root)->equal), word + 1);
-        else
-            (*root)->isLastChar = 1;
-    }
+TST* createTST() {
+    TST* tst = (TST*)malloc(sizeof(TST));
+    tst->root = NULL;
+    return tst;
 }
-int findTSTUtil(TSTNode *root, char *word)
-{
-    if (!root)
+
+TSTNode* addTSTUtil(TSTNode *node, char *word) {
+    if (!node)
+        node = createNode(*word);
+
+    if ((*word) < node->data)
+        node->left = addTSTUtil(node->left, word);
+    else if ((*word) > node->data)
+        node->right = addTSTUtil(node->right, word);
+    else if (*(word + 1)) // equal but not last char.
+        node->equal = addTSTUtil(node->equal, word + 1);
+    else // equal and last char.
+        node->isLastChar = 1;
+
+    return node;
+}
+
+void addTST(TST *tst, char *word) {
+    tst->root = addTSTUtil(tst->root, word);
+}
+
+int findTSTUtil(TSTNode *node, char *word) {
+    if (!node)
         return 0;
 
-    if (*word < (root)->data)
-        return findTSTUtil(root->left, word);
-    else if (*word > (root)->data)
-        return findTSTUtil(root->right, word);
-    else
+    if (*word < node->data)
+        return findTSTUtil(node->left, word);
+    else if (*word > node->data)
+        return findTSTUtil(node->right, word);
+    else if (*(word + 1)) // equal but not last character.
+        return findTSTUtil(node->equal, word + 1);        
+    else // equal and last character.
+        return node->isLastChar;
+}
+
+int findTST(TST *tst, char *word) {
+    return findTSTUtil(tst->root, word);
+}
+
+int removeTSTUtil(TSTNode *node, char *word) {
+    if (!node)
+        return 0;
+
+    if (*word < (node)->data)
+        return removeTSTUtil(node->left, word);
+    else if (*word > node->data)
+        return removeTSTUtil(node->right, word);
+    else if (*(word + 1)) // equal but not last character.
+        return removeTSTUtil(node->equal, word + 1);        
+    else if(node->isLastChar)// equal and last character.
     {
-        if (*(word + 1) == '\0')
-            return root->isLastChar;
-
-        return findTSTUtil(root->equal, word + 1);
-    }
+        node->isLastChar = 0; 
+        return 1;
+    } 
+    return 0;
+    
 }
-int findTST(TSTNode *root, char *word)
-{
-    int ret = findTSTUtil(root, word);
-    printf(" %s : ", word);
-    ret ? printf("Found\n") : printf("Not Found\n");
-    return ret;
-}
-int main()
-{
-    TSTNode *root = NULL;
-    insertTST(&root, "banana");
-    insertTST(&root, "apple");
-    insertTST(&root, "mango");
 
-    printf("\nSearch results for apple, banana, grapes and mango :\n");
-    findTST(root, "apple");
-    findTST(root, "banana");
-    findTST(root, "grapes");
-    findTST(root, "mango");
+int removeTST(TST *tst, char *word) {
+    return removeTSTUtil(tst->root, word);
+}
+
+int main() {
+    TST *tst = createTST();
+    addTST(tst, "banana");
+    addTST(tst, "apple");
+    addTST(tst, "mango");
+
+    printf("find apple : %d\n", findTST(tst, "apple"));
+    printf("find banana : %d\n", findTST(tst, "banana"));
+    printf("find grapes : %d\n", findTST(tst, "grapes"));
+    printf("find mango : %d\n", findTST(tst, "mango"));
+
     return 0;
 }
 
+/*
+find apple : 1
+find banana : 1
+find grapes : 0
+find mango : 1
+*/

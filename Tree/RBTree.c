@@ -39,8 +39,7 @@ void joinParentChild(RBTree* tree, Node *u, Node *v);
 Node *minimum(RBTree* tree, Node *node);
 
 
-Node* createNode(int data, Node *nullNode)
-{
+Node* createNode(int data, Node *nullNode) {
 	Node* node = (Node*)malloc(sizeof(Node));
 	node->data = data;
 	node->left = nullNode;
@@ -51,8 +50,7 @@ Node* createNode(int data, Node *nullNode)
 	return node;
 }
 
-RBTree* createRBTree()
-{
+RBTree* createRBTree() {
 	RBTree* tree = (RBTree*)malloc(sizeof(RBTree));
 	tree->nullNode = createNode(0, NULL);
 	tree->nullNode->colour = 0;
@@ -60,13 +58,11 @@ RBTree* createRBTree()
 	return tree;
 }
 
-int isRed(Node *node)
-{
+int isRed(Node *node) {
 	return (node == NULL) ? 0 : (node->colour == 1);
 }
 
-Node *getUncle(RBTree* tree, Node *node)
-{
+Node *getUncle(RBTree* tree, Node *node) {
 	// If no parent or grandparent, then no uncle
 	if (node->parent == tree->nullNode || node->parent->parent == tree->nullNode)
 		return NULL;
@@ -77,8 +73,7 @@ Node *getUncle(RBTree* tree, Node *node)
 		return node->parent->parent->left;
 }
 
-Node *rightRotate(RBTree* tree, Node *x)
-{
+Node *rightRotate(RBTree* tree, Node *x) {
 	Node *y = x->left;
 	Node *T = y->right;
 
@@ -91,8 +86,7 @@ Node *rightRotate(RBTree* tree, Node *x)
 	if (T != tree->nullNode)
 		T->parent = x;
 
-	if (x == tree->root)
-	{
+	if (x == tree->root) {
 		tree->root = y;
 		return y;
 	}
@@ -105,8 +99,7 @@ Node *rightRotate(RBTree* tree, Node *x)
 	return y; // Return new root
 }
 
-Node *leftRotate(RBTree* tree, Node *x)
-{
+Node *leftRotate(RBTree* tree, Node *x) {
 	Node *y = x->right;
 	Node *T = y->left;
 
@@ -119,8 +112,7 @@ Node *leftRotate(RBTree* tree, Node *x)
 	if (T != tree->nullNode)
 		T->parent = x;
 
-	if (x == tree->root)
-	{
+	if (x == tree->root) {
 		tree->root = y;
 		return y;
 	}
@@ -133,23 +125,19 @@ Node *leftRotate(RBTree* tree, Node *x)
 	return y; // Return new root
 }
 
-Node *rightLeftRotate(RBTree* tree, Node *node)
-{
+Node *rightLeftRotate(RBTree* tree, Node *node) {
 	node->right = rightRotate(tree, node->right);
 	return leftRotate(tree, node);
 }
 
-Node *leftRightRotate(RBTree* tree, Node *node)
-{
+Node *leftRightRotate(RBTree* tree, Node *node) {
 	node->left = leftRotate(tree, node->left);
 	return rightRotate(tree, node);
 }
 
-Node * find(RBTree *tree, int data)
-{
+Node * find(RBTree *tree, int data) {
 	Node *curr = tree->root;
-	while (curr != tree->nullNode)
-	{
+	while (curr != tree->nullNode) {
 		if (curr->data == data)
 			return curr;
 		else if (curr->data > data)
@@ -160,21 +148,17 @@ Node * find(RBTree *tree, int data)
 	return NULL;
 }
 
-void printTree(RBTree *tree)
-{
+void printTree(RBTree *tree) {
 	char indent[100] = "";
 	printTreeUtil(tree, tree->root, indent, 0);
 	printf("\n");
 }
 
-void printTreeUtil(RBTree* tree, Node *node, char* indent, int isLeft)
-{
-	if (node == tree->nullNode)
-	{
+void printTreeUtil(RBTree* tree, Node *node, char* indent, int isLeft) {
+	if (node == tree->nullNode) {
 		return;
 	}
-	if (isLeft)
-	{
+	if (isLeft) {
 		printf("%s%s", indent, "L:");
 		strcat(indent, "|  ");
 	}
@@ -190,57 +174,47 @@ void printTreeUtil(RBTree* tree, Node *node, char* indent, int isLeft)
 	indent[strlen(indent) - 3] = '\0';
 }
 
-void insertData(RBTree *tree, int data)
-{
+void insertData(RBTree *tree, int data) {
 	tree->root = insertDataUtil(tree, tree->root, data);
 	Node *temp = find(tree, data);
 	fixRedRed(tree, temp);
 }
 
-Node *insertDataUtil(RBTree* tree, Node *node, int data)
-{
-	if (node == tree->nullNode)
-	{
+Node *insertDataUtil(RBTree* tree, Node *node, int data) {
+	if (node == tree->nullNode) {
 		node = createNode(data, tree->nullNode);
 	}
-	else if (node->data > data)
-	{
+	else if (node->data > data) {
 		node->left = insertDataUtil(tree, node->left, data);
 		node->left->parent = node;
 	}
-	else if (node->data < data)
-	{
+	else if (node->data < data) {
 		node->right = insertDataUtil(tree, node->right, data);
 		node->right->parent = node;
 	}
 	return node;
 }
 
-void fixRedRed(RBTree* tree, Node *x)
-{
+void fixRedRed(RBTree* tree, Node *x) {
 	// if x is root colour it black and return
-	if (x == tree->root)
-	{
+	if (x == tree->root) {
 		x->colour = 0;
 		return;
 	}
 
-	if (x->parent == tree->nullNode || x->parent->parent == tree->nullNode)
-	{
+	if (x->parent == tree->nullNode || x->parent->parent == tree->nullNode) {
 		return;
 	}
 	// Initialize parent, grandparent, uncle
 	Node *parent = x->parent, *grandparent = parent->parent, *uncle = getUncle(tree, x);
 	Node *mid = NULL;
 
-	if (parent->colour == 0)
-	{
+	if (parent->colour == 0) {
 		return;
 	}
 
 	// parent colour is red. gp is black.
-	if (uncle != tree->nullNode && uncle->colour == 1)
-	{
+	if (uncle != tree->nullNode && uncle->colour == 1) {
 		// uncle and parent is red.
 		parent->colour = 0;
 		uncle->colour = 0;
@@ -273,24 +247,19 @@ void fixRedRed(RBTree* tree, Node *x)
 	mid->right->colour = 1;
 }
 
-void removeData(RBTree *tree, int data)
-{
+void removeData(RBTree *tree, int data) {
 	removeDataUtil(tree, tree->root, data);
 }
 
-void removeDataUtil(RBTree* tree, Node *node, int key)
-{
+void removeDataUtil(RBTree* tree, Node *node, int key) {
 	Node *z = tree->nullNode;
 	Node *x, *y;
-	while (node != tree->nullNode)
-	{
-		if (node->data == key)
-		{
+	while (node != tree->nullNode) {
+		if (node->data == key) {
 			z = node;
 			break;
 		}
-		else if (node->data <= key)
-		{
+		else if (node->data <= key) {
 			node = node->right;
 		}
 		else
@@ -299,21 +268,18 @@ void removeDataUtil(RBTree* tree, Node *node, int key)
 		}
 	}
 
-	if (z == tree->nullNode)
-	{
+	if (z == tree->nullNode) {
 		printf("Couldn't find key in the tree\n");
 		return;
 	}
 
 	y = z;
 	int yColour = y->colour;
-	if (z->left == tree->nullNode)
-	{
+	if (z->left == tree->nullNode) {
 		x = z->right;
 		joinParentChild(tree, z, z->right);
 	}
-	else if (z->right == tree->nullNode)
-	{
+	else if (z->right == tree->nullNode) {
 		x = z->left;
 		joinParentChild(tree, z, z->left);
 	}
@@ -326,10 +292,8 @@ void removeDataUtil(RBTree* tree, Node *node, int key)
 		x = y->right;
 	}
 
-	if (yColour == 0)
-	{
-		if (x->colour == 1)
-		{
+	if (yColour == 0) {
+		if (x->colour == 1) {
 			x->colour = 0;
 			return;
 		}
@@ -340,8 +304,7 @@ void removeDataUtil(RBTree* tree, Node *node, int key)
 	}
 }
 
-void fixDoubleBlack(RBTree* tree, Node *x)
-{
+void fixDoubleBlack(RBTree* tree, Node *x) {
 	if (x == tree->root) // Root node.
 	{
 		return;
@@ -349,15 +312,13 @@ void fixDoubleBlack(RBTree* tree, Node *x)
 
 	Node *sib = getSibling(tree, x);
 	Node *parent = x->parent;
-	if (sib == tree->nullNode)
-	{
+	if (sib == tree->nullNode) {
 		// No sibling double black shifted to parent.
 		fixDoubleBlack(tree, parent);
 	}
 	else
 	{
-		if (sib->colour == 1)
-		{
+		if (sib->colour == 1) {
 			// Sibling colour is red.
 			parent->colour = 1;
 			sib->colour = 0;
@@ -365,9 +326,7 @@ void fixDoubleBlack(RBTree* tree, Node *x)
 			{
 				// Sibling is left child.
 				rightRotate(tree, parent);
-			}
-			else
-			{
+			} else {
 				// Sibling is right child.
 				leftRotate(tree, parent);
 			}
@@ -416,9 +375,7 @@ void fixDoubleBlack(RBTree* tree, Node *x)
 					}
 				}
 				parent->colour = 0;
-			}
-			else
-			{
+			} else {
 				// Both children black.
 				sib->colour = 1;
 				if (parent->colour == 0)
@@ -434,30 +391,24 @@ void fixDoubleBlack(RBTree* tree, Node *x)
 	}
 }
 
-Node* getSibling(RBTree* tree, Node *node)
-{
+Node* getSibling(RBTree* tree, Node *node) {
 	// sibling null if no parent
-	if (node->parent == tree->nullNode)
-	{
+	if (node->parent == tree->nullNode) {
 		return NULL;
 	}
 
-	if (node->parent->left == node)
-	{
+	if (node->parent->left == node) {
 		return node->parent->right;
 	}
 
 	return node->parent->left;
 }
 
-void joinParentChild(RBTree* tree, Node *u, Node *v)
-{
-	if (u->parent == tree->nullNode)
-	{
+void joinParentChild(RBTree* tree, Node *u, Node *v) {
+	if (u->parent == tree->nullNode) {
 		tree->root = v;
 	}
-	else if (u == u->parent->left)
-	{
+	else if (u == u->parent->left) {
 		u->parent->left = v;
 	}
 	else
@@ -467,17 +418,14 @@ void joinParentChild(RBTree* tree, Node *u, Node *v)
 	v->parent = u->parent;
 }
 
-Node* minimum(RBTree* tree, Node *node)
-{
-	while (node->left != tree->nullNode)
-	{
+Node* minimum(RBTree* tree, Node *node) {
+	while (node->left != tree->nullNode) {
 		node = node->left;
 	}
 	return node;
 }
 
-int main()
-{
+int main() {
 	RBTree *tree = createRBTree();
 	insertData(tree, 1);
 	insertData(tree, 2);

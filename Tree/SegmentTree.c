@@ -19,8 +19,7 @@ void set(SegmentTree* tree, int arr[], int ind, int val);
 int setUtil(SegmentTree* tree, int segStart, int segEnd, int ind, int val, int index);
 
 
-SegmentTree* createSegmentTree(int input[], int size)
-{
+SegmentTree* createSegmentTree(int input[], int size) {
 	SegmentTree* tree = (SegmentTree*)malloc(sizeof(SegmentTree));
 	// Height of segment tree.
 	int x = ceil(log(size)/log(2));
@@ -33,11 +32,9 @@ SegmentTree* createSegmentTree(int input[], int size)
 	return tree;
 }
 
-int constructST(SegmentTree* tree, int input[], int start, int end, int index)
-{
+int constructST(SegmentTree* tree, int input[], int start, int end, int index) {
 	// Store it in current node of the segment tree and return
-	if (start == end)
-	{
+	if (start == end) {
 		tree->segArr[index] = input[start];
 		return input[start];
 	}
@@ -51,19 +48,16 @@ int constructST(SegmentTree* tree, int input[], int start, int end, int index)
 	 return tree->segArr[index];
 }
 
-int getSum(SegmentTree* tree, int start, int end)
-{
+int getSum(SegmentTree* tree, int start, int end) {
 	// Check for error conditions.
-	if (start > end || start < 0 || end > tree->size - 1)
-	{
+	if (start > end || start < 0 || end > tree->size - 1) {
 		printf("Invalid Input.");
 		return -1;
 	}
 	return getSumUtil(tree, 0, tree->size - 1, start, end, 0);
 }
 
-int getSumUtil(SegmentTree* tree, int segStart, int segEnd, int queryStart, int queryEnd, int index)
-{
+int getSumUtil(SegmentTree* tree, int segStart, int segEnd, int queryStart, int queryEnd, int index) {
 	if (queryStart <= segStart && segEnd <= queryEnd) // complete overlapping case.
 	{
 		return tree->segArr[index];
@@ -80,11 +74,9 @@ int getSumUtil(SegmentTree* tree, int segStart, int segEnd, int queryStart, int 
 		getSumUtil(tree, mid + 1, segEnd, queryStart, queryEnd, 2 * index + 2);
 }
 
-void set(SegmentTree* tree, int arr[], int ind, int val)
-{
+void set(SegmentTree* tree, int arr[], int ind, int val) {
 	// Check for error conditions.
-	if (ind < 0 || ind > tree->size - 1)
-	{
+	if (ind < 0 || ind > tree->size - 1) {
 		printf("Invalid Input.");
 		return;
 	}
@@ -95,22 +87,18 @@ void set(SegmentTree* tree, int arr[], int ind, int val)
 	setUtil(tree, 0, tree->size - 1, ind, val, 0);
 }
 
-int setUtil(SegmentTree* tree, int segStart, int segEnd, int ind, int val, int index)
-{
+int setUtil(SegmentTree* tree, int segStart, int segEnd, int ind, int val, int index) {
 	// set index lies outside the range of current segment.
 	// So diff to its parent node will be zero.
-	if (ind < segStart || ind > segEnd)
-	{
+	if (ind < segStart || ind > segEnd) {
 		return 0;
 	}
 
 	// If the input index is in range of this node, then set the
 	// value of the node and its children
 
-	if (segStart == segEnd)
-	{
-		if (segStart == ind)
-		{ // Index that need to be set.
+	if (segStart == segEnd) {
+		if (segStart == ind) { // Index that need to be set.
 			int diff = val - tree->segArr[index];
 			tree->segArr[index] = val;
 			return diff;
@@ -132,8 +120,7 @@ int setUtil(SegmentTree* tree, int segStart, int segEnd, int ind, int val, int i
 	return diff;
 }
 
-int main()
-{
+int main() {
 	int arr[] = {1, 2, 4, 8, 16, 32, 64};
 	int n = 7;
 	SegmentTree *tree = createSegmentTree(arr, n);

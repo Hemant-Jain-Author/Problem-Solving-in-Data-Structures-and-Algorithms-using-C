@@ -1,46 +1,35 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-void print(int Q[], int n)
-{
-	for (int i = 0; i < n; i++)
-	{
+void print(int Q[], int n) {
+	for (int i = 0; i < n; i++) 
 		printf("%d ", Q[i]);
-	}
+
 	printf("\n");
 }
 
-int feasible(int Q[], int k)
-{
-	for (int i = 0; i < k; i++)
-	{
+int feasible(int Q[], int k) {
+	for (int i = 0; i < k; i++) {
 		if (Q[k] == Q[i] || abs(Q[i] - Q[k]) == abs(i - k))
-		{
 			return 0;
-		}
 	}
 	return 1;
 }
 
-void nQueens(int Q[], int k, int n)
-{
-	if (k == n)
-	{
+void nQueens(int Q[], int k, int n) {
+	if (k == n) {
 		print(Q, n);
 		return;
 	}
-	for (int i = 0; i < n; i++)
-	{
+	for (int i = 0; i < n; i++) {
 		Q[k] = i;
-		if (feasible(Q, k))
-		{
+		if (feasible(Q, k)) {
 			nQueens(Q, k + 1, n);
 		}
 	}
 }
 
-int main()
-{
+int main() {
 	int  Q[8];
 	nQueens(Q, 0, 8);
 	return 0;

@@ -20,8 +20,7 @@ typedef struct Heap_t
     int(* compare)(int , int);
 } Heap;
 
-void proclateDown(int *a, int position, int size, int(* compare)(int , int))
-{
+void proclateDown(int *a, int position, int size, int(* compare)(int , int)) {
     int lChild = 2 * position + 1;
     int rChild = lChild + 1;
 
@@ -34,8 +33,7 @@ void proclateDown(int *a, int position, int size, int(* compare)(int , int))
     if (rChild < size && compare(a[lChild], a[rChild]))
         small = rChild;
 
-    if (small != -1 && compare(a[position], a[small]))
-    {
+    if (small != -1 && compare(a[position], a[small])) {
         temp = a[position];
         a[position] = a[small];
         a[small] = temp;
@@ -44,13 +42,11 @@ void proclateDown(int *a, int position, int size, int(* compare)(int , int))
     }
 }
 
-void proclateUp(int *a, int position, int(* compare)(int , int))
-{
+void proclateUp(int *a, int position, int(* compare)(int , int)) {
     int parent = (position - 1) / 2;
     int temp;
 
-    if (parent >= 0)
-    {
+    if (parent >= 0) {
         if (compare(a[parent], a[position]))
         {
             temp = a[position];
@@ -62,15 +58,13 @@ void proclateUp(int *a, int position, int(* compare)(int , int))
     }
 }
 
-void heapify(int arr[], int size, int(* compare)(int , int))
-{
+void heapify(int arr[], int size, int(* compare)(int , int)) {
     for (int i = size/2; i >= 0; i--)
         proclateDown(arr, i, size, compare);
 }
 
 
-Heap* createHeap2(int arr[], int size, int(* compare)(int , int))
-{
+Heap* createHeap2(int arr[], int size, int(* compare)(int , int)) {
     Heap* hp = (Heap*) malloc(sizeof(Heap));
     hp->size = hp->capacity = size;
     hp->array = arr;
@@ -79,8 +73,7 @@ Heap* createHeap2(int arr[], int size, int(* compare)(int , int))
     return hp;
 }
 
-Heap* createHeap(int(* compare)(int , int))
-{
+Heap* createHeap(int(* compare)(int , int)) {
     Heap* hp = (Heap*) malloc(sizeof(Heap));
     hp->size = 0; 
     hp->capacity = 100;
@@ -89,8 +82,7 @@ Heap* createHeap(int(* compare)(int , int))
     return hp;
 }
 
-int heapRemove(Heap *hp)
-{
+int heapRemove(Heap *hp) {
     int value = hp->array[0];
     hp->array[0] = hp->array[hp->size - 1];
     hp->size--;
@@ -98,8 +90,7 @@ int heapRemove(Heap *hp)
     return value;
 }
 
-void heapAdd(Heap *hp, int value)
-{
+void heapAdd(Heap *hp, int value) {
     if (hp->size == hp->capacity)
         return;
     hp->size++;
@@ -107,29 +98,24 @@ void heapAdd(Heap *hp, int value)
     proclateUp(hp->array, hp->size - 1, hp->compare);
 }
 
-int heapTop(Heap *hp)
-{
+int heapTop(Heap *hp) {
     return hp->array[0];
 }
 
-int heapsize(Heap *hp)
-{
+int heapsize(Heap *hp) {
     return hp->size;
 }
 
-int merge(int lists[], int size)
-{
+int merge(int lists[], int size) {
 	Heap* hp = createHeap(greater);
 
-	for (int i = 0; i < size; i++)
-	{
+	for (int i = 0; i < size; i++) {
 		heapAdd(hp, lists[i]);
 	}
 
 	int total = 0;
 	int value = 0;
-	while (heapsize(hp) > 1)
-	{
+	while (heapsize(hp) > 1} {
 		value =  heapRemove(hp);
 		value +=  heapRemove(hp);
 		heapAdd(hp, value);
@@ -139,8 +125,7 @@ int merge(int lists[], int size)
 	return total;
 }
 
-int main()
-{
+int main() {
 	int lists[] = {4, 3, 2, 6};
 	merge(lists, 4);
 }

@@ -6,16 +6,12 @@ int less(int a, int b){
 	return a < b;
 }
 
-void sort(int arr[], int size, int (*comp)(int p1, int p2))
-{
+void sort(int arr[], int size, int (*comp)(int p1, int p2)) {
     int i, j;
 	int temp;
-    for (i = 0; i < (size - 1); i++)
-    {
-        for (j = 0; j < size - i - 1; j++)
-        {
-            if (comp(arr[j], arr[j + 1]))
-            {
+    for (i = 0; i < (size - 1); i++) {
+        for (j = 0; j < size - i - 1; j++) {
+            if (comp(arr[j], arr[j + 1])} {
                 /* Swapping */
                 temp = arr[j];
                 arr[j] = arr[j + 1];
@@ -33,8 +29,7 @@ typedef struct Heap_t
     int(* compare)(int , int);
 } Heap;
 
-void proclateDown(int arr[], int position, int size, int(* compare)(int , int))
-{
+void proclateDown(int arr[], int position, int size, int(* compare)(int , int)) {
     int lChild = 2 * position + 1;
     int rChild = lChild + 1;
 
@@ -47,8 +42,7 @@ void proclateDown(int arr[], int position, int size, int(* compare)(int , int))
     if (rChild < size && compare(arr[lChild], arr[rChild]))
         small = rChild;
 
-    if (small != -1 && compare(arr[position], arr[small]))
-    {
+    if (small != -1 && compare(arr[position], arr[small])) {
         temp = arr[position];
         arr[position] = arr[small];
         arr[small] = temp;
@@ -57,33 +51,27 @@ void proclateDown(int arr[], int position, int size, int(* compare)(int , int))
     }
 }
 
-void proclateUp(int arr[], int position, int(* compare)(int , int))
-{
+void proclateUp(int arr[], int position, int(* compare)(int , int)) {
     int parent = (position - 1) / 2;
     int temp;
 
-    if (parent >= 0)
-    {
-        if (compare(arr[parent], arr[position]))
-        {
+    if (parent >= 0) {
+        if (compare(arr[parent], arr[position])} {
             temp = arr[position];
             arr[position] = arr[parent];
             arr[parent] = temp;
-
             proclateUp(arr, parent, compare);
         }
     }
 }
 
-void heapify(int arr[], int size, int(* compare)(int , int))
-{
+void heapify(int arr[], int size, int(* compare)(int , int)) {
     for (int i = size/2; i >= 0; i--)
         proclateDown(arr, i, size, compare);
 }
 
 
-Heap* createHeap2(int arr[], int size, int(* compare)(int , int))
-{
+Heap* createHeap2(int arr[], int size, int(* compare)(int , int)) {
     Heap* hp = (Heap*) malloc(sizeof(Heap));
     hp->size = hp->capacity = size;
     hp->array = arr;
@@ -92,8 +80,7 @@ Heap* createHeap2(int arr[], int size, int(* compare)(int , int))
     return hp;
 }
 
-Heap* createHeap(int(* compare)(int , int))
-{
+Heap* createHeap(int(* compare)(int , int)) {
     Heap* hp = (Heap*) malloc(sizeof(Heap));
     hp->size = 0; 
     hp->capacity = 100;
@@ -102,8 +89,7 @@ Heap* createHeap(int(* compare)(int , int))
     return hp;
 }
 
-int heapRemove(Heap *hp)
-{
+int heapRemove(Heap *hp) {
     int value = hp->array[0];
     hp->array[0] = hp->array[hp->size - 1];
     hp->size--;
@@ -111,8 +97,7 @@ int heapRemove(Heap *hp)
     return value;
 }
 
-void heapAdd(Heap *hp, int value)
-{
+void heapAdd(Heap *hp, int value) {
     if (hp->size == hp->capacity)
         return;
     hp->size++;
@@ -120,30 +105,25 @@ void heapAdd(Heap *hp, int value)
     proclateUp(hp->array, hp->size - 1, hp->compare);
 }
 
-int heapTop(Heap *hp)
-{
+int heapTop(Heap *hp) {
     return hp->array[0];
 }
 
-int heapSize(Heap *hp)
-{
+int heapSize(Heap *hp) {
     return hp->size;
 }
 
-int chotaBhim(int cups[], int size)
-{
+int chotaBhim(int cups[], int size) {
 	int time = 60;
 	sort(cups, size, less); // decreasing order.
 	int total = 0;
 	int index, temp;
-	while (time > 0)
-	{
+	while (time > 0} {
 		total += cups[0];
 		cups[0] = ceil(cups[0] / 2.0);
 		index = 0;
 		temp = cups[0];
-		while (index < size - 1 && temp < cups[index + 1])
-		{
+		while (index < size - 1 && temp < cups[index + 1]) {
 			cups[index] = cups[index + 1];
 			index += 1;
 		}
@@ -154,14 +134,12 @@ int chotaBhim(int cups[], int size)
 	return total;
 }
 
-int chotaBhim2(int cups[], int size)
-{
+int chotaBhim2(int cups[], int size) {
     int time = 60;
     Heap* hp = createHeap2(cups, size, less); // max heap
     int total = 0;
     int value;
-    while (time > 0)
-    {
+    while (time > 0) {
         value = heapRemove(hp);
         total += value;
         value = ceil(value / 2.0);
@@ -172,8 +150,7 @@ int chotaBhim2(int cups[], int size)
     return total;
 }
 
-int main()
-{
+int main() {
 	int cups[] = {2, 1, 7, 4, 2};
     chotaBhim(cups, sizeof(cups) / sizeof(int));
     int cups2[] = {2, 1, 7, 4, 2};
