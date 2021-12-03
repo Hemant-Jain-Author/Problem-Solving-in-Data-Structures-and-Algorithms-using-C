@@ -1,23 +1,107 @@
-#include <stdio.h>
-#include <stdlib.h>
 
-typedef struct Node_t
-{
-    int value;
-    struct Node_t *lChild;
-    struct Node_t *rChild;
-} TreeNode;
+#include "Tree.h"
 
-typedef struct tree_t
-{
-    TreeNode* root;
-} Tree;
-
-Tree* createTree() {
+Tree* createBinaryTree() {
     Tree* tree = (Tree*)malloc(sizeof(Tree));
     tree->root = NULL;
     return tree;
 }
+
+TreeNode *createBinarySearchTreeUtil(int arr[], int start, int end) {
+    if (start > end)
+        return NULL;
+    
+    int mid = (start + end) / 2;
+    TreeNode *curr = (TreeNode *)malloc(sizeof(TreeNode));
+    curr->value = arr[mid];
+    curr->lChild = createBinarySearchTreeUtil(arr, start, mid - 1);
+    curr->rChild = createBinarySearchTreeUtil(arr, mid + 1, end);
+    return curr;
+}
+
+Tree* createBinarySearchTree(int arr[], int size) {
+    Tree* tree = (Tree*)malloc(sizeof(Tree));
+    tree->root = createBinarySearchTreeUtil(arr, 0, size - 1);
+    return tree;
+}
+
+TreeNode *levelOrderBinaryTreeUtil(int arr[], int start, int size) {
+    TreeNode *curr = (TreeNode *)malloc(sizeof(TreeNode));
+    curr->lChild = curr->rChild = NULL;
+    curr->value = arr[start];
+    int left = 2 * start + 1;
+    int right = 2 * start + 2;
+        
+    if (left < size)
+        curr->lChild = levelOrderBinaryTreeUtil(arr, left, size);
+    
+    if (right < size)
+        curr->rChild = levelOrderBinaryTreeUtil(arr, right, size);
+    
+    return curr;
+}
+
+Tree* levelOrderBinaryTree(int arr[], int size) {
+    Tree* tree = (Tree*)malloc(sizeof(Tree));
+    tree->root = levelOrderBinaryTreeUtil(arr, 0, size);
+    return tree;
+}
+
+void printPreOrderUtil(TreeNode *root) /* pre order  */
+{
+    if (root) {
+        printf("%d ", root->value);
+        printPreOrderUtil(root->lChild);
+        printPreOrderUtil(root->rChild);
+    }
+}
+
+void printPreOrder(Tree *tree) {
+    printPreOrderUtil(tree->root);
+    printf("\n");
+}
+
+void printPostOrderUtil(TreeNode *root) /*  post order  */
+{
+    if (root) {
+        printPostOrderUtil(root->lChild);
+        printPostOrderUtil(root->rChild);
+        printf("%d ", root->value);
+    }
+}
+
+void printPostOrder(Tree *tree) {
+    printPostOrderUtil(tree->root);
+    printf("\n");
+}
+
+void printInOrderUtil(TreeNode *root) /*  in order  */
+{
+    if (root) {
+        printInOrderUtil(root->lChild);
+        printf("%d ", root->value);
+        printInOrderUtil(root->rChild);
+    }
+}
+
+void printInOrder(Tree *tree) {
+    printInOrderUtil(tree->root);
+    printf("\n");
+}
+
+int main1() {
+    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Tree *t = levelOrderBinaryTree(arr, 10);
+    printPreOrder(t);
+    printPostOrder(t);
+    printInOrder(t);
+    return 0;
+}
+/*
+1 2 4 8 9 5 10 3 6 7 
+8 9 4 10 5 2 6 7 3 1 
+8 4 9 2 10 5 1 6 3 7 
+*/
 
 TreeNode *insertUtil(TreeNode *root, int value) {
     if (root == NULL) {
@@ -41,57 +125,366 @@ void insert(Tree *tree, int value) {
     tree->root = insertUtil(tree->root, value);
 }
 
-void printPreOrderUtil(TreeNode *root) /* pre order  */
-{
-    if (root) {
-        printf("%d ", root->value);
-        printPreOrderUtil(root->lChild);
-        printPreOrderUtil(root->rChild);
+int main2() {
+    Tree *t = createBinaryTree();
+    insert(t, 5);
+    insert(t, 3);
+    insert(t, 7);
+    insert(t, 2);
+    insert(t, 1);
+    insert(t, 4);
+    insert(t, 6);
+    insert(t, 8);
+    printInOrder(t);
+    return 0;
+}
+
+/*
+1 2 3 4 5 6 7 8 9 
+*/
+
+
+TreeNode *nthPreOrderUtil(TreeNode *root, int index) {
+    static int count = 0;
+
+    if (root == NULL)
+        return NULL;
+
+    count++;
+    if (count == index)
+        return root;
+
+    TreeNode *temp = nthPreOrderUtil(root->lChild, index);
+    if (temp != NULL)
+        return temp;
+
+    temp = nthPreOrderUtil(root->rChild, index);
+    if (temp != NULL)
+        return temp;
+
+    return NULL;
+}
+
+int nthPreOrder(Tree *tree, int index) {
+    TreeNode *temp = nthPreOrderUtil(tree->root, index);
+    if (temp != NULL)
+        return temp->value;
+    printf("Errro, value not found.\n");
+    return 9999;
+}
+
+TreeNode *nthPostOrderUtil(TreeNode *root, int index) {
+    static int count = 0;
+
+    if (root == NULL)
+        return NULL;
+
+    TreeNode *temp = nthPostOrderUtil(root->lChild, index);
+    if (temp != NULL)
+        return temp;
+
+    temp = nthPostOrderUtil(root->rChild, index);
+    if (temp != NULL)
+        return temp;
+
+    count++;
+    if (count == index)
+        return root;
+
+    return NULL;
+}
+
+int nthPostOrder(Tree *tree, int index) {
+    TreeNode *temp = nthPostOrderUtil(tree->root, index);
+    if (temp != NULL)
+        return temp->value;
+    printf("Errro, value not found.\n");
+    return 9999;
+}
+
+TreeNode *nthInOrderUtil(TreeNode *root, int index) {
+    static int count = 0;
+
+    if (root == NULL)
+        return NULL;
+
+    TreeNode *temp = nthInOrderUtil(root->lChild, index);
+    if (temp != NULL)
+        return temp;
+
+    count++;
+    if (count == index)
+        return root;
+
+    temp = nthInOrderUtil(root->rChild, index);
+    if (temp != NULL)
+        return temp;
+
+    return NULL;
+}
+
+int nthInOrder(Tree *tree, int index) {
+    TreeNode *temp = nthInOrderUtil(tree->root, index);
+    if (temp != NULL)
+        return temp->value;
+    printf("Errro, value not found.\n");
+    return 9999;
+}
+
+
+int main3() {
+    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Tree *t = levelOrderBinaryTree(arr, 10);
+    printf("nthInOrder : %d\n", nthInOrder(t, 4));
+    printf("nthPostOrder : %d\n", nthPostOrder(t, 4));
+    printf("nthPreOrder : %d\n", nthPreOrder(t, 4));
+    return 0;
+}
+
+/*
+nthInOrder : 2
+nthPostOrder : 10
+nthPreOrder : 8
+*/
+
+
+void printBreadthFirst(Tree *tree) {
+    Queue* que = createQueue();
+    TreeNode *temp, *root = tree->root;
+    if (root != NULL) {
+       QueueAdd(que, root);
+    }
+
+    while (QueueIsEmpty(que) == 0) {
+        temp = QueueRemove(que);
+        printf("%d ", temp->value);
+
+        if (temp->lChild != NULL) {
+           QueueAdd(que, temp->lChild);
+        }
+        if (temp->rChild != NULL) {
+           QueueAdd(que, temp->rChild);
+        }
+    }
+    printf("\n");
+}
+
+void printDepthFirst(Tree *tree) {
+    Stack* stk = createStack();
+    TreeNode *temp, *root = tree->root;
+
+    if (root != NULL) {
+        StackPush(stk, root);
+    }
+
+    while (StackIsEmpty(stk) == 0) {
+        temp = StackPop(stk);
+        printf("%d ", temp->value);
+
+        if (temp->lChild != NULL) {
+            StackPush(stk, temp->lChild);
+        }
+        if (temp->rChild != NULL) {
+            StackPush(stk, temp->rChild);
+        }
+    }
+    printf("\n");
+}
+
+void printLevelOrderLineByLine(Tree *tree) {
+    Queue* que1 = createQueue();
+    Queue* que2 = createQueue();
+    TreeNode *temp = NULL, *root = tree->root;
+    if (root != NULL)
+        QueueAdd(que1, root);
+    while (QueueSize(que1) != 0 || QueueSize(que2) != 0) {
+        while (QueueSize(que1) != 0) {
+            temp = QueueRemove(que1);
+            printf("%d ", temp->value);
+            if (temp->lChild != NULL)
+                QueueAdd(que2, temp->lChild);
+            if (temp->rChild != NULL)
+                QueueAdd(que2, temp->rChild);
+        }
+        printf("\n");
+
+        while (QueueSize(que2) != 0) {
+            temp = QueueRemove(que2);
+            printf("%d ", temp->value);
+            if (temp->lChild != NULL)
+                QueueAdd(que1, temp->lChild);
+            if (temp->rChild != NULL)
+                QueueAdd(que1, temp->rChild);
+        }
+        printf("\n");
     }
 }
 
-void printPreOrder(Tree *tree) {
-    printPreOrderUtil(tree->root);
-}
+void printLevelOrderLineByLine2(Tree *tree) {
+    Queue* que = createQueue();
+    TreeNode *temp = NULL, *root=tree->root;
+    int count = 0;
 
-void printPostOrderUtil(TreeNode *root) /*  post order  */
-{
-    if (root) {
-        printPostOrderUtil(root->lChild);
-        printPostOrderUtil(root->rChild);
-        printf("%d ", root->value);
+    if (root != NULL)
+       QueueAdd(que, root);
+    while (QueueSize(que) != 0) {
+        count = QueueSize(que);
+        while (count > 0) {
+            temp = QueueRemove(que);
+            printf("%d ", temp->value);
+            if (temp->lChild != NULL)
+               QueueAdd(que, temp->lChild);
+            if (temp->rChild != NULL)
+               QueueAdd(que, temp->rChild);
+            count -= 1;
+        }
+        printf("\n");
     }
 }
 
-void printPostOrder(Tree *tree) {
-    printPostOrderUtil(tree->root);
-}
+void printSpiralTree(Tree *tree) {
+    Stack* stk1 = createStack();
+    Stack* stk2 = createStack();
 
-void printInOrderUtil(TreeNode *root) /*  in order  */
-{
-    if (root) {
-        printInOrderUtil(root->lChild);
-        printf("%d ", root->value);
-        printInOrderUtil(root->rChild);
+    TreeNode *temp, *root = tree->root;
+    if (root != NULL)
+        StackPush(stk1, root);
+
+    while (StackIsEmpty(stk1) == 0 || StackIsEmpty(stk2) == 0) {
+        while (StackIsEmpty(stk1) == 0) {
+            temp = StackPop(stk1);
+            printf("%d ", temp->value);
+            if (temp->rChild != NULL)
+                StackPush(stk2, temp->rChild);
+            if (temp->lChild != NULL)
+                StackPush(stk2, temp->lChild);
+        }
+        while (StackIsEmpty(stk2) == 0) {
+            temp = StackPop(stk2);
+            printf("%d ", temp->value);
+            if (temp->lChild != NULL)
+                StackPush(stk1, temp->lChild);
+            if (temp->rChild != NULL)
+                StackPush(stk1, temp->rChild);
+        }
     }
+    printf("\n");
 }
 
-void printInOrder(Tree *tree) {
-    printInOrderUtil(tree->root);
-}
-
-void freeTreeUtil(TreeNode *root) {
-    if (root) {
-        freeTreeUtil(root->lChild);
-        freeTreeUtil(root->rChild);
-        free(root);
+void printAllPathUtil(TreeNode *curr, Stack* stk) {
+    if(curr == NULL)
+        return;
+    
+    StackPush(stk, curr);
+    if (curr->lChild == NULL && curr->rChild == NULL) {
+        StackPrint(stk);
+        StackPop(stk);
+        return;
     }
+
+    printAllPathUtil(curr->rChild, stk);
+    printAllPathUtil(curr->lChild, stk);
+    StackPop(stk);
 }
 
-void freeTree(Tree *tree) {
-    freeTreeUtil(tree->root);
-    tree->root = NULL;
+void printAllPath(Tree *tree) {
+    Stack* stk = createStack();
+    if (tree->root == NULL)
+        return;
+    printAllPathUtil(tree->root, stk);
 }
+
+int main4() {
+    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Tree *t = levelOrderBinaryTree(arr, 10);
+    printBreadthFirst(t);
+    printDepthFirst(t);
+    printLevelOrderLineByLine(t);
+    printLevelOrderLineByLine2(t);
+    printSpiralTree(t);
+    printAllPath(t);
+    return 0;
+}
+
+/*
+1 2 3 4 5 6 7 8 9 10 
+1 3 7 6 2 5 10 4 9 8 
+
+1 
+2 3 
+4 5 6 7 
+8 9 10
+
+1 
+2 3 
+4 5 6 7 
+8 9 10 
+
+1 2 3 7 6 5 4 8 9 10 
+
+[7 3 1 ]
+[6 3 1 ]
+[10 5 2 1 ]
+[9 4 2 1 ]
+[8 4 2 1 ]
+
+*/
+
+void iterativePreOrder(Tree *t) {
+    if (t->root == NULL)
+        return;
+
+    Stack* stk = createStack();
+    StackPush(stk, t->root);
+    TreeNode *curr;
+
+    while (StackIsEmpty(stk) == 0) {
+        curr = StackPop(stk);
+        printf("%d ", curr->value);
+
+        if (curr->rChild != NULL)
+            StackPush(stk, curr->rChild);
+
+        if (curr->lChild != NULL)
+            StackPush(stk, curr->lChild);
+    }
+    printf("\n");
+}
+
+int main5() {
+    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Tree *t = levelOrderBinaryTree(arr, 10);
+    iterativePreOrder(t);
+    return 0;
+}
+
+/*
+1 2 4 8 9 5 10 3 6 7 
+*/
+
+
+int find(Tree *tree, int value) {
+    TreeNode *curr = tree->root;
+    while (curr != NULL) {
+        if(curr->value == value) {
+            return 1;
+        } else if (curr->value > value) {
+            curr =  curr->lChild ;   
+        } else {
+            curr =  curr->rChild;
+        }
+    }
+    return 0;
+}
+
+int find2(Tree *tree, int value) {
+    TreeNode *curr = tree->root;
+    while (curr != NULL && curr->value != value) {
+        curr = (curr->value > value) ? curr->lChild : curr->rChild;
+    }
+    return curr != NULL;
+}
+
 
 TreeNode *findNode(TreeNode *root, int value) {
     if (!root)
@@ -105,11 +498,42 @@ TreeNode *findNode(TreeNode *root, int value) {
         return findNode(root->rChild, value);
 }
 
-int find(Tree *tree, int value) {
+int find3(Tree *tree, int value) {
     if (findNode(tree->root, value) != NULL)
         return 1;
-
     return 0;
+}
+
+int findMin(Tree *tree) {
+    TreeNode *root = tree->root;
+    if (!root)
+        return -999;
+
+    while (root->lChild) {
+        root = root->lChild;
+    }
+    return root->value;
+}
+
+int findMax(Tree *tree) {
+    TreeNode *root = tree->root;
+    if (!root)
+        return -999;
+
+    while (root->rChild) {
+        root = root->rChild;
+    }
+    return root->value;
+}
+
+TreeNode *findMaxNode(TreeNode *root) {
+    if (!root)
+        return NULL;
+
+    while (root->rChild) {
+        root = root->rChild;
+    }
+    return root;
 }
 
 TreeNode *findMinNode(TreeNode *root) {
@@ -129,6 +553,14 @@ int findMin2(Tree *tree) {
     return 9999;
 }
 
+int findMax2(Tree *tree) {
+    TreeNode *tmp = findMaxNode(tree->root);
+    if(tmp)
+        return tmp->value;
+    return 9999;
+}
+
+
 TreeNode *findMinNodeRec(TreeNode *root) {
     if (!root)
         return NULL;
@@ -137,23 +569,6 @@ TreeNode *findMinNodeRec(TreeNode *root) {
         return root;
     else
         return findMinNodeRec(root->lChild);
-}
-
-int findMin3(Tree *tree) {
-    TreeNode *tmp = findMinNodeRec(tree->root);
-    if(tmp)
-        return tmp->value;
-    return 9999;
-}
-
-TreeNode *findMaxNode(TreeNode *root) {
-    if (!root)
-        return NULL;
-
-    while (root->rChild) {
-        root = root->rChild;
-    }
-    return root;
 }
 
 TreeNode *findMaxNodeRec(TreeNode *root) {
@@ -166,38 +581,6 @@ TreeNode *findMaxNodeRec(TreeNode *root) {
         return findMaxNodeRec(root->rChild);
 }
 
-int findMax(Tree *tree) {
-    TreeNode *root = tree->root;
-    if (!root)
-        return -999;
-
-    while (root->rChild) {
-        root = root->rChild;
-    }
-    return root->value;
-}
-
-int maxValue(TreeNode *root ) {
-    if (!root)
-        return -999;
-
-    while (root->rChild) {
-        root = root->rChild;
-    }
-    return root->value;
-}
-
-int findMin(Tree *tree) {
-    TreeNode *root = tree->root;
-    if (!root)
-        return -999;
-
-    while (root->lChild) {
-        root = root->lChild;
-    }
-    return root->value;
-}
-
 int minValue(TreeNode *root) {
     if (!root)
         return -999;
@@ -208,7 +591,56 @@ int minValue(TreeNode *root) {
     return root->value;
 }
 
-TreeNode *deleteNodeUtil(TreeNode *root, int value) {
+int maxValue(TreeNode *root) {
+    if (!root)
+        return -99999;
+
+    while (root->rChild) {
+        root = root->rChild;
+    }
+    return root->value;
+}
+
+
+int main6() {
+    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Tree *t = createBinarySearchTree(arr, 10);
+    printf("find:: %d \n", find(t, 7));
+    printf("find:: %d \n", find2(t, 7));
+    printf("find:: %d \n", find3(t, 7));
+    printf("findMax:: %d \n", findMax(t));
+    printf("findMin:: %d \n", findMin(t));
+    printf("Find Min : %d \n", findMin2(t));
+    printf("Find Max : %d \n", findMax2(t));
+  //  printf("Find Min : %d \n", findMinRec(t));
+   // printf("Find Max : %d \n", findMaxRec(t));
+    return 0;
+}
+
+/*
+find:: 1 
+find:: 1 
+find:: 1 
+findMax:: 10 
+findMin:: 1 
+Find Min : 1 
+Find Max : 10 
+*/
+
+void freeTreeUtil(TreeNode *root) {
+    if (root) {
+        freeTreeUtil(root->lChild);
+        freeTreeUtil(root->rChild);
+        free(root);
+    }
+}
+
+void freeTree(Tree *tree) {
+    freeTreeUtil(tree->root);
+    tree->root = NULL;
+}
+
+TreeNode *removeDataUtil(TreeNode *root, int value) {
     if (!root)
         return NULL;
 
@@ -231,19 +663,89 @@ TreeNode *deleteNodeUtil(TreeNode *root, int value) {
 
             int mx = maxValue(root->lChild);
             root->value = mx;
-            root->lChild = deleteNodeUtil(root->lChild, mx);
+            root->lChild = removeDataUtil(root->lChild, mx);
         }
     } else {
         if (root->value > value)
-            root->lChild = deleteNodeUtil(root->lChild, value);
+            root->lChild = removeDataUtil(root->lChild, value);
         else
-            root->rChild = deleteNodeUtil(root->rChild, value);
+            root->rChild = removeDataUtil(root->rChild, value);
     }
     return root;
 }
 
-void deleteNode(Tree *tree, int value) {
-    tree->root = deleteNodeUtil(tree->root, value);
+void removeData(Tree *tree, int value) {
+    tree->root = removeDataUtil(tree->root, value);
+}
+
+int main7() {
+    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Tree *t = createBinarySearchTree(arr, 10);
+    printPreOrder(t);
+    removeData(t, 6);
+    printPreOrder(t);
+    freeTree(t);
+    printPreOrder(t);
+    free(t);
+    return 0;
+}
+
+/*
+5 2 1 3 4 8 7 9 10 
+*/
+
+int numNodesUtil(TreeNode *root) {
+    if (!root)
+        return 0;
+
+    return (1 + numNodesUtil(root->rChild) + numNodesUtil(root->lChild));
+}
+
+int numNodes(Tree *tree) {
+    return numNodesUtil(tree->root);
+}
+
+
+int numFullNodesBTUtil(TreeNode *root) {
+    if (root == NULL)
+        return 0;
+
+    int count = numFullNodesBTUtil(root->lChild) 
+                + numFullNodesBTUtil(root->rChild);
+
+    if (root->lChild && root->rChild)
+        count++;
+
+    return count;
+}
+
+int numFullNodesBT(Tree *tree) {
+    return numFullNodesBTUtil(tree->root);
+}
+
+int numLeafsUtil(TreeNode *root) {
+    if (!root)
+        return 0;
+
+    if (!root->lChild && !root->rChild)
+        return 1;
+
+    return (numLeafsUtil(root->rChild) + numLeafsUtil(root->lChild));
+}
+
+int numLeafs(Tree *tree) {
+    return numLeafsUtil(tree->root);
+}
+
+int sumAllBTUtil(TreeNode *root) {
+    if (root == NULL)
+        return 0;
+
+    return root->value + sumAllBTUtil(root->lChild) + sumAllBTUtil(root->rChild);
+}
+
+int sumAllBT(Tree *tree) {
+    return sumAllBTUtil(tree->root);
 }
 
 int treeDepthUtil(TreeNode *root) {
@@ -263,6 +765,51 @@ int treeDepth(Tree *tree) {
     return treeDepthUtil(tree->root);
 }
 
+int maxLengthPathBTUtil(TreeNode *root) //diameter
+{
+    if (root == NULL)
+        return 0;
+
+    int max = treeDepthUtil(root->lChild) + treeDepthUtil(root->rChild) + 1;
+    int leftMax = maxLengthPathBTUtil(root->lChild);
+    int rightMax = maxLengthPathBTUtil(root->rChild);
+
+    if (leftMax > max)
+        max = leftMax;
+
+    if (rightMax > max)
+        max = rightMax;
+
+    return max;
+}
+
+int maxLengthPathBT(Tree *tree) //diameter
+{
+    return maxLengthPathBTUtil(tree->root);
+}
+
+int main8() {
+    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Tree *t = levelOrderBinaryTree(arr, 10);
+    printInOrder(t);
+    printf("numNodes:: %d\n", numNodes(t));
+    printf("numFullNodesBT:: %d\n", numFullNodesBT(t));
+    printf("numLeafNodes:: %d\n", numLeafs(t));
+    printf("treeDepth:: %d\n", treeDepth(t));
+    printf("maxLengthPathBT:: %d\n", maxLengthPathBT(t));
+    printf("sumAllBT:: %d\n", sumAllBT(t));
+    return 0;
+}
+
+/*
+numNodes:: 10
+numFullNodesBT:: 4
+numLeafNodes:: 5
+treeDepth:: 4
+maxLengthPathBT:: 6
+sumAllBT:: 55
+*/
+
 TreeNode *copyTreeUtil(TreeNode *root) {
     if (!root)
         return NULL;
@@ -277,8 +824,10 @@ TreeNode *copyTreeUtil(TreeNode *root) {
     return temp;
 }
 
-void copyTree(Tree *src, Tree *dest) {
+Tree* copyTree(Tree *src) {
+    Tree *dest = createBinaryTree();
     dest->root = copyTreeUtil(src->root);
+    return dest;
 }
 
 TreeNode *copyMirrorTreeUtil(TreeNode *root) {
@@ -297,8 +846,10 @@ TreeNode *copyMirrorTreeUtil(TreeNode *root) {
     return temp;
 }
 
-void copyMirrorTree(Tree *src, Tree *dest) {
+Tree *copyMirrorTree(Tree *src) {
+    Tree *dest = createBinaryTree();
     dest->root = copyMirrorTreeUtil(src->root);
+    return dest;
 }
 
 void printMirrorUtil(TreeNode *root) {
@@ -316,266 +867,153 @@ void printMirror(Tree *tree) {
     return;
 }
 
-TreeNode *NthPreeOrderUtil(TreeNode *root, int index) /* pre order  */
-{
-    static int count = 0;
-
-    if (!root)
-        NULL;
-
-    count++;
-    if (count == index)
-        return root;
-
-    TreeNode *temp = NthPreeOrderUtil(root->lChild, index);
-    if (temp)
-        return temp;
-
-    temp = NthPreeOrderUtil(root->rChild, index);
-    if (temp)
-        return temp;
-
-    return NULL;
-}
-
-int NthPreeOrder(Tree *tree, int index) {
-    TreeNode *temp = NthPreeOrderUtil(tree->root, index);
-    if (temp)
-        return temp->value;
-    printf("Errro, value not found.\n");
-    return 9999;
-}
-
-TreeNode *NthPostOrderUtil(TreeNode *root, int index) /*  post order  */
-{
-    static int count = 0;
-
-    if (root)
-        return NULL;
-
-            TreeNode *
-            temp = NthPostOrderUtil(root->lChild, index);
-    if (temp)
-        return temp;
-
-    temp = NthPostOrderUtil(root->rChild, index);
-    if (temp)
-        return temp;
-
-    count++;
-    if (count == index)
-        return root;
-
-    return NULL;
-}
-
-int NthPostOrder(Tree *tree, int index) {
-    TreeNode *temp = NthPostOrderUtil(tree->root, index);
-    if (temp)
-        return temp->value;
-    printf("Errro, value not found.\n");
-    return 9999;
-}
-
-TreeNode *NthInOrderUtil(TreeNode *root, int index) /*  in order  */
-{
-    static int count = 0;
-
-    if (root)
-        return NULL;
-
-    TreeNode *temp = NthInOrderUtil(root->lChild, index);
-    if (temp)
-        return temp;
-
-    count++;
-    if (count == index)
-        return root;
-
-    temp = NthInOrderUtil(root->rChild, index);
-    if (temp)
-        return temp;
-
-    return NULL;
-}
-
-int NthInOrder(Tree *tree, int index) {
-    TreeNode *temp = NthInOrderUtil(tree->root, index);
-    if (temp)
-        return temp->value;
-    printf("Errro, value not found.\n");
-    return 9999;
-}
-
-int numNodesUtil(TreeNode *root) {
-    if (!root)
-        return 0;
-
-    return (1 + numNodesUtil(root->rChild) + numNodesUtil(root->lChild));
-}
-
-int numNodes(Tree *tree) {
-    return numNodesUtil(tree->root);
-}
-
-int numLeafsUtil(TreeNode *root) {
-    if (!root)
-        return 0;
-
-    if (!root->lChild && !root->rChild)
-        return 1;
-
-    return (numLeafsUtil(root->rChild) + numLeafsUtil(root->lChild));
-}
-
-int numLeafs(Tree *tree) {
-    return numLeafsUtil(tree->root);
-}
-
-int isIdenticalUtil(TreeNode *root1, TreeNode *root2) {
+int isEqualUtil(TreeNode *root1, TreeNode *root2) {
     if (!root1 && !root2)
         return 1;
 
     if (!root1 || !root2)
         return 0;
 
-    return isIdenticalUtil(root1->lChild, root2->lChild) &&
-           isIdenticalUtil(root1->rChild, root2->rChild) &&
+    return isEqualUtil(root1->lChild, root2->lChild) &&
+           isEqualUtil(root1->rChild, root2->rChild) &&
            (root1->value == root2->value);
 }
 
-int isIdentical(Tree *tree1, Tree *tree2) {
-    return isIdenticalUtil(tree1->root, tree2->root);
+int isEqual(Tree *tree1, Tree *tree2) {
+    return isEqualUtil(tree1->root, tree2->root);
 }
 
-int isBSTUtil(TreeNode *root) {
-    if (!root)
-        return 1;
 
-    if ((root->lChild && maxValue(root->lChild) > root->value) ||
-        (root->rChild && minValue(root->rChild) <= root->value))
-        return 0;
+int main9() {
+    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Tree *t = createBinarySearchTree(arr, 10);
+    Tree* t1 = copyTree(t);
+    Tree* t2 = copyMirrorTree(t);
+    printInOrder(t);
+    printInOrder(t1);
+    printInOrder(t2);
 
-    return isBSTUtil(root->lChild) && isBSTUtil(root->rChild);
+    printf("Equal :: %d\n", isEqual(t, t1));
+    printf("Equal :: %d\n", isEqual(t, t2));
+    return 0;
 }
 
-int isBST(Tree *tree) {
-    return isBSTUtil(tree->root);
+/*
+1 2 3 4 5 6 7 8 9 10 
+1 2 3 4 5 6 7 8 9 10 
+10 9 8 7 6 5 4 3 2 1 
+Equal :: 1
+Equal :: 0
+*/
+
+TreeNode *ancestorUtil(TreeNode *curr, int first, int second) {
+    if (curr == NULL)
+        return NULL;
+
+    if (curr->value > first && curr->value > second) {
+        return ancestorUtil(curr->lChild, first, second);
+    }
+    if (curr->value < first && curr->value < second) {
+        return ancestorUtil(curr->rChild, first, second);
+    }
+    return curr;
 }
 
-int isBSTUtil2(TreeNode *root, int min, int max) {
-    if (!root)
-        return 1;
-
-    if (root->value < min || root->value > max)
-        return 0;
-
-    return isBSTUtil2(root->lChild, min, root->value) &&
-           isBSTUtil2(root->rChild, root->value, max);
+TreeNode *ancestor(Tree* tree, int first, int second) {
+    if (first > second) {
+        int temp = first;
+        first = second;
+        second = temp;
+    }
+    return ancestorUtil(tree->root, first, second);
 }
 
-#define INT_MIN -99999
-#define INT_MAX 99999
+int isCompleteTree(Tree *tree) {
+    Queue* que = createQueue();
+    TreeNode* temp = NULL, *root = tree->root;
+    int noChild = 0;
+    if (root != NULL)
+       QueueAdd(que, root);
+    
+    while (QueueSize(que) != 0) {
+        temp = QueueRemove(que);
+        if (temp->lChild != NULL) {
+            if (noChild == 1)
+                return 0;
+           QueueAdd(que, temp->lChild);
+        }
+        else
+            noChild = 1;
 
-int isBST2(Tree *tree) {
-    return isBSTUtil2(tree->root, INT_MIN, INT_MAX);
-}
-
-int isBSTUtil3(TreeNode *root, int *value) /*  in order  */
-{
-    if (!root)
-        return 1;
-
-    if (!isBSTUtil3(root->lChild, value))
-        return 0;
-
-    if (*value > root->value)
-        return 0;
-
-    *value = root->value;
-
-    if (!isBSTUtil3(root->rChild, value))
-        return 0;
-
+        if (temp->rChild != NULL) {
+            if (noChild == 1)
+                return 0;
+           QueueAdd(que, temp->rChild);
+        }
+        else
+            noChild = 1;
+    }
     return 1;
 }
 
-int isBST3(Tree *tree) {
-    int temp = 0;
-    return isBSTUtil3(tree->root, &temp);
-}
-
-TreeNode *findNodeIterative(TreeNode *root, int value) /* iterative */
-{
-    while (root) {
-        if (root->value == value)
-            return root;
-        else if (root->value > value)
-            root = root->lChild;
-        else
-            root = root->rChild;
-    }
-    return NULL;
-}
-
-TreeNode *LcaBST(TreeNode *root, TreeNode *firstPtr, TreeNode *secondPtr) {
-    if (!firstPtr || !secondPtr || !root)
-        return root;
-
-    if (root->value > firstPtr->value &&
-        root->value > secondPtr->value) {
-        return LcaBST(root->lChild, firstPtr, secondPtr);
-    }
-    if (root->value < firstPtr->value &&
-        root->value < secondPtr->value) {
-        return LcaBST(root->rChild, firstPtr, secondPtr);
-    }
-    return root;
-}
-
-int findNodeDepth(TreeNode *root, TreeNode *dstPtr) {
-    int value;
-    if (!root || !dstPtr)
-        return -1;
-
-    if (root->value == dstPtr->value)
+int isCompleteTreeUtil(TreeNode* curr, int index, int count) {
+    if (curr == NULL)
+        return 1;
+    if (index > count)
         return 0;
-    else
-    {
-        if (root->value > dstPtr->value)
-            value = findNodeDepth(root->lChild, dstPtr);
-        else
-            value = findNodeDepth(root->rChild, dstPtr);
-
-        if (value != -1)
-            return (value + 1);
-    }
+    return isCompleteTreeUtil(curr->lChild, index * 2 + 1, count)
+           && isCompleteTreeUtil(curr->rChild, index * 2 + 2, count);
 }
 
-int pathLength(TreeNode *root, TreeNode *firstPtr, TreeNode *secondPtr) {
-    TreeNode *parent = LcaBST(root, firstPtr, secondPtr);
-    int first = findNodeDepth(parent, firstPtr);
-    int second = findNodeDepth(parent, secondPtr);
-    return first + second;
+int isCompleteTree2(Tree *tree) {
+    int count = numNodes(tree);
+    return isCompleteTreeUtil(tree->root, 0, count);
 }
 
-TreeNode *LcaBT(TreeNode *root, TreeNode *firstPtr, TreeNode *secondPtr) {
-    if (root == NULL)
-        return NULL;
-
-    if (root == firstPtr || root == secondPtr)
-        return root;
-
-    TreeNode *left = LcaBT(root->lChild, firstPtr, secondPtr);
-    TreeNode *right = LcaBT(root->rChild, firstPtr, secondPtr);
-
-    if (left && right)
-        return root;
-    else if (left)
-        return left;
-    else
-        return right;
+int isHeapUtil(TreeNode* curr, int parentValue) {
+    if (curr == NULL)
+        return 1;
+    if (curr->value < parentValue)
+        return 0;
+    return (isHeapUtil(curr->lChild, curr->value) && isHeapUtil(curr->rChild, curr->value));
 }
+
+int isHeap(Tree *tree) {
+    int infi = -9999999;
+    return (isCompleteTree(tree) && isHeapUtil(tree->root, infi));
+}
+
+int isHeapUtil2(TreeNode* curr, int index, int count, int parentValue) {
+    if (curr == NULL)
+        return 1;
+    if (index > count)
+        return 0;
+    if (curr->value < parentValue)
+        return 0;
+    return isHeapUtil2(curr->lChild, index * 2 + 1, count, curr->value)
+           && isHeapUtil2(curr->rChild, index * 2 + 2, count, curr->value);
+}
+
+int isHeap2(Tree *tree) {
+    int count = numNodes(tree);
+    int parentValue = -9999999;
+    return isHeapUtil2(tree->root, 0, count, parentValue);
+}
+
+int main10() {
+    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Tree *t = levelOrderBinaryTree(arr, 10);
+    printf("isHeap :: %d\n", isHeap(t));
+    printf("isHeap :: %d\n",  isHeap2(t));
+    printf("isCompleteTree :: %d\n",  isCompleteTree(t));    
+    return 0;
+}
+
+/*
+isHeap :: 1
+isHeap :: 1
+isCompleteTree :: 1
+*/
 
 int findMaxBTUtil(TreeNode *root) {
     if (root == NULL)
@@ -633,75 +1071,85 @@ int searchBT(Tree *tree, int value) {
     return searchBTUtil(tree->root, value);
 }
 
-int maxDepthBTUtil(TreeNode *root) {
-    if (root == NULL)
-        return 0;
-
-    int max = 0;
-    int left = maxDepthBTUtil(root->lChild);
-    int right = maxDepthBTUtil(root->rChild);
-
-    if (left > max)
-        max = left;
-    if (right > max)
-        max = right;
-
-    return max + 1;
-}
-
-int maxDepthBT(Tree *tree) {
-    return maxDepthBTUtil(tree->root);
-}
-
-int numFullNodesBTUtil(TreeNode *root) {
-    if (root == NULL)
-        return 0;
-
-    int count = 0;
-    count += numFullNodesBTUtil(root->lChild);
-    count += numFullNodesBTUtil(root->rChild);
-
-    if (root->lChild && root->rChild)
-        count++;
-
-    return count;
-}
-
-int numFullNodesBT(Tree *tree) {
-    return numFullNodesBTUtil(tree->root);
-}
-
-int maxLengthPathBTUtil(TreeNode *root) //diameter
+TreeNode *searchBST(TreeNode *root, int value) /* iterative */
 {
-    if (root == NULL)
+    while (root) {
+        if (root->value == value)
+            return root;
+        else if (root->value > value)
+            root = root->lChild;
+        else
+            root = root->rChild;
+    }
+    return NULL;
+}
+
+int main11() {
+    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Tree *t = createBinarySearchTree(arr, 10);
+    printf("searchBT :: %d\n", searchBT(t, 9));
+    printf("findMaxBT :: %d\n", findMaxBT(t));
+    return 0;
+}
+
+/*
+searchBT :: 1
+findMaxBT :: 10
+*/
+
+
+int isBSTUtil(TreeNode *root) {
+    if (!root)
+        return 1;
+
+    if ((root->lChild && maxValue(root->lChild) > root->value) ||
+        (root->rChild && minValue(root->rChild) <= root->value))
         return 0;
 
-    int max = maxDepthBTUtil(root->lChild) + maxDepthBTUtil(root->rChild) + 1;
-    int leftMax = maxLengthPathBTUtil(root->lChild);
-    int rightMax = maxLengthPathBTUtil(root->rChild);
-
-    if (leftMax > max)
-        max = leftMax;
-
-    if (rightMax > max)
-        max = rightMax;
-
-    return max;
+    return isBSTUtil(root->lChild) && isBSTUtil(root->rChild);
 }
-int maxLengthPathBT(Tree *tree) //diameter
+
+int isBST(Tree *tree) {
+    return isBSTUtil(tree->root);
+}
+
+int isBSTUtil2(TreeNode *root, int min, int max) {
+    if (!root)
+        return 1;
+
+    if (root->value < min || root->value > max)
+        return 0;
+
+    return isBSTUtil2(root->lChild, min, root->value) &&
+           isBSTUtil2(root->rChild, root->value, max);
+}
+
+int isBST2(Tree *tree) {
+    return isBSTUtil2(tree->root, INT_MIN, INT_MAX);
+}
+
+int isBSTUtil3(TreeNode *root, int *value) /*  in order  */
 {
-    return maxLengthPathBTUtil(tree->root);
-}
+    if (!root)
+        return 1;
 
-int sumAllBTUtil(TreeNode *root) {
-    if (root == NULL)
+    if (!isBSTUtil3(root->lChild, value))
         return 0;
 
-    return root->value + sumAllBTUtil(root->lChild) + sumAllBTUtil(root->rChild);
+    if (*value > root->value)
+        return 0;
+
+    *value = root->value;
+
+    if (!isBSTUtil3(root->rChild, value))
+        return 0;
+
+    return 1;
 }
 
-int sumAllBT(Tree *tree) {
-    return sumAllBTUtil(tree->root);
+int isBST3(Tree *tree) {
+    int temp = 0;
+    return isBSTUtil3(tree->root, &temp);
 }
 
 TreeNode *trimOutsideRangeUtil(TreeNode *root, int min, int max) {
@@ -745,9 +1193,31 @@ void printInRangeUtil(TreeNode *root, int min, int max) {
 
 void printInRange(Tree *tree, int min, int max) {
     printInRangeUtil(tree->root, min, max);
+    printf("\n");
 }
 
-int CeilBST(Tree *tree, int value) {
+int main12() {
+    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Tree *t = createBinarySearchTree(arr, 10);
+    printf("isBST :: %d\n", isBST(t));
+    printf("isBST2 :: %d\n", isBST2(t));
+    printf("isBST3 :: %d\n", isBST3(t));
+    printInRange(t, 4, 8);
+    trimOutsideRange(t, 4, 8);
+    printInOrder(t); 
+    return 0;
+}
+
+/*
+isBST :: 1
+isBST2 :: 1
+isBST3 :: 1
+4 5 6 7 8 
+4 5 6 7 8 
+*/
+
+
+int ceilBST(Tree *tree, int value) {
     TreeNode *root = tree->root;
     int ceil = 0;
     while (root) {
@@ -764,7 +1234,7 @@ int CeilBST(Tree *tree, int value) {
     return ceil;
 }
 
-int FloorBST(Tree *tree, int value) {
+int floorBST(Tree *tree, int value) {
     TreeNode *root = tree->root;
     int floor = 0;
     while (root) {
@@ -781,36 +1251,81 @@ int FloorBST(Tree *tree, int value) {
     return floor;
 }
 
-void printBoundaryUtil(TreeNode *root, int isLastNode) {
-    static int PrintOnlyLeafFlag = 0;
-    static int PrintParentsFlag = 0;
 
+int main13() {
+    int arr[] = { 1, 2, 4, 5, 6, 7, 9, 10 };
+    Tree *t = createBinarySearchTree(arr, 10);
+    printInOrder(t);
+    printf("floorBST : %d\n", floorBST(t, 3));
+    printf("ceilBST : %d\n", ceilBST(t, 3));
+    printf("floorBST : %d\n", floorBST(t, 8));
+    printf("ceilBST : %d\n", ceilBST(t, 8));
+    return 0;
+}
+
+/*
+floorBST : 2
+ceilBST : 4
+floorBST : 7
+ceilBST : 9
+*/
+
+
+TreeNode *lcaBSTUtil(TreeNode *root, int first, int second) {
     if (!root)
-        return;
+        return root;
 
-    if (!root->rChild && !root->lChild) {
-        printf(" %d ", root->value);
-        PrintOnlyLeafFlag = 1;
-        if (isLastNode)
-            PrintParentsFlag = 1;
-        return;
+    if (root->value > first && root->value > second) {
+        return lcaBSTUtil(root->lChild, first, second);
     }
-
-    if (!PrintOnlyLeafFlag)
-        printf(" %d ", root->value);
-
-    printBoundaryUtil(root->lChild, (!root->rChild) ? isLastNode : 0);
-
-    if (root->rChild)
-        printBoundaryUtil(root->rChild, isLastNode);
-
-    if (PrintParentsFlag)
-        printf(" %d ", root->value);
+    if (root->value < first && root->value < second) {
+        return lcaBSTUtil(root->rChild, first, second);
+    }
+    return root;
 }
 
-void printBoundary(Tree *tree) {
-    printBoundaryUtil(tree->root, 1);
+int lcaBST(Tree *tree, int first, int second) {
+    TreeNode* ans = lcaBSTUtil(tree->root, first, second);
+    if(ans)
+        return ans->value;
+    return -99999;
 }
+
+
+TreeNode *LcaBT(TreeNode *root, TreeNode *firstPtr, TreeNode *secondPtr) {
+    if (root == NULL)
+        return NULL;
+
+    if (root == firstPtr || root == secondPtr)
+        return root;
+
+    TreeNode *left = LcaBT(root->lChild, firstPtr, secondPtr);
+    TreeNode *right = LcaBT(root->rChild, firstPtr, secondPtr);
+
+    if (left && right)
+        return root;
+    else if (left)
+        return left;
+    else
+        return right;
+}
+
+int main14() {
+    int arr[] = { 1, 2, 4, 5, 6, 7, 9, 10 };
+    Tree *t = createBinarySearchTree(arr, 10);
+    printf("%d\n", lcaBST(t, 3, 4));
+    printf("%d\n", lcaBST(t, 1, 4));
+    printf("%d\n", lcaBST(t, 10, 4));
+    return 0;
+}
+
+
+/*
+4
+2
+6
+*/
+
 
 TreeNode *treeToListRec(TreeNode *curr) {
     TreeNode *head, *tail, *tempHead;
@@ -848,106 +1363,121 @@ TreeNode *treeToListRec(TreeNode *curr) {
     return head;
 }
 
-TreeNode *createBinaryTreeUtil(int arr[], int start, int end) {
-    if (start > end)
-        return NULL;
+TreeNode *treeToList(Tree *tree) {
+    return treeToListRec(tree->root);
+}
+
+void  printDLL(TreeNode *root) {
+    if (root == NULL) {
+        return;
+    }
+    TreeNode *curr = root;
+    TreeNode *tail = curr->lChild;
+    printf("DLL nodes are : " );
+    while (curr != tail) {
+        printf("%d ", curr->value);
+        curr = curr->rChild;
+    };
+    printf("%d\n", curr->value);
     
-    int mid = (start + end) / 2;
-    TreeNode *curr = (TreeNode *)malloc(sizeof(TreeNode));
-    curr->value = arr[mid];
-    curr->lChild = createBinaryTreeUtil(arr, start, mid - 1);
-    curr->rChild = createBinaryTreeUtil(arr, mid + 1, end);
-    return curr;
 }
 
-Tree* createBinaryTree(int arr[], int size) {
-    Tree* tree = (Tree*)malloc(sizeof(Tree));
-    tree->root = createBinaryTreeUtil(arr, 0, size - 1);
-    return tree;
+int main16() {
+    int arr[] =  {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    Tree *t = createBinarySearchTree(arr, 10);
+    printInOrder(t);
+    TreeNode *head = treeToList(t); 
+    printDLL(head);
+    return 0;
 }
 
-int main() {
-    int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    Tree *t2 = createBinaryTree(arr, 10);
-    printInOrder(t2);
-    printf("\n");
+/*
+1 2 3 4 5 6 7 8 9 10 
+DLL nodes are : 1 2 3 4 5 6 7 8 9 10
+*/
+
+void printBoundaryUtil(TreeNode *root, int isLastNode) {
+    static int PrintOnlyLeafFlag = 0;
+    static int PrintParentsFlag = 0;
+
+    if (!root)
+        return;
+
+    if (!root->rChild && !root->lChild) {
+        printf("%d ", root->value);
+        PrintOnlyLeafFlag = 1;
+        if (isLastNode)
+            PrintParentsFlag = 1;
+        return;
+    }
+
+    if (!PrintOnlyLeafFlag)
+        printf("%d ", root->value);
+
+    printBoundaryUtil(root->lChild, (!root->rChild) ? isLastNode : 0);
+
+    if (root->rChild)
+        printBoundaryUtil(root->rChild, isLastNode);
+
+    if (PrintParentsFlag)
+        printf("%d ", root->value);
+}
+
+void printBoundary(Tree *tree) {
+    printBoundaryUtil(tree->root, 1);
+}
+
+int main17() {
+    int arr[] =  {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    Tree *t = createBinarySearchTree(arr, 10);
+    printBoundary(t);
+    return 0;
+}
+
+/*
+5 2 1 4 7 10 9 8 5 
+*/
+
+int findNodeDepth(TreeNode *root, TreeNode *dstPtr) {
+    int value;
+    if (!root || !dstPtr)
+        return -1;
+
+    if (root->value == dstPtr->value)
+        return 0;
+    else if (root->value > dstPtr->value)
+        value = findNodeDepth(root->lChild, dstPtr);
+    else
+        value = findNodeDepth(root->rChild, dstPtr);
+
+    if (value != -1)
+        return (value + 1);
+    return -1;
 }
 /*
-TreeNode *root = NULL;
-TreeNode *temp = NULL;
-
-root = insertUtil(root, 5);
-root = insertUtil(root, 2);
-root = insertUtil(root, 9);
-root = insertUtil(root, 7);
-root = insertUtil(root, 6);
-root = insertUtil(root, 10);
-root = insertUtil(root, 11);
-root = insertUtil(root, 9);
-root = insertUtil(root, 1);
-root = insertUtil(root, 3);
-root = insertUtil(root, 5);
-printPreOrder(root);
-printf("\n");
-printPostOrder(root);
-printf("\n");
-printInOrder(root);
-printf("\n");
-printBoundary(root, 1); //error
-printf("\n");
-
-printf("Find Node : %d \n", findNode(root, 9));
-printf("Find Min : %d \n", findMin(root)->value);
-printf("Find Max : %d \n", findMax(root)->value);
-printf("Find Min : %d \n", findMinRec(root)->value);
-printf("Find Max : %d \n", findMaxRec(root)->value);
-//root = deleteNode(root, 5);
-printf("Min Value : %d \n", minValue(root));
-printf("Max Value : %d \n", maxValue(root));
-printf("Tree Depth : %d \n", treeDepth(root));
-TreeNode *root2 = NULL;
-TreeNode *root3 = NULL;
-root2 = copyTree(root);
-printf("\n");
-printPreOrder(root2);
-printf("\n");
-printMirror(root);
-printf("\n");
-root3 = copyMirrorTree(root);
-printPreOrder(root3);
-printf("\n");
-printf("NthPreeOrder : %d \n", NthPreeOrder(root, 4)->value);
-printf("NthPostOrder : %d \n", NthPostOrder(root, 4)->value);
-printf("NthInOrder : %d \n", NthInOrder(root, 4)->value);
-
-//freeTree2(&root);
-//printPreOrder(root);
-printf("Find Node : %d \n", findNode(root, 9));
-printf("\n");
-printf("numNodes : %d \n", numNodes(root));
-printf("numLeafs : %d \n", numLeafs(root));
-printf("isIdentical : %d \n", isIdentical(root, root2));
-printf("isBST : %d \n", isBST(root));
-printf("isBST2 : %d \n", isBST2(root));
-printf("isBST3 : %d \n", isBST3(root));
-
-printf("\n");
-printf("Find Node : %d \n", findNodeIterative(root, 9));
-printf("Find Node : %d \n", findNodeIterativeOptimized(root, 9));
-printf("Find max : %d \n", findMaxBT(root));
-printf("Find min : %d \n", findMinBT(root));
-printf("Find Node : %d \n", searchBT(root, 9));
-printf("Max Depth : %d \n", maxDepthBT(root));
-printf("Num full nodes : %d \n", numFullNodesBT(root));
-printf("MaxLengthPathBT : %d \n", maxLengthPathBT(root));
-printf("sumAllBT : %d \n", sumAllBT(root));
-printf("CeilBST : %d \n", CeilBST(root, 8));
-printf("FloorBST : %d \n", FloorBST(root, 4));
-printInRange(root, 4, 9);
-root = trimOutsideRange(root, 4, 9);
-printf("\n");
-printInOrder(root);
-printf("Find Node : %d \n", findNodeIterativeOptimized(root, 9));
-return 0;
+int pathLength(TreeNode *root, TreeNode *firstPtr, TreeNode *secondPtr) {
+    TreeNode *parent = lcaBST(root, firstPtr, secondPtr);
+    int first = findNodeDepth(parent, firstPtr);
+    int second = findNodeDepth(parent, secondPtr);
+    return first + second;
 }
 */
+int main() {
+    main1();
+    main2();
+    main3();
+    main4();
+    main5();
+    main6();
+    main7();
+    main8();
+    main9();
+    main10();
+    main11();
+    main12();
+    main13();
+    main14();
+    main16();
+    main17();
+    return 0;
+}

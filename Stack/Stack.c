@@ -4,6 +4,7 @@
 #include "string.h"
 
 #define ERROR_VALUE -999
+#define MAX_CAPACITY 100
 
 typedef struct Stack
 {
@@ -12,11 +13,11 @@ typedef struct Stack
     int capacity;
 } Stack;
 
-Stack* createStack(int size) {
+Stack* createStack() {
     Stack *stk = (Stack*)malloc(sizeof(Stack));
-    stk->data = (int *)malloc(size * sizeof(int));
+    stk->data = (int *)malloc(MAX_CAPACITY * sizeof(int));
     stk->top = -1;
-    stk->capacity = size;
+    stk->capacity = MAX_CAPACITY;
     return stk;
 }
 
@@ -61,8 +62,8 @@ void StackPrint(Stack *stk) {
     printf("]\n");
 }
 
-int main() {
-    Stack* stk = createStack(20);
+int mainA() {
+    Stack* stk = createStack();
     for (int i = 0; i < 20; i++)
         StackPush(stk, i);
     printf("StackTop %d \n", StackTop(stk));
