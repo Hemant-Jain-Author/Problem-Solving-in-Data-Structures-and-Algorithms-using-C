@@ -115,7 +115,7 @@ int merge(int lists[], int size) {
 
 	int total = 0;
 	int value = 0;
-	while (heapsize(hp) > 1} {
+	while (heapsize(hp) > 1) {
 		value =  heapRemove(hp);
 		value +=  heapRemove(hp);
 		heapAdd(hp, value);

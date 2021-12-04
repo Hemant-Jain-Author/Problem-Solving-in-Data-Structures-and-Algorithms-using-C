@@ -252,18 +252,18 @@ void printBreadthFirst(Tree *tree) {
     Queue* que = createQueue();
     TreeNode *temp, *root = tree->root;
     if (root != NULL) {
-       QueueAdd(que, root);
+       queueAdd(que, root);
     }
 
-    while (QueueIsEmpty(que) == 0) {
-        temp = QueueRemove(que);
+    while (queueIsEmpty(que) == 0) {
+        temp = queueRemove(que);
         printf("%d ", temp->value);
 
         if (temp->lChild != NULL) {
-           QueueAdd(que, temp->lChild);
+           queueAdd(que, temp->lChild);
         }
         if (temp->rChild != NULL) {
-           QueueAdd(que, temp->rChild);
+           queueAdd(que, temp->rChild);
         }
     }
     printf("\n");
@@ -274,18 +274,18 @@ void printDepthFirst(Tree *tree) {
     TreeNode *temp, *root = tree->root;
 
     if (root != NULL) {
-        StackPush(stk, root);
+        stackPush(stk, root);
     }
 
-    while (StackIsEmpty(stk) == 0) {
-        temp = StackPop(stk);
+    while (stackIsEmpty(stk) == 0) {
+        temp = stackPop(stk);
         printf("%d ", temp->value);
 
         if (temp->lChild != NULL) {
-            StackPush(stk, temp->lChild);
+            stackPush(stk, temp->lChild);
         }
         if (temp->rChild != NULL) {
-            StackPush(stk, temp->rChild);
+            stackPush(stk, temp->rChild);
         }
     }
     printf("\n");
@@ -296,25 +296,25 @@ void printLevelOrderLineByLine(Tree *tree) {
     Queue* que2 = createQueue();
     TreeNode *temp = NULL, *root = tree->root;
     if (root != NULL)
-        QueueAdd(que1, root);
-    while (QueueSize(que1) != 0 || QueueSize(que2) != 0) {
-        while (QueueSize(que1) != 0) {
-            temp = QueueRemove(que1);
+        queueAdd(que1, root);
+    while (queueSize(que1) != 0 || queueSize(que2) != 0) {
+        while (queueSize(que1) != 0) {
+            temp = queueRemove(que1);
             printf("%d ", temp->value);
             if (temp->lChild != NULL)
-                QueueAdd(que2, temp->lChild);
+                queueAdd(que2, temp->lChild);
             if (temp->rChild != NULL)
-                QueueAdd(que2, temp->rChild);
+                queueAdd(que2, temp->rChild);
         }
         printf("\n");
 
-        while (QueueSize(que2) != 0) {
-            temp = QueueRemove(que2);
+        while (queueSize(que2) != 0) {
+            temp = queueRemove(que2);
             printf("%d ", temp->value);
             if (temp->lChild != NULL)
-                QueueAdd(que1, temp->lChild);
+                queueAdd(que1, temp->lChild);
             if (temp->rChild != NULL)
-                QueueAdd(que1, temp->rChild);
+                queueAdd(que1, temp->rChild);
         }
         printf("\n");
     }
@@ -326,16 +326,16 @@ void printLevelOrderLineByLine2(Tree *tree) {
     int count = 0;
 
     if (root != NULL)
-       QueueAdd(que, root);
-    while (QueueSize(que) != 0) {
-        count = QueueSize(que);
+       queueAdd(que, root);
+    while (queueSize(que) != 0) {
+        count = queueSize(que);
         while (count > 0) {
-            temp = QueueRemove(que);
+            temp = queueRemove(que);
             printf("%d ", temp->value);
             if (temp->lChild != NULL)
-               QueueAdd(que, temp->lChild);
+               queueAdd(que, temp->lChild);
             if (temp->rChild != NULL)
-               QueueAdd(que, temp->rChild);
+               queueAdd(que, temp->rChild);
             count -= 1;
         }
         printf("\n");
@@ -348,24 +348,24 @@ void printSpiralTree(Tree *tree) {
 
     TreeNode *temp, *root = tree->root;
     if (root != NULL)
-        StackPush(stk1, root);
+        stackPush(stk1, root);
 
-    while (StackIsEmpty(stk1) == 0 || StackIsEmpty(stk2) == 0) {
-        while (StackIsEmpty(stk1) == 0) {
-            temp = StackPop(stk1);
+    while (stackIsEmpty(stk1) == 0 || stackIsEmpty(stk2) == 0) {
+        while (stackIsEmpty(stk1) == 0) {
+            temp = stackPop(stk1);
             printf("%d ", temp->value);
             if (temp->rChild != NULL)
-                StackPush(stk2, temp->rChild);
+                stackPush(stk2, temp->rChild);
             if (temp->lChild != NULL)
-                StackPush(stk2, temp->lChild);
+                stackPush(stk2, temp->lChild);
         }
-        while (StackIsEmpty(stk2) == 0) {
-            temp = StackPop(stk2);
+        while (stackIsEmpty(stk2) == 0) {
+            temp = stackPop(stk2);
             printf("%d ", temp->value);
             if (temp->lChild != NULL)
-                StackPush(stk1, temp->lChild);
+                stackPush(stk1, temp->lChild);
             if (temp->rChild != NULL)
-                StackPush(stk1, temp->rChild);
+                stackPush(stk1, temp->rChild);
         }
     }
     printf("\n");
@@ -375,16 +375,16 @@ void printAllPathUtil(TreeNode *curr, Stack* stk) {
     if(curr == NULL)
         return;
     
-    StackPush(stk, curr);
+    stackPush(stk, curr);
     if (curr->lChild == NULL && curr->rChild == NULL) {
-        StackPrint(stk);
-        StackPop(stk);
+        stackPrint(stk);
+        stackPop(stk);
         return;
     }
 
     printAllPathUtil(curr->rChild, stk);
     printAllPathUtil(curr->lChild, stk);
-    StackPop(stk);
+    stackPop(stk);
 }
 
 void printAllPath(Tree *tree) {
@@ -435,18 +435,18 @@ void iterativePreOrder(Tree *t) {
         return;
 
     Stack* stk = createStack();
-    StackPush(stk, t->root);
+    stackPush(stk, t->root);
     TreeNode *curr;
 
-    while (StackIsEmpty(stk) == 0) {
-        curr = StackPop(stk);
+    while (stackIsEmpty(stk) == 0) {
+        curr = stackPop(stk);
         printf("%d ", curr->value);
 
         if (curr->rChild != NULL)
-            StackPush(stk, curr->rChild);
+            stackPush(stk, curr->rChild);
 
         if (curr->lChild != NULL)
-            StackPush(stk, curr->lChild);
+            stackPush(stk, curr->lChild);
     }
     printf("\n");
 }
@@ -933,14 +933,14 @@ int isCompleteTree(Tree *tree) {
     TreeNode* temp = NULL, *root = tree->root;
     int noChild = 0;
     if (root != NULL)
-       QueueAdd(que, root);
+       queueAdd(que, root);
     
-    while (QueueSize(que) != 0) {
-        temp = QueueRemove(que);
+    while (queueSize(que) != 0) {
+        temp = queueRemove(que);
         if (temp->lChild != NULL) {
             if (noChild == 1)
                 return 0;
-           QueueAdd(que, temp->lChild);
+           queueAdd(que, temp->lChild);
         }
         else
             noChild = 1;
@@ -948,7 +948,7 @@ int isCompleteTree(Tree *tree) {
         if (temp->rChild != NULL) {
             if (noChild == 1)
                 return 0;
-           QueueAdd(que, temp->rChild);
+           queueAdd(que, temp->rChild);
         }
         else
             noChild = 1;

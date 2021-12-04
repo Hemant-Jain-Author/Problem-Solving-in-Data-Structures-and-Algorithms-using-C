@@ -15,7 +15,7 @@ void sort(int arr[], int size, int (*comp)(int p1, int p2)) {
 	int temp;
     for (i = 0; i < (size - 1); i++) {
         for (j = 0; j < size - i - 1; j++) {
-            if (comp(arr[j], arr[j + 1])} {
+            if (comp(arr[j], arr[j + 1])) {
                 /* Swapping */
                 temp = arr[j];
                 arr[j] = arr[j + 1];
@@ -60,7 +60,7 @@ void proclateUp(int arr[], int position, int(* compare)(int , int)) {
     int temp;
 
     if (parent >= 0) {
-        if (compare(arr[parent], arr[position])} {
+        if (compare(arr[parent], arr[position])) {
             temp = arr[position];
             arr[position] = arr[parent];
             arr[parent] = temp;
@@ -131,7 +131,7 @@ int JoinRopes(int ropes[], int size) {
         total += value;
         index = length - 2;
 
-        while (index > 0 && ropes[index - 1] < value} {
+        while (index > 0 && ropes[index - 1] < value) {
             ropes[index] = ropes[index - 1];
             index -= 1;
         }

@@ -21,11 +21,11 @@ Stack* createStack()
     return stk;
 }
 
-int StackIsEmpty(Stack *stk) {
+int stackIsEmpty(Stack *stk) {
     return stk->head == NULL;
 }
 
-void StackPush(Stack *stk, int value) {
+void stackPush(Stack *stk, int value) {
     StackNode *temp = (StackNode *)malloc(sizeof(StackNode));
     if (!temp) {
         printf("Memory allocation error.\n");
@@ -36,7 +36,7 @@ void StackPush(Stack *stk, int value) {
     stk->head = temp;
 }
 
-int StackPop(Stack *stk) {
+int stackPop(Stack *stk) {
     StackNode *deleteMe;
     if(stk->head == NULL) {
         printf("Stack is empty.\n");
@@ -49,7 +49,7 @@ int StackPop(Stack *stk) {
     return value;
 }
 
-void StackPrint(Stack *stk) {
+void stackPrint(Stack *stk) {
     if (!stk->head)
         return;
 
@@ -65,11 +65,11 @@ void StackPrint(Stack *stk) {
 
 int main() {
     Stack* stk= createStack();
-    StackPush(stk, 1);
-    StackPush(stk, 2);
-    StackPush(stk, 3);
-    StackPrint(stk);
-    while (!StackIsEmpty(stk))
-        printf("%d ", StackPop(stk));
+    stackPush(stk, 1);
+    stackPush(stk, 2);
+    stackPush(stk, 3);
+    stackPrint(stk);
+    while (!stackIsEmpty(stk))
+        printf("%d ", stackPop(stk));
     return 0;
 }

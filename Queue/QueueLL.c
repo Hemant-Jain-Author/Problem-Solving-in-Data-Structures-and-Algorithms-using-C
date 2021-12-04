@@ -20,11 +20,11 @@ Queue* createQueue()
     return queue;
 }
 
-int QueueIsEmpty(Queue *queue) {
+int queueIsEmpty(Queue *queue) {
     return queue->tail == NULL;
 }
 
-int QueueAdd(Queue *queue, int value) {
+int queueAdd(Queue *queue, int value) {
     QueueNode *temp = (QueueNode *)malloc(sizeof(QueueNode));
     if (!temp) {
         printf("Memory Allocation Error");
@@ -42,7 +42,7 @@ int QueueAdd(Queue *queue, int value) {
     }
     return 1;
 }
-int QueueRemove(Queue *queue) {
+int queueRemove(Queue *queue) {
     int value;
     QueueNode *deleteMe;
 
@@ -63,7 +63,7 @@ int QueueRemove(Queue *queue) {
     return value;
 }
 
-void QueuePrint(Queue *queue) {
+void queuePrint(Queue *queue) {
     if (!queue->tail)
         return;
 
@@ -79,11 +79,11 @@ void QueuePrint(Queue *queue) {
 
 int main() {
     Queue* queue = createQueue();
-    QueueAdd(queue, 1);
-    QueueAdd(queue, 2);
-    QueueAdd(queue, 3);
+    queueAdd(queue, 1);
+    queueAdd(queue, 2);
+    queueAdd(queue, 3);
 
-    while(!QueueIsEmpty(queue))
-        printf("%d ", QueueRemove(queue));
+    while(!queueIsEmpty(queue))
+        printf("%d ", queueRemove(queue));
     return 0;
 }

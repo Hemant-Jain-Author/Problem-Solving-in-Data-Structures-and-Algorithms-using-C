@@ -32,7 +32,7 @@ int shortestDist(int n, int graph[][n]) {
 		}
 	}
 	value = n - 1;
-	while (value != -1} {
+	while (value != -1) {
 		printf("%d ", value);
 		value = path[value];
 	}

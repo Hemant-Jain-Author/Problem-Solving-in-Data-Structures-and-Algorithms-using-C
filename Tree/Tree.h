@@ -30,7 +30,7 @@ Stack* createStack() {
     return stk;
 }
 
-void StackPush(Stack *stk, TreeNode *value) {
+void stackPush(Stack *stk, TreeNode *value) {
     if (stk->top + 1 == stk->capacity){
         printf("Stack is full.\n");
         return;
@@ -39,7 +39,7 @@ void StackPush(Stack *stk, TreeNode *value) {
     stk->data[stk->top] = value;
 }
 
-TreeNode* StackPop(Stack *stk) {
+TreeNode* stackPop(Stack *stk) {
     if (stk->top == -1) {
         printf("stack empty.\n");
         return NULL;
@@ -50,20 +50,20 @@ TreeNode* StackPop(Stack *stk) {
     return value;
 }
 
-TreeNode* StackTop(Stack *stk) {
+TreeNode* stackTop(Stack *stk) {
     TreeNode* value = stk->data[stk->top];
     return value;
 }
 
-int StackIsEmpty(Stack *stk) {
+int stackIsEmpty(Stack *stk) {
     return (stk->top == -1);
 }
 
-int StackSize(Stack *stk) {
+int stackSize(Stack *stk) {
     return (stk->top + 1);
 }
 
-void StackPrint(Stack *stk) {
+void stackPrint(Stack *stk) {
     printf("[");
     for (int i = stk->top; i >= 0; i--) {
         printf("%d ", stk->data[i]->value);
@@ -87,7 +87,7 @@ Queue* createQueue() {
 	return que;
 }
 
-void QueueAdd(Queue *que, TreeNode * value) {
+void queueAdd(Queue *que, TreeNode * value) {
 	if (que->size == MAX_CAPACITY) {
 		printf("Queue is full.\n");
 		return;
@@ -97,7 +97,7 @@ void QueueAdd(Queue *que, TreeNode * value) {
 	que->back = (que->back + 1) % MAX_CAPACITY;
 }
 
-TreeNode * QueueRemove(Queue *que) {
+TreeNode * queueRemove(Queue *que) {
 	TreeNode* value;
 	if (que->size == 0) {
 		printf("Queue is empty.\n");
@@ -109,15 +109,15 @@ TreeNode * QueueRemove(Queue *que) {
 	return value;
 }
 
-TreeNode * QueueFront(Queue *que) {
+TreeNode * queueFront(Queue *que) {
 	return que->data[que->front];
 }
 
-TreeNode * QueueBack(Queue *que) {
+TreeNode * queueBack(Queue *que) {
 	return que->data[que->back-1];
 }
 
-TreeNode * QueueRemoveBack(Queue *que) {
+TreeNode * queueRemoveBack(Queue *que) {
 	if (que->size == 0) {
 		printf("Queue is empty.\n");
 		return NULL;
@@ -128,15 +128,15 @@ TreeNode * QueueRemoveBack(Queue *que) {
 	return value;
 }
 
-int QueueIsEmpty(Queue *que) {
+int queueIsEmpty(Queue *que) {
 	return que->size == 0;
 }
 
-int QueueSize(Queue *que) {
+int queueSize(Queue *que) {
 	return que->size;
 }
 
-void QueuePrint(Queue *que) {
+void queuePrint(Queue *que) {
 	int size = que->size;
 	printf("[ ");
 	int index = que->front;

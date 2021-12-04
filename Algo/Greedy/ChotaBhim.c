@@ -11,7 +11,7 @@ void sort(int arr[], int size, int (*comp)(int p1, int p2)) {
 	int temp;
     for (i = 0; i < (size - 1); i++) {
         for (j = 0; j < size - i - 1; j++) {
-            if (comp(arr[j], arr[j + 1])} {
+            if (comp(arr[j], arr[j + 1])) {
                 /* Swapping */
                 temp = arr[j];
                 arr[j] = arr[j + 1];
@@ -56,7 +56,7 @@ void proclateUp(int arr[], int position, int(* compare)(int , int)) {
     int temp;
 
     if (parent >= 0) {
-        if (compare(arr[parent], arr[position])} {
+        if (compare(arr[parent], arr[position])) {
             temp = arr[position];
             arr[position] = arr[parent];
             arr[parent] = temp;
@@ -118,7 +118,7 @@ int chotaBhim(int cups[], int size) {
 	sort(cups, size, less); // decreasing order.
 	int total = 0;
 	int index, temp;
-	while (time > 0} {
+	while (time > 0) {
 		total += cups[0];
 		cups[0] = ceil(cups[0] / 2.0);
 		index = 0;

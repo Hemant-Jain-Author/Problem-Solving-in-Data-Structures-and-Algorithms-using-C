@@ -39,7 +39,7 @@ void StackPush(Stack *stk, int value) {
     stk->data[stk->top] = value;
 }
 
-int StackPop(Stack *stk) {
+int stackPop(Stack *stk) {
     if (stk->top == -1) {
         printf("stack empty.\n");
         return -99999;
@@ -59,11 +59,11 @@ int StackIsEmpty(Stack *stk) {
     return (stk->top == -1);
 }
 
-int StackSize(Stack *stk) {
+int stackSize(Stack *stk) {
     return (stk->top + 1);
 }
 
-void StackPrint(Stack *stk) {
+void stackPrint(Stack *stk) {
     printf("[");
     for (int i = stk->top; i >= 0; i--) {
         printf("%d ", stk->data[i]);
@@ -83,34 +83,34 @@ Queue* createQueue() {
 	return que;
 }
 
-void QueueAdd(Queue* que, int value) {
+void queueAdd(Queue* que, int value) {
 	StackPush(que->stk1, value);
 }
 
-int QueueRemove(Queue* que) {
+int queueRemove(Queue* que) {
 	int value;
 	if (StackIsEmpty(que->stk2)) {	
 		while (!StackIsEmpty(que->stk1)) {
-			value = StackPop(que->stk1);
+			value = stackPop(que->stk1);
 			StackPush(que->stk2, value);
 		}
 	}
-	return StackPop(que->stk2);
+	return stackPop(que->stk2);
 }
 
-int QueueSize(Queue* que) {
-	return StackSize(que->stk1) + StackSize(que->stk2);
+int queueSize(Queue* que) {
+	return stackSize(que->stk1) + stackSize(que->stk2);
 }
 
 int main() {
 	Queue* que = createQueue();
-	QueueAdd(que, 1);
-	QueueAdd(que, 2);
-	QueueAdd(que, 3);
-    QueueAdd(que, 4);
-	QueueAdd(que, 5);
-	QueueAdd(que, 6);
-	while(QueueSize(que) > 0)
-		printf("%d  ", QueueRemove(que));
+	queueAdd(que, 1);
+	queueAdd(que, 2);
+	queueAdd(que, 3);
+    queueAdd(que, 4);
+	queueAdd(que, 5);
+	queueAdd(que, 6);
+	while(queueSize(que) > 0)
+		printf("%d  ", queueRemove(que));
 
 }

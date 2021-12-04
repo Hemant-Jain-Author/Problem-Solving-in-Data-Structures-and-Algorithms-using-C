@@ -43,32 +43,32 @@ main line 2
 
 void sortedInsert(Stack *stk, int element) {
     int temp;
-    if (StackIsEmpty(stk) || element > StackTop(stk)) {
-        StackPush(stk, element);
+    if (stackIsEmpty(stk) || element > stackTop(stk)) {
+        stackPush(stk, element);
     } else {
-        temp = StackPop(stk);
+        temp = stackPop(stk);
         sortedInsert(stk, element);
-        StackPush(stk, temp);
+        stackPush(stk, temp);
     }
 }
 
 int main2()
 {
     Stack* stk = createStack();
-    StackPush(stk, 1);
-    StackPush(stk, 2);
-    StackPush(stk, 4);
-    StackPush(stk, 5);
-    StackPrint(stk);
+    stackPush(stk, 1);
+    stackPush(stk, 2);
+    stackPush(stk, 4);
+    stackPush(stk, 5);
+    stackPrint(stk);
     sortedInsert(stk, 3);
-    StackPrint(stk);
+    stackPrint(stk);
     return 0;
 }
 
 void sortStack(Stack *stk) {
     int temp;
-    if (StackIsEmpty(stk) == 0) {
-        temp = StackPop(stk);
+    if (stackIsEmpty(stk) == 0) {
+        temp = stackPop(stk);
         sortStack(stk);
         sortedInsert(stk, temp);
     }
@@ -77,64 +77,64 @@ void sortStack(Stack *stk) {
 void sortStack2(Stack *stk) {
     int temp;
     Stack* stk2 = createStack();
-    while (StackIsEmpty(stk) == 0) {
-        temp = StackPop(stk);
-        while ((StackIsEmpty(stk2) == 0) && (StackTop(stk2) < temp))
-            StackPush(stk, StackPop(stk2));
-        StackPush(stk2, temp);
+    while (stackIsEmpty(stk) == 0) {
+        temp = stackPop(stk);
+        while ((stackIsEmpty(stk2) == 0) && (stackTop(stk2) < temp))
+            stackPush(stk, stackPop(stk2));
+        stackPush(stk2, temp);
     }
-    while (StackIsEmpty(stk2) == 0)
-        StackPush(stk, StackPop(stk2));
+    while (stackIsEmpty(stk2) == 0)
+        stackPush(stk, stackPop(stk2));
 }
 
 int main3()
 {
     Stack* stk = createStack();
-    StackPush(stk, 1);
-    StackPush(stk, 5);
-    StackPush(stk, 4);
-    StackPush(stk, 3);
-    StackPrint(stk);
+    stackPush(stk, 1);
+    stackPush(stk, 5);
+    stackPush(stk, 4);
+    stackPush(stk, 3);
+    stackPrint(stk);
     sortStack(stk);
-    StackPrint(stk);
+    stackPrint(stk);
 
     Stack* stk2 = createStack();
-    StackPush(stk2, 1);
-    StackPush(stk2, 5);
-    StackPush(stk2, 4);
-    StackPush(stk2, 3);
-    StackPrint(stk2);
+    stackPush(stk2, 1);
+    stackPush(stk2, 5);
+    stackPush(stk2, 4);
+    stackPush(stk2, 3);
+    stackPrint(stk2);
     sortStack2(stk2);
-    StackPrint(stk2);
+    stackPrint(stk2);
     return 0;
 }
 
 void bottomInsert(Stack *stk, int element) {
-    if (StackIsEmpty(stk))
-        StackPush(stk, element);
+    if (stackIsEmpty(stk))
+        stackPush(stk, element);
     else
     {
-        int temp = StackPop(stk);
+        int temp = stackPop(stk);
         bottomInsert(stk, element);
-        StackPush(stk, temp);
+        stackPush(stk, temp);
     }
 }
 
 int main4() {
     Stack* stk = createStack();
-    StackPush(stk, 1);
-    StackPush(stk, 2);
-    StackPush(stk, 3);
+    stackPush(stk, 1);
+    stackPush(stk, 2);
+    stackPush(stk, 3);
     bottomInsert(stk, 4);
-    StackPrint(stk);
+    stackPrint(stk);
     return 0;
 }
 
 
 void reverseStack(Stack *stk) {
     int temp;
-    if (StackIsEmpty(stk) == 0) {
-        temp = StackPop(stk);
+    if (stackIsEmpty(stk) == 0) {
+        temp = stackPop(stk);
         reverseStack(stk);
         bottomInsert(stk, temp);
     }
@@ -142,90 +142,90 @@ void reverseStack(Stack *stk) {
 
 void reverseStack2(Stack *stk) {
     Queue* que = createQueue();
-    while (StackIsEmpty(stk) == 0)
-        QueueAdd(que, StackPop(stk));
+    while (stackIsEmpty(stk) == 0)
+        queueAdd(que, stackPop(stk));
 
-    while (QueueIsEmpty(que) == 0)
-        StackPush(stk, QueueRemove(que));
+    while (queueIsEmpty(que) == 0)
+        stackPush(stk, queueRemove(que));
 }
 
 int main5()
 {
     Stack* stk = createStack();
-    StackPush(stk, 1);
-    StackPush(stk, 2);
-    StackPush(stk, 3);
-    StackPush(stk, 4);
-    StackPrint(stk);
+    stackPush(stk, 1);
+    stackPush(stk, 2);
+    stackPush(stk, 3);
+    stackPush(stk, 4);
+    stackPrint(stk);
     reverseStack(stk);
-    StackPrint(stk);
+    stackPrint(stk);
     reverseStack2(stk);
-    StackPrint(stk);
+    stackPrint(stk);
     return 0;
 }
 
 void reverseKElementInStack(Stack *stk, int k) {
     Queue* que = createQueue();
     int i = 0;
-    while (StackIsEmpty(stk) == 0 && i < k) {
-        QueueAdd(que, StackPop(stk));
+    while (stackIsEmpty(stk) == 0 && i < k) {
+        queueAdd(que, stackPop(stk));
         i++;
     }
-    while (QueueIsEmpty(que) == 0)
-        StackPush(stk, QueueRemove(que));
+    while (queueIsEmpty(que) == 0)
+        stackPush(stk, queueRemove(que));
 }
 
 int main6()
 {
     Stack* stk = createStack();
-    StackPush(stk, 1);
-    StackPush(stk, 2);
-    StackPush(stk, 3);
-    StackPush(stk, 4);
-    StackPrint(stk);
+    stackPush(stk, 1);
+    stackPush(stk, 2);
+    stackPush(stk, 3);
+    stackPush(stk, 4);
+    stackPrint(stk);
     reverseKElementInStack(stk, 2);
-    StackPrint(stk);
+    stackPrint(stk);
     return 0;
 }
 
 void reverseQueue(Queue *que) {
     Stack* stk = createStack();
-    while (QueueIsEmpty(que) == 0)
-        StackPush(stk, QueueRemove(que));
+    while (queueIsEmpty(que) == 0)
+        stackPush(stk, queueRemove(que));
 
-    while (StackIsEmpty(stk) == 0)
-        QueueAdd(que, StackPop(stk));
+    while (stackIsEmpty(stk) == 0)
+        queueAdd(que, stackPop(stk));
 }
 
 int main7()
 {
     Queue* que = createQueue();
-    QueueAdd(que, 1);
-    QueueAdd(que, 2);
-    QueueAdd(que, 3);
-    QueueAdd(que, 4);
-    QueuePrint(que);
+    queueAdd(que, 1);
+    queueAdd(que, 2);
+    queueAdd(que, 3);
+    queueAdd(que, 4);
+    queuePrint(que);
     reverseQueue(que);
-    QueuePrint(que);
+    queuePrint(que);
     return 0;
 }
 
 void reverseKElementInQueue(Queue *que, int k) {
     Stack* stk = createStack();
     int i = 0, diff, temp;
-    while (QueueIsEmpty(que) == 0 && i < k) {
-        StackPush(stk, QueueRemove(que));
+    while (queueIsEmpty(que) == 0 && i < k) {
+        stackPush(stk, queueRemove(que));
         i++;
     }
 
-    while (StackIsEmpty(stk) == 0) {
-        QueueAdd(que, StackPop(stk));
+    while (stackIsEmpty(stk) == 0) {
+        queueAdd(que, stackPop(stk));
     }
 
-    diff = QueueSize(que) - k;
+    diff = queueSize(que) - k;
     while (diff > 0) {
-        temp = QueueRemove(que);
-        QueueAdd(que, temp);
+        temp = queueRemove(que);
+        queueAdd(que, temp);
         diff -= 1;
     }
 }
@@ -233,13 +233,13 @@ void reverseKElementInQueue(Queue *que, int k) {
 int main8()
 {
     Queue* que = createQueue();
-    QueueAdd(que, 1);
-    QueueAdd(que, 2);
-    QueueAdd(que, 3);
-    QueueAdd(que, 4);
-    QueuePrint(que);
+    queueAdd(que, 1);
+    queueAdd(que, 2);
+    queueAdd(que, 3);
+    queueAdd(que, 4);
+    queuePrint(que);
     reverseKElementInQueue(que, 2);
-    QueuePrint(que);
+    queuePrint(que);
     return 0;
 }
 
@@ -250,21 +250,21 @@ int isBalancedParenthesis(char *expn, int size) {
     for (int i = 0; i < size; i++) {
         ch = expn[i];
         if (ch == '{' || ch == '[' || ch == '(')
-            StackPush(stk, ch);
+            stackPush(stk, ch);
         else if (ch == '}') {
-            if (StackPop(stk) != '{')
+            if (stackPop(stk) != '{')
                 return 0;
         }
         else if (ch == ']') {
-            if (StackPop(stk) != '[')
+            if (stackPop(stk) != '[')
                 return 0;
         }
         else if (ch == ')') {
-            if (StackPop(stk) != '(')
+            if (stackPop(stk) != '(')
                 return 0;
         }
     }
-    return (StackSize(stk) == 0);
+    return (stackSize(stk) == 0);
 }
 
 int main9() {
@@ -286,11 +286,11 @@ int maxDepthParenthesis(char *expn, int size) {
         ch = expn[i];
 
         if (ch == '(') {
-            StackPush(stk, ch);
+            stackPush(stk, ch);
             depth += 1;
         }
         else if (ch == ')') {
-            StackPop(stk);
+            stackPop(stk);
             depth -= 1;
         }
         if (depth > maxDepth)
@@ -330,19 +330,19 @@ int main10() {
 
 int longestContBalParen(char *string, int size) {
     Stack* stk = createStack();
-    StackPush(stk, -1);
+    stackPush(stk, -1);
     int length = 0;
 
     for (int i = 0; i < size; i++) {
         if (string[i] == '(')
-            StackPush(stk, i);
+            stackPush(stk, i);
         else // string[i] == ')'
         {
-            StackPop(stk);
-            if (StackSize(stk) != 0)
-                length = max(length, i - StackTop(stk));
+            stackPop(stk);
+            if (stackSize(stk) != 0)
+                length = max(length, i - stackTop(stk));
             else
-                StackPush(stk, i);
+                stackPush(stk, i);
         }
     }
     return length;
@@ -369,15 +369,15 @@ int reverseParenthesis(char *expn, int size) {
     for (int i = 0; i < size; i++) {
         ch = expn[i];
         if (ch == '(')
-            StackPush(stk, ch);
+            stackPush(stk, ch);
         else if (ch == ')')
-            if (StackSize(stk) != 0 && StackTop(stk) == '(')
-                StackPop(stk);
+            if (stackSize(stk) != 0 && stackTop(stk) == '(')
+                stackPop(stk);
             else
-                StackPush(stk, ')');
+                stackPush(stk, ')');
     }
-    while (StackSize(stk) != 0) {
-        if (StackPop(stk) == '(')
+    while (stackSize(stk) != 0) {
+        if (stackPop(stk) == '(')
             openCount += 1;
         else
             closeCount += 1;
@@ -404,15 +404,15 @@ int findDuplicateParenthesis(char *expn, int size) {
         ch = expn[i];
         if (ch == ')') {
             count = 0;
-            while (StackSize(stk) != 0 && StackTop(stk) != '(') {
-                StackPop(stk);
+            while (stackSize(stk) != 0 && stackTop(stk) != '(') {
+                stackPop(stk);
                 count += 1;
             }
             if (count <= 1)
                 return 1;
         }
         else
-            StackPush(stk, ch);
+            stackPush(stk, ch);
     }
     return 0;
 }
@@ -437,12 +437,12 @@ void printParenthesisNumber(char *expn, int size) {
     for (int i = 0; i < size; i++) {
         ch = expn[i];
         if (ch == '(') {
-            StackPush(stk, count);
+            stackPush(stk, count);
             output[outputIndex++] = count;
             count += 1;
         }
         else if (ch == ')')
-            output[outputIndex++] = StackPop(stk);
+            output[outputIndex++] = stackPop(stk);
     }
     printf("Parenthesis Count ");
     for (int i = 0; i < outputIndex; i++) {
@@ -502,19 +502,19 @@ void infixToPostfix(char *expn, char *output) {
             case '/':
             case '%':
             case '^':
-                while (!StackIsEmpty(stk) && precedence(ch) <= precedence(StackTop(stk)))
+                while (!stackIsEmpty(stk) && precedence(ch) <= precedence(stackTop(stk)))
                 {
-                    op = StackPop(stk);
+                    op = stackPop(stk);
                     output[index++] = op;
                     output[index++] = ' ';
                 }
-                StackPush(stk, ch);
+                stackPush(stk, ch);
                 break;
             case '(':
-                StackPush(stk, ch);
+                stackPush(stk, ch);
                 break;
             case ')':
-                while (!StackIsEmpty(stk) && (op = StackPop(stk)) != '(')
+                while (!stackIsEmpty(stk) && (op = stackPop(stk)) != '(')
                 {
                     output[index++] = op;
                     output[index++] = ' ';
@@ -523,8 +523,8 @@ void infixToPostfix(char *expn, char *output) {
             }
         }
     }
-    while (!StackIsEmpty(stk)) {
-        op = StackPop(stk);
+    while (!stackIsEmpty(stk)) {
+        op = stackPop(stk);
         output[index++] = op;
         output[index++] = ' ';
     }
@@ -595,30 +595,30 @@ int postfixEvaluate(char *postfix) {
         }
         else if (ch == ' ') {
             if (digit == 1) {
-                StackPush(s, value); /* Push the operand */
+                stackPush(s, value); /* Push the operand */
                 digit = 0;
                 value = 0;
             }
         } else {
-            op2 = StackPop(s);
-            op1 = StackPop(s);
+            op2 = stackPop(s);
+            op1 = stackPop(s);
             switch (ch) {
             case '+':
-                StackPush(s, op1 + op2);
+                stackPush(s, op1 + op2);
                 break;
             case '-':
-                StackPush(s, op1 - op2);
+                stackPush(s, op1 - op2);
                 break;
             case '*':
-                StackPush(s, op1 * op2);
+                stackPush(s, op1 * op2);
                 break;
             case '/':
-                StackPush(s, op1 / op2);
+                stackPush(s, op1 / op2);
                 break;
             }
         }
     }
-    return StackTop(s);
+    return stackTop(s);
 }
 
 int main17() {
@@ -649,17 +649,17 @@ int *StockSpanRange(int arr[], int size) {
 int *StockSpanRange2(int *arr, int size) {
     Stack* stk = createStack();
     int *SR = (int *)malloc(sizeof(int) * size);
-    StackPush(stk, 0);
+    stackPush(stk, 0);
     SR[0] = 1;
     int i = 1;
     while (i < size) {
-        while (StackSize(stk) != 0 && arr[StackTop(stk)] <= arr[i])
-            StackPop(stk);
-        if (StackSize(stk) == 0)
+        while (stackSize(stk) != 0 && arr[stackTop(stk)] <= arr[i])
+            stackPop(stk);
+        if (stackSize(stk) == 0)
             SR[i] = i + 1;
         else
-            SR[i] = i - StackTop(stk);
-        StackPush(stk, i);
+            SR[i] = i - stackTop(stk);
+        stackPush(stk, i);
         i += 1;
     }
     return SR;
@@ -709,18 +709,18 @@ int GetMaxArea2(int arr[], int size) {
     int top, topArea;
 
     while (i < size) {
-        while ((i < size) && (StackSize(stk) == 0 || arr[StackTop(stk)] <= arr[i])) {
-            StackPush(stk, i);
+        while ((i < size) && (stackSize(stk) == 0 || arr[stackTop(stk)] <= arr[i])) {
+            stackPush(stk, i);
             i += 1;
         }
-        while (StackSize(stk) != 0 && (i == size || arr[StackTop(stk)] > arr[i])) {
-            top = StackTop(stk);
-            StackPop(stk);
-            if (StackSize(stk) == 0) {
+        while (stackSize(stk) != 0 && (i == size || arr[stackTop(stk)] > arr[i])) {
+            top = stackTop(stk);
+            stackPop(stk);
+            if (stackSize(stk) == 0) {
                 topArea = arr[top] * i;
             }
             else
-                topArea = arr[top] * (i - StackTop(stk) - 1);
+                topArea = arr[top] * (i - stackTop(stk) - 1);
 
             if (maxArea < topArea)
                 maxArea = topArea;
@@ -767,15 +767,15 @@ void nextLargerElement2(int arr[], int size) {
     for (int i = 0; i < size; i++) {
         curr = arr[i];
         // stack always have values in decreasing order.
-        while (StackIsEmpty(stk) == 0 && arr[StackTop(stk)] <= curr) {
-            index = StackPop(stk);
+        while (stackIsEmpty(stk) == 0 && arr[stackTop(stk)] <= curr) {
+            index = stackPop(stk);
             output[index] = curr;
         }
-        StackPush(stk, i);
+        stackPush(stk, i);
     }
     // index which dont have any next Larger.
-    while (StackIsEmpty(stk) == 0) {
-        index = StackPop(stk);
+    while (stackIsEmpty(stk) == 0) {
+        index = stackPop(stk);
         output[index] = -1;
     }
     printArray(output, size);
@@ -797,15 +797,15 @@ void nextSmallerElement(int arr[], int size) {
     for (int i = 0; i < size; i++) {
         curr = arr[i];
         // stack always have values in increasing order.
-        while (StackIsEmpty(stk) == 0 && arr[StackTop(stk)] > curr) {
-            index = StackPop(stk);
+        while (stackIsEmpty(stk) == 0 && arr[stackTop(stk)] > curr) {
+            index = stackPop(stk);
             output[index] = curr;
         }
-        StackPush(stk, i);
+        stackPush(stk, i);
     }
     // index which dont have any next Smaller.
-    while (StackIsEmpty(stk) == 0) {
-        index = StackPop(stk);
+    while (stackIsEmpty(stk) == 0) {
+        index = stackPop(stk);
         output[index] = -1;
     }
     printArray(output, size);
@@ -826,15 +826,15 @@ void nextLargerElementCircular(int arr[], int size) {
     for (int i = 0; i < (2 * size - 1); i++) {
         curr = arr[i % size];
         // stack always have values in decreasing order.
-        while (StackIsEmpty(stk) == 0 && arr[StackTop(stk)] <= curr) {
-            index = StackPop(stk);
+        while (stackIsEmpty(stk) == 0 && arr[stackTop(stk)] <= curr) {
+            index = stackPop(stk);
             output[index] = curr;
         }
-        StackPush(stk, i % size);
+        stackPush(stk, i % size);
     }
     // index which dont have any next Larger.
-    while (StackIsEmpty(stk) == 0) {
-        index = StackPop(stk);
+    while (stackIsEmpty(stk) == 0) {
+        index = stackPop(stk);
         output[index] = -1;
     }
     printArray(output, size);
@@ -1083,11 +1083,11 @@ int findCelebrity(int relation[][5], int count) {
     Stack* stk = createStack();
     int first = 0, second = 0;
     for (int i = 0; i < count; i++) {
-        StackPush(stk, i);
+        stackPush(stk, i);
     }
-    first = StackPop(stk);
-    while (StackSize(stk) != 0) {
-        second = StackPop(stk);
+    first = stackPop(stk);
+    while (stackSize(stk) != 0) {
+        second = stackPop(stk);
         if (isKnown(relation, first, second))
             first = second;
     }

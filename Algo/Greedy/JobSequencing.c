@@ -27,7 +27,7 @@ int less(Job *a, Job *b) {
 void sort(Job * arr[], int size, int (*comp)(Job * p1, Job * p2)) {
     for (int i = 0; i < (size - 1); i++) {
         for (int j = 0; j < size - i - 1; j++) {
-            if (comp(arr[j], arr[j + 1])} {
+            if (comp(arr[j], arr[j + 1])) {
                 /* Swapping */
                 Job* temp = arr[j];
                 arr[j] = arr[j + 1];
