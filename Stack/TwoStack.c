@@ -4,8 +4,7 @@
 #define MAX_SIZE 50
 #define ERROR_VALUE 999999
 
-typedef struct stack
-{
+typedef struct Stack {
     int top1;
     int top2;
     int data[MAX_SIZE];

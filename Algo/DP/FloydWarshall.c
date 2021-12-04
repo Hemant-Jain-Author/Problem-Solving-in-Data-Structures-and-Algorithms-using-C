@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include<stdlib.h>
 
-const int INF = 99999;
+const int INFINITE = 99999;
 
 void printSolution(int V, int dist[V][V]) {
 	for (int i = 0; i < V; i++) {
 		for (int j = 0; j < V; j++) {
-			if (dist[i][j] == INF)
-				printf("INF ");
+			if (dist[i][j] == INFINITE)
+				printf("INFINITE ");
 			else
 				printf("%d ", dist[i][j]);
 		}
@@ -25,7 +25,7 @@ void floydWarshall(int V, int graph[V][V]) { // Bottom up.
 		for (int i = 0; i < V; i++) { // Pick source vertices one by one.
 			for (int j = 0; j < V; j++) { // Pick destination vertices.
 				// If we have shorter path from i to j via k, then update dist[i][j]
-				if (dist[i][k] != INF && dist[k][j] != INF && dist[i][k] + dist[k][j] < dist[i][j])
+				if (dist[i][k] != INFINITE && dist[k][j] != INFINITE && dist[i][k] + dist[k][j] < dist[i][j])
 					dist[i][j] = dist[i][k] + dist[k][j];
 			}
 		}
@@ -37,13 +37,13 @@ void floydWarshall(int V, int graph[V][V]) { // Bottom up.
 int main() {
 	int graph[7][7] =
 	{
-		{0, 2, 4, INF, INF, INF, INF},
-		{2, 0, 4, 1, INF, INF, INF},
-		{4, 4, 0, 2, 8, 4, INF},
-		{INF, 1, 2, 0, 3, INF, 6},
-		{INF, INF, 6, 4, 0, 3, 1},
-		{INF, INF, 4, INF, 4, 0, 2},
-		{INF, INF, INF, 4, 2, 3, 0}
+		{0, 2, 4, INFINITE, INFINITE, INFINITE, INFINITE},
+		{2, 0, 4, 1, INFINITE, INFINITE, INFINITE},
+		{4, 4, 0, 2, 8, 4, INFINITE},
+		{INFINITE, 1, 2, 0, 3, INFINITE, 6},
+		{INFINITE, INFINITE, 6, 4, 0, 3, 1},
+		{INFINITE, INFINITE, 4, INFINITE, 4, 0, 2},
+		{INFINITE, INFINITE, INFINITE, 4, 2, 3, 0}
 	};
 	floydWarshall(7, graph);
 }

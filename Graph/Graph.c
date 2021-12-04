@@ -9,7 +9,7 @@ Graph* createGraph(int count) {
     return gph;
 }
 
-GraphEdge* createGraphEdge(int src, int dst, int cost){
+GraphEdge* createGraphEdge(int src, int dst, int cost) {
     GraphEdge *edge = (GraphEdge *)malloc(sizeof(GraphEdge));
     edge->src = src;
     edge->dest = dst;
@@ -809,7 +809,7 @@ void primsMST(Graph *gph) {
     for (int i = 0; i < gph->count; i++) {
         if (dist[i] == INFINITE)
             printf("(%d is unreachable.)", i);
-        else if(previous[i] != -1){
+        else if(previous[i] != -1) {
             printf("(%d, %d, %d) ", previous[i], i, dist[i]);
             total += dist[i];
         }

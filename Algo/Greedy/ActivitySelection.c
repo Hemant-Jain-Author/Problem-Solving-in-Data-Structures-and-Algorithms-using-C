@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include<stdlib.h>
 
-typedef struct Activity_t
-{
+typedef struct Activity {
 	int start;
 	int stop;
-}Activity;
+} Activity ;
 
 Activity* createActivity(int s, int f) {
 	Activity* act = (Activity*)malloc(sizeof(Activity));

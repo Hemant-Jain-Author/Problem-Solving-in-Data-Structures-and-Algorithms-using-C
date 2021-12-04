@@ -125,8 +125,7 @@ RobinKarp : 7
 KMP : 7 
 */
 
-int main()
-{
+int main() {
     main1();
     char* str = "Only time will tell if we stand the test of time";
     printf("Frequency of 'time' is : %d\n", KMPFindCount(str, "time"));

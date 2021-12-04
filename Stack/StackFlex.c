@@ -3,10 +3,9 @@
 #include <ctype.h>
 #include "string.h"
 
-#define ERROR_VALUE -999
+#define ERROR_VALUE -999999
 
-typedef struct stack
-{
+typedef struct Stack {
     int top;
     int *data;
     int capacity;

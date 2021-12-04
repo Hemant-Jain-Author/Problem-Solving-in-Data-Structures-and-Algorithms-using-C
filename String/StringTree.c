@@ -24,7 +24,7 @@ typedef struct StringTree {
     TreeNode *root;
 } StringTree;
 
-StringTree *createTree(){
+StringTree *createTree() {
     StringTree *tree = (StringTree*)malloc(sizeof(StringTree));
     tree->root = NULL;
     return tree;

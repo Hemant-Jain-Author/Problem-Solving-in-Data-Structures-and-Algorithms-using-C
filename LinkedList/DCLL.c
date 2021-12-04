@@ -1,26 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node
-{
+typedef struct Node {
     int value;
     struct Node *next;
     struct Node *prev;
 } Node;
 
-Node* createNode(int value){
+Node* createNode(int value) {
     Node* node = (Node*)malloc(sizeof(Node));
     node->value = value;
     node->next = node->prev = node;
     return node;
 }
 
-typedef struct DCLL
-{
+typedef struct DCLL {
     Node *head;
 } DCLL;
 
-DCLL* createDCLL(){
+DCLL* createDCLL() {
     DCLL *list = (DCLL *)malloc(sizeof(DCLL));
     list->head = NULL;
     return list;
@@ -59,7 +57,7 @@ int insertAtEnd(DCLL *list, int value) {
 
 int removeFromStart(DCLL *list) {
     Node *head = list->head;
-    if (!head){
+    if (!head) {
         printf("Empty List Error");
         return -99999;
     }
@@ -83,7 +81,7 @@ int removeFromStart(DCLL *list) {
 
 int removeFromEnd(DCLL *list) {
     Node *head = list->head;
-    if (!head){
+    if (!head) {
         printf("Empty List Error");
         return -99999;
     }

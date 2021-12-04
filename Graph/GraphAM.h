@@ -1,20 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Graph_t
-{
+typedef struct Graph {
     int count;
     int **adj;
 } Graph;
 
-typedef struct GraphEdge_t
-{
+typedef struct GraphEdge {
     int src;
     int dest;
     int cost;
 } GraphEdge;
 
-GraphEdge* createGraphEdge(int src, int dst, int cost){
+GraphEdge* createGraphEdge(int src, int dst, int cost) {
     GraphEdge *edge = (GraphEdge *)malloc(sizeof(GraphEdge));
     edge->src = src;
     edge->dest = dst;
@@ -30,8 +28,7 @@ int max(int first, int second) {
     return (first > second) ? first : second;
 }
 
-typedef struct Heap_t
-{
+typedef struct Heap {
     int capacity;
     int size;
     GraphEdge** array;

@@ -52,8 +52,7 @@ void sortedInsert(Stack *stk, int element) {
     }
 }
 
-int main2()
-{
+int main2() {
     Stack* stk = createStack();
     stackPush(stk, 1);
     stackPush(stk, 2);
@@ -87,8 +86,7 @@ void sortStack2(Stack *stk) {
         stackPush(stk, stackPop(stk2));
 }
 
-int main3()
-{
+int main3() {
     Stack* stk = createStack();
     stackPush(stk, 1);
     stackPush(stk, 5);
@@ -149,8 +147,7 @@ void reverseStack2(Stack *stk) {
         stackPush(stk, queueRemove(que));
 }
 
-int main5()
-{
+int main5() {
     Stack* stk = createStack();
     stackPush(stk, 1);
     stackPush(stk, 2);
@@ -175,8 +172,7 @@ void reverseKElementInStack(Stack *stk, int k) {
         stackPush(stk, queueRemove(que));
 }
 
-int main6()
-{
+int main6() {
     Stack* stk = createStack();
     stackPush(stk, 1);
     stackPush(stk, 2);
@@ -197,8 +193,7 @@ void reverseQueue(Queue *que) {
         queueAdd(que, stackPop(stk));
 }
 
-int main7()
-{
+int main7() {
     Queue* que = createQueue();
     queueAdd(que, 1);
     queueAdd(que, 2);
@@ -230,8 +225,7 @@ void reverseKElementInQueue(Queue *que, int k) {
     }
 }
 
-int main8()
-{
+int main8() {
     Queue* que = createQueue();
     queueAdd(que, 1);
     queueAdd(que, 2);
@@ -385,6 +379,7 @@ int reverseParenthesis(char *expn, int size) {
     int reversal = ceil(openCount / 2.0) + ceil(closeCount / 2.0);
     return reversal;
 }
+
 int main12() {
     char *expn = "())((()))(())()(()()()()))";
     char *expn2 = ")(())(((";
@@ -1159,8 +1154,7 @@ int IsMaxHeap(int arr[], int size) {
     return 1;
 }
 
-int main()
-{
+int main() {
     main1();
     main2();
     main3();

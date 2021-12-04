@@ -2,12 +2,11 @@
 #include<stdlib.h>
 #include <string.h>
 
-typedef struct Job_t
-{
+typedef struct Job {
 	int start;
 	int stop;
 	int value;
-}Job;
+} Job ;
 
 Job* createJob(int s, int f, int v) {
 	Job* jb = (Job*)malloc(sizeof(Job));

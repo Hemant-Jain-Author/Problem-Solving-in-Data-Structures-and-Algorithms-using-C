@@ -2,14 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node
-{
+typedef struct Node {
     int value;
     struct Node *next;
     struct Node *prev;
 } Node;
 
-Node* createNode(int value, Node* next, Node* prev){
+Node* createNode(int value, Node* next, Node* prev) {
     Node *node = (Node*)malloc(sizeof(Node));
     node->value = value;
     node->next = next;
@@ -17,13 +16,12 @@ Node* createNode(int value, Node* next, Node* prev){
     return node;
 }
 
-typedef struct DLL
-{
+typedef struct DLL {
     Node *head;
     Node *tail;
 } DLL;
 
-DLL *createDLL(){
+DLL *createDLL() {
     DLL *list = (DLL*)malloc(sizeof(DLL));
     list->head = NULL;
     list->tail = NULL;

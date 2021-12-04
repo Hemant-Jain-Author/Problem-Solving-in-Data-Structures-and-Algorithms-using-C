@@ -2,19 +2,16 @@
 #include <stdlib.h>
 #define ERROR_VALUE 999999;
 
-typedef struct QueueNode
-{
+typedef struct QueueNode {
     int value;
     struct QueueNode *next;
 } QueueNode;
 
-typedef struct QueueNode
-{
+typedef struct Queue {
     QueueNode *tail;
-} QueueNode;
+} Queue;
 
-Queue* createQueue() 
-{
+Queue* createQueue() {
     Queue *queue = (Queue*) malloc(sizeof(Queue));
     queue->tail = NULL;
     return queue;

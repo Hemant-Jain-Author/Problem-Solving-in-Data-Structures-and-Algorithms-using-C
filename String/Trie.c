@@ -19,7 +19,7 @@ typedef struct Trie {
     TrieNode *root;
 } Trie;
 
-Trie *createTrie(){
+Trie *createTrie() {
     Trie *trie = (Trie*)malloc(sizeof(Trie));
     trie->root = createNode(); // first node with dummy value.
     return trie;
@@ -48,7 +48,7 @@ void removeTrieUtil(TrieNode *curr, char *str, int start) {
     if(curr == NULL)
         return;
     
-    if(strlen(str) == start){
+    if(strlen(str) == start) {
         curr->isLastChar = 0;
         return;
     }

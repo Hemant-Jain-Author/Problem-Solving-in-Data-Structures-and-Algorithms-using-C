@@ -3,9 +3,7 @@
 #include <ctype.h>
 #include "string.h"
 #include <math.h>
-
-#define MAX_CAPACITY 50
-#define ERROR_VALUE -999
+#include "../Stack/Stack.c"
 
 int min(int a, int b) {
 	return a > b ? b : a;
@@ -13,62 +11,6 @@ int min(int a, int b) {
 
 int max(int a, int b) {
 	return a < b ? b : a;
-}
-
-typedef struct Stack
-{
-    int top;
-    int *data;
-    int capacity;
-} Stack;
-
-Stack* createStack() {
-    Stack *stk = (Stack*)malloc(sizeof(Stack));
-    stk->data = (int *)malloc(MAX_CAPACITY * sizeof(int));
-    stk->top = -1;
-    stk->capacity = MAX_CAPACITY;
-    return stk;
-}
-
-void StackPush(Stack *stk, int value) {
-    if (stk->top + 1 == stk->capacity){
-        printf("Stack is full.\n");
-        return;
-    }
-    stk->top++;
-    stk->data[stk->top] = value;
-}
-
-int stackPop(Stack *stk) {
-    if (stk->top == -1) {
-        printf("stack empty.\n");
-        return -99999;
-    }
-    
-    int value = stk->data[stk->top];
-    stk->top--;
-    return value;
-}
-
-int StackTop(Stack *stk) {
-    int value = stk->data[stk->top];
-    return value;
-}
-
-int StackIsEmpty(Stack *stk) {
-    return (stk->top == -1);
-}
-
-int stackSize(Stack *stk) {
-    return (stk->top + 1);
-}
-
-void stackPrint(Stack *stk) {
-    printf("[");
-    for (int i = stk->top; i >= 0; i--) {
-        printf("%d ", stk->data[i]);
-    }
-    printf("]\n");
 }
 
 typedef struct Queue {
@@ -84,15 +26,15 @@ Queue* createQueue() {
 }
 
 void queueAdd(Queue* que, int value) {
-	StackPush(que->stk1, value);
+	stackPush(que->stk1, value);
 }
 
 int queueRemove(Queue* que) {
 	int value;
-	if (StackIsEmpty(que->stk2)) {	
-		while (!StackIsEmpty(que->stk1)) {
+	if (stackIsEmpty(que->stk2)) {	
+		while (!stackIsEmpty(que->stk1)) {
 			value = stackPop(que->stk1);
-			StackPush(que->stk2, value);
+			stackPush(que->stk2, value);
 		}
 	}
 	return stackPop(que->stk2);

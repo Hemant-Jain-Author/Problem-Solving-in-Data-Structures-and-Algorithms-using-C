@@ -214,7 +214,7 @@ int main7() {
 -2 -2 -6 -14 -14 NAN
 */
 
-int main(){
+int main() {
 	main1();	
 	main2();
 	main3();

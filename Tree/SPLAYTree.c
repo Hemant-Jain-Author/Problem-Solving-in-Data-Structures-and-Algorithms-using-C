@@ -2,30 +2,16 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct Node_t
-{
+typedef struct Node {
 	int data;
-	struct Node_t *left;
-	struct Node_t *right;
-	struct Node_t *parent;
-}Node;
+	struct Node *left;
+	struct Node *right;
+	struct Node *parent;
+} Node;
 
-typedef struct SPLAYTree_t
-{
+typedef struct SPLAYTree {
 	Node *root;
-}SPLAYTree;
-
-int find(SPLAYTree* tree, int data);
-void insertData(SPLAYTree* tree, int data);
-void removeData(SPLAYTree* tree, int data);
-void printTree(SPLAYTree* tree);
-void splay(SPLAYTree* tree, Node *node);
-
-void printTreeUtil(Node *node, char* indent, int isLeft);
-Node *rightRotate(Node *x); // Function to right rotate subtree rooted with x
-Node *leftRotate(Node *x); // Function to left rotate subtree rooted with x
-Node *getParent(Node *node);
-Node *findMinNode(Node *curr);
+} SPLAYTree;
 
 Node* createNode(int d, Node *l, Node *r) {
 	Node* node = (Node*)malloc(sizeof(Node));
@@ -42,12 +28,6 @@ SPLAYTree* createSPLAYTree() {
 	return tree;
 }
 
-void printTree(SPLAYTree* tree) {
-	char indent[100] = "";
-	printTreeUtil(tree->root, indent, 0);
-	printf("\n");
-}
-
 void printTreeUtil(Node *node, char* indent, int isLeft) {
 	if (node == NULL)
 		return;
@@ -55,9 +35,7 @@ void printTreeUtil(Node *node, char* indent, int isLeft) {
 	if (isLeft) {
 		printf("%s%s", indent, "L:");
 		strcat(indent, "|  ");
-	}
-	else
-	{
+	} else {
 		printf("%s%s", indent, "R:");
 		strcat(indent, "   ");
 	}
@@ -68,6 +46,13 @@ void printTreeUtil(Node *node, char* indent, int isLeft) {
 	indent[strlen(indent) - 3] = '\0';
 }
 
+void printTree(SPLAYTree* tree) {
+	char indent[100] = "";
+	printTreeUtil(tree->root, indent, 0);
+	printf("\n");
+}
+
+// Function to right rotate subtree rooted with x
 Node *rightRotate(Node *x) {
 	Node *y = x->left;
 	Node *T = y->right;
@@ -83,14 +68,14 @@ Node *rightRotate(Node *x) {
 
 	if (y->parent != NULL && y->parent->left == x) {
 		y->parent->left = y;
-	}
-	else if (y->parent != NULL && y->parent->right == x) {
+	} else if (y->parent != NULL && y->parent->right == x) {
 		y->parent->right = y;
 	}
 	// Return new root
 	return y;
 }
 
+// Function to left rotate subtree rooted with x
 Node *leftRotate(Node *x) {
 	Node *y = x->right;
 	Node *T = y->left;
@@ -106,8 +91,7 @@ Node *leftRotate(Node *x) {
 
 	if (y->parent != NULL && y->parent->left == x) {
 		y->parent->left = y;
-	}
-	else if (y->parent != NULL && y->parent->right == x) {
+	} else if (y->parent != NULL && y->parent->right == x) {
 		y->parent->right = y;
 	}
 	// Return new root
@@ -128,28 +112,23 @@ void splay(SPLAYTree* tree, Node *node) {
 		grand = getParent(parent);
 		if (parent == NULL) { // rotations had created new root, always last condition.
 			tree->root = node;
-		}
-		else if (grand == NULL) { // single rotation case.
+		} else if (grand == NULL) { // single rotation case.
 			if (parent->left == node)
 			{
 			   node = rightRotate(parent);
 			} else {
 				node = leftRotate(parent);
 			}
-		}
-		else if (grand->left == parent && parent->left == node) { // Zig Zig case.
+		} else if (grand->left == parent && parent->left == node) { // Zig Zig case.
 			rightRotate(grand);
 			node = rightRotate(parent);
-		}
-		else if (grand->right == parent && parent->right == node) { // Zag Zag case.
+		} else if (grand->right == parent && parent->right == node) { // Zag Zag case.
 			leftRotate(grand);
 			node = leftRotate(parent);
-		}
-		else if (grand->left == parent && parent->right == node) { //Zig Zag case.
+		} else if (grand->left == parent && parent->right == node) { //Zig Zag case.
 			leftRotate(parent);
 			node = rightRotate(grand);
-		}
-		else if (grand->right == parent && parent->left == node) { // Zag Zig case.
+		} else if (grand->right == parent && parent->left == node) { // Zag Zig case.
 			rightRotate(parent);
 			node = leftRotate(grand);
 		}
@@ -162,8 +141,7 @@ int find(SPLAYTree* tree, int data) {
 		if (curr->data == data) {
 			splay(tree, curr);
 			return 1;
-		}
-		else if (curr->data > data)
+		} else if (curr->data > data)
 			curr = curr->left;
 		else
 			curr = curr->right;
@@ -250,13 +228,10 @@ void removeData(SPLAYTree* tree, int data) {
 			node->data = data;			
 			node = node->right;
 
-		}
-		else if (node->data > data) {
+		} else if (node->data > data) {
 			parent = node;
 			node = node->left;
-		}
-		else
-		{
+		} else {
 			parent = node;
 			node = node->right;
 		}

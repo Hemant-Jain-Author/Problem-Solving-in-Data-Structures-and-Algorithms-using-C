@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include<stdlib.h>
-int INFI = 99999 ;
+int INFINITE = 99999 ;
 
-int compare(int a, int b) {
+int greater(int a, int b) {
 	return (a > b);
 }
 
@@ -30,7 +30,7 @@ int minCoins(int coins[], int n, int val) // Greedy may be wrong.
 		return 0;
 
 	int count = 0;
-	sort(coins, n, compare);
+	sort(coins, n, greater);
 	for (int i = n - 1; i >= 0 && val > 0;) {
 		if (coins[i] <= val) {
 			count++;
@@ -49,7 +49,7 @@ int minCoins2(int coins[], int n, int val) // Brute force.
 	if (val == 0)
 		return 0;
 
-	int count = INFI ;
+	int count = INFINITE ;
 	for (int i = 0; i < n ; i++) {
 		if (coins[i] <= val) {
 			int subCount = minCoins2(coins, n, val - coins[i]);
@@ -59,18 +59,18 @@ int minCoins2(int coins[], int n, int val) // Brute force.
 			}
 		}
 	}
-	return (count != INFI )? count : -1;
+	return (count != INFINITE )? count : -1;
 }
 
 int minCoinsTDUtil(int dp[], int coins[], int n, int val) {
-	if (dp[val] != INFI )
+	if (dp[val] != INFINITE )
 		return dp[val];
 
 	// Recursion
 	for (int i = 0; i < n; i++) {
 		if (coins[i] <= val) { // check validity of a sub-problem
 			int subCount = minCoinsTDUtil(dp, coins, n, val - coins[i]);
-			if (subCount != INFI )
+			if (subCount != INFINITE )
 			{
 				dp[val] = min(dp[val], subCount + 1);
 			}
@@ -82,7 +82,7 @@ int minCoinsTDUtil(int dp[], int coins[], int n, int val) {
 int minCoinsTD(int coins[], int n, int val) {
 	int dp[val + 1];
 	for(int i = 0; i< val + 1; i++)
-		dp[i] = INFI ;
+		dp[i] = INFINITE ;
 
 	dp[0] = 0; // zero val need zero coins.
 	
@@ -93,7 +93,7 @@ int minCoinsBU(int coins[], int n, int val) { // DP bottom up approach.
 	int dp[val + 1];
 
 	for(int i = 0; i< val + 1; i++)
-		dp[i] = INFI ;
+		dp[i] = INFINITE ;
 
 	dp[0] = 0; // Base value.
 
@@ -102,7 +102,7 @@ int minCoinsBU(int coins[], int n, int val) { // DP bottom up approach.
 			// For all coins smaller than or equal to i.
 			if (coins[j] <= i)
 			{
-				if (dp[i - coins[j]] != INFI )
+				if (dp[i - coins[j]] != INFINITE )
 				{
 					dp[i] = min(dp[i], dp[i - coins[j]] + 1);
 				}
@@ -110,7 +110,7 @@ int minCoinsBU(int coins[], int n, int val) { // DP bottom up approach.
 		}
 	}
 
-	return (dp[val] != INFI )? dp[val] : -1;
+	return (dp[val] != INFINITE )? dp[val] : -1;
 }
 
 int main() {

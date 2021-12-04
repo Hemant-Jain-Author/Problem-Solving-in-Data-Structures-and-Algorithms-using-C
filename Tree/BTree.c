@@ -3,11 +3,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct Node_t
-{
+typedef struct Node {
 	int n; // Current number of keys
 	int* keys; // An array of keys
-	struct Node_t** arr; // An array of child pointers
+	struct Node** arr; // An array of child pointers
 	int leaf; // Is true when node is leaf. Otherwise false
 } Node;
 
@@ -20,8 +19,7 @@ Node* createNode(int leaf, int max) {
 	return node;
 }
 
-typedef struct BTree_t
-{
+typedef struct BTree {
 	Node *root; // Pointer to root node
 	int max; // Maximum degree
 	int min; // Minimum degree
@@ -135,9 +133,7 @@ void insertValue(BTree* tree, int key) {
 		// Insert the new key at found location
 		tree->root->keys[i + 1] = key;
 		tree->root->n = tree->root->n + 1;
-	}
-	else
-	{
+	} else {
 		int i = 0;
 		while (i < tree->root->n && tree->root->keys[i] < key)
 			i++;
@@ -167,9 +163,7 @@ void insertValueUtil(Node *parent, Node *child, int index, int key, int max) {
 		// Insert the new key at found location
 		child->keys[i + 1] = key;
 		child->n += 1;
-	}
-	else
-	{
+	} else {
 		int i = 0;
 		// insert the node to the proper child.
 		while (i < child->n && child->keys[i] < key) {
@@ -239,9 +233,7 @@ void removeValue(BTree* tree, int key) {
 		// Else root will point to first child of node.
 		if (tree->root->leaf) {
 			tree->root = NULL;
-		}
-		else
-		{
+		} else {
 			tree->root = tree->root->arr[0];
 		}
 	}
@@ -252,20 +244,14 @@ void removeUtil(Node *node, int key, int min) {
 	if (node->leaf) {
 		if (index < node->n && node->keys[index] == key) {
 			removeFromLeaf(node, index); // Leaf node key found.
-		}
-		else
-		{
+		} else {
 			printf("The key %d not found.\n", key);
 			return;
 		}
-	}
-	else
-	{
+	} else {
 		if (index < node->n && node->keys[index] == key) {
 			removeFromNonLeaf(node, index, min); // Internal node key found.
-		}
-		else
-		{
+		} else {
 			removeUtil(node->arr[index], key, min);
 		}
 
@@ -361,9 +347,7 @@ void fixBTree(Node *node, int index, int min) {
 	{
 		if (index != node->n) {
 			merge(node, index);
-		}
-		else
-		{
+		} else {
 			merge(node, index - 1);
 		}
 	}

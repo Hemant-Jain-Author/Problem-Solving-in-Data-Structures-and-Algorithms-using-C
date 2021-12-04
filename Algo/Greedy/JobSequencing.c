@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include<stdlib.h>
 
-typedef struct Job_t
-{
+typedef struct Job {
 	char id;
 	int deadline;
 	int profit;
-}Job;
+} Job;
 
 Job* createJob(char id, int deadline, int profit) {
 	Job* job = (Job*)malloc(sizeof(Job));
@@ -16,7 +15,7 @@ Job* createJob(char id, int deadline, int profit) {
 	return job;
 }
 
-int max(int a, int b){
+int max(int a, int b) {
 	return (a > b)? a : b;
 }
 
@@ -36,7 +35,6 @@ void sort(Job * arr[], int size, int (*comp)(Job * p1, Job * p2)) {
         }
     }
 }
-
 
 int JobSequencing(char ids[], int deadlines[], int profits[], int n) {
 	Job* jobs[n];

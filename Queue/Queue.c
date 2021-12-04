@@ -5,8 +5,7 @@
 #define MAX_CAPACITY 100
 #define ERROR_VALUE -999
 
-typedef struct Queue
-{
+typedef struct Queue {
 	int front;
 	int back;
 	int size;

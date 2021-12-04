@@ -119,9 +119,8 @@ int fibonacciSearch(int arr[], int size, int value) {
 		}
 	}
 	if (arr[low + fibNMn2] == value) // above loop does not check when fibNMn2 = 0
-	{
 		return 1;
-	}
+
 	return 0;
 }
 
@@ -278,6 +277,7 @@ int removeDuplicates(int arr[], int size) {
 int removeDuplicates2(int arr[], int size) {
     if (size == 0)
         return 0;
+    
     Set* st = createSet();
     int j = 0;
     for (int i = 1; i < size; i++) {
@@ -2312,7 +2312,7 @@ int findBalancedPoint(int arr[], int size) {
         second += arr[i];
 
     for (int i = 0; i < size; i++) {
-        if (first == second){
+        if (first == second) {
             return i;
         }
         if (i < size - 1)

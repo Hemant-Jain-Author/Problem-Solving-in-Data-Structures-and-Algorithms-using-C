@@ -2,11 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct Node_t
-{
+typedef struct Node {
 	int data;
-	struct Node_t* left;
-	struct Node_t* right;
+	struct Node* left;
+	struct Node* right;
 	int height;
 }Node;
 
@@ -19,31 +18,15 @@ Node* createNode(int d, Node* l, Node* r) {
 	return node;
 }
 
-typedef struct AVLTree_t
-{
+typedef struct AVLTree {
 	Node* root;
-}AVLTree;
+} AVLTree;
 
 AVLTree*  createAVLTree() {
 	AVLTree* tree = (AVLTree*) malloc (sizeof(AVLTree));
 	tree->root = NULL;
 	return tree;
 }
-
-void insertData(AVLTree* tree, int data);
-Node* insertDataUtil(Node* node, int data);
-void deleteData(AVLTree* tree, int data);
-Node* deleteDataUtil(Node* node, int data);
-void printTree(AVLTree* tree);
-void printTreeUtil(Node* node, char* indent, int isLeft);
-int max(int a, int b);
-Node* rightRotate(Node* x); // Function to right rotate subtree rooted with x
-Node* leftRotate(Node* x); // Function to left rotate subtree rooted with x
-Node* rightLeftRotate(Node* x); // Function to right then left rotate subtree rooted with x
-Node* leftRightRotate(Node* x); // Function to left then right rotate subtree rooted with x
-Node* findMin(Node* curr);
-int height(Node* n);
-int getBalance(Node* node);
 
 int height(Node* n) {
 	if (n == NULL)
@@ -52,12 +35,58 @@ int height(Node* n) {
 	return n->height;
 }
 
+int max(int a, int b) {
+	return (a > b) ? a : b;
+}
+
 int getBalance(Node* node) {
 	return (node == NULL) ? 0 : height(node->left) - height(node->right);
 }
 
-void insertData(AVLTree* tree, int data) {
-	tree->root = insertDataUtil(tree->root, data);
+// Function to right rotate subtree rooted with x
+Node* rightRotate(Node* x) {
+	Node* y = x->left;
+	Node* T = y->right;
+
+	// Rotation
+	y->right = x;
+	x->left = T;
+
+	// Update heights
+	x->height = max(height(x->left), height(x->right)) + 1;
+	y->height = max(height(y->left), height(y->right)) + 1;
+
+	// Return new root
+	return y;
+}
+
+// Function to left rotate subtree rooted with x
+Node* leftRotate(Node* x) {
+	Node* y = x->right;
+	Node* T = y->left;
+
+	// Rotation
+	y->left = x;
+	x->right = T;
+
+	// Update heights
+	x->height = max(height(x->left), height(x->right)) + 1;
+	y->height = max(height(y->left), height(y->right)) + 1;
+
+	// Return new root
+	return y;
+}
+
+// Function to right then left rotate subtree rooted with x
+Node* rightLeftRotate(Node* x) {
+	x->right = rightRotate(x->right);
+	return leftRotate(x);
+}
+
+// Function to left then right rotate subtree rooted with x
+Node* leftRightRotate(Node* x) {
+	x->left = leftRotate(x->left);
+	return rightRotate(x);
 }
 
 Node* insertDataUtil(Node* node, int data) {
@@ -92,50 +121,19 @@ Node* insertDataUtil(Node* node, int data) {
 	return node;
 }
 
-Node* rightRotate(Node* x) {
-	Node* y = x->left;
-	Node* T = y->right;
-
-	// Rotation
-	y->right = x;
-	x->left = T;
-
-	// Update heights
-	x->height = max(height(x->left), height(x->right)) + 1;
-	y->height = max(height(y->left), height(y->right)) + 1;
-
-	// Return new root
-	return y;
+void insertData(AVLTree* tree, int data) {
+	tree->root = insertDataUtil(tree->root, data);
 }
 
-Node* leftRotate(Node* x) {
-	Node* y = x->right;
-	Node* T = y->left;
+Node* findMin(Node* curr) {
+	Node* node = curr;
+	if (node == NULL)
+		return NULL;
 
-	// Rotation
-	y->left = x;
-	x->right = T;
-
-	// Update heights
-	x->height = max(height(x->left), height(x->right)) + 1;
-	y->height = max(height(y->left), height(y->right)) + 1;
-
-	// Return new root
-	return y;
-}
-
-Node* rightLeftRotate(Node* x) {
-	x->right = rightRotate(x->right);
-	return leftRotate(x);
-}
-
-Node* leftRightRotate(Node* x) {
-	x->left = leftRotate(x->left);
-	return rightRotate(x);
-}
-
-void deleteData(AVLTree* tree, int data) {
-	tree->root = deleteDataUtil(tree->root, data);
+	while (node->left != NULL)
+		node = node->left;
+	
+	return node;
 }
 
 Node* deleteDataUtil(Node* node, int data) {
@@ -155,9 +153,7 @@ Node* deleteDataUtil(Node* node, int data) {
 			node->data = minNode->data;
 			node->right = deleteDataUtil(node->right, minNode->data);
 		}
-	}
-	else
-	{
+	} else {
 		if (node->data > data)
 			node->left = deleteDataUtil(node->left, data);
 		else
@@ -185,21 +181,9 @@ Node* deleteDataUtil(Node* node, int data) {
 	return node;
 }
 
-Node* findMin(Node* curr) {
-	Node* node = curr;
-	if (node == NULL)
-		return NULL;
 
-	while (node->left != NULL)
-		node = node->left;
-	
-	return node;
-}
-
-void printTree(AVLTree* tree) {
-	char str[100] = "";
-	printTreeUtil(tree->root, str,  0);
-	printf("\n");
+void deleteData(AVLTree* tree, int data) {
+	tree->root = deleteDataUtil(tree->root, data);
 }
 
 void printTreeUtil(Node* node, char* indent, int isLeft) {
@@ -209,9 +193,7 @@ void printTreeUtil(Node* node, char* indent, int isLeft) {
 	if (isLeft) {
 		printf("%s%s", indent, "L:");
 		strcat(indent, "|  ");
-	}
-	else
-	{
+	} else {
 		printf("%s%s", indent, "R:");
 		strcat(indent, "   ");
 	}
@@ -222,8 +204,10 @@ void printTreeUtil(Node* node, char* indent, int isLeft) {
 	indent[strlen(indent) - 3] = '\0';
 }
 
-int max(int a, int b) {
-	return (a > b) ? a : b;
+void printTree(AVLTree* tree) {
+	char str[100] = "";
+	printTreeUtil(tree->root, str,  0);
+	printf("\n");
 }
 
 int main() {

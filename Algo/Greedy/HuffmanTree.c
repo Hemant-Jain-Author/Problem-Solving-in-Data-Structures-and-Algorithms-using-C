@@ -6,10 +6,10 @@ Node* createNode(char ch, int fr, Node *l, Node *r) {
 	nd->freq = fr;
 	nd->left = l;
 	nd->right = r;
-    return nd;
+	return nd;
 }
 
-int greater(Node *n1, Node *n2){
+int greater(Node *n1, Node *n2) {
 	return n1->freq > n2->freq;
 }
 

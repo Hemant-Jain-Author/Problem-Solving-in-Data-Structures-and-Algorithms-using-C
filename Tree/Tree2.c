@@ -16,7 +16,7 @@ int isBSTArray(int preorder[], int size) {
             root = stackPop(stk);
         }
         // add current value to the stack.
-        StackPush(stk, value);
+        stackPush(stk, value);
     }
     return 1;
 }

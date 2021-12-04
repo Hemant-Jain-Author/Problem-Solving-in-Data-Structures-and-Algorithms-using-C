@@ -1,21 +1,18 @@
 #include <stdlib.h>
 #include <stdio.h>
-#define ERROR_VALUE -99999
+#define ERROR_VALUE -9999999
 
-typedef struct StackNode
-{
+typedef struct StackNode {
     int value;
     struct StackNode *next;
 } StackNode;
 
 
-typedef struct Stack
-{
+typedef struct Stack {
     StackNode *head;
 } Stack;
 
-Stack* createStack() 
-{
+Stack* createStack() {
     Stack *stk = (Stack*)malloc(sizeof(Stack));
     stk->head = NULL;
     return stk;

@@ -14,6 +14,7 @@ int matchExpUtil(char *exp, char *str, int i, int j) {
 
     if (exp[i] == '*')
         return matchExpUtil(exp, str, i + 1, j) || matchExpUtil(exp, str, i, j + 1) || matchExpUtil(exp, str, i + 1, j + 1);
+    
     return 0;
 }
 
@@ -429,13 +430,12 @@ int main16() {
     return 0;
 }
 
-void printAnagramUtil(char arr[], int i, int length)
-{
-	if (length == i)
-	{
+void printAnagramUtil(char arr[], int i, int length) {
+	if (length == i) {
 		printf("%s\n", arr);
 		return;
 	}
+    
     char temp;
 	for (int j = i; j < length; j++)
 	{
@@ -552,8 +552,7 @@ int main19() {
     return 0;
 }
 
-int main()
-{
+int main() {
     main1();
     main2();
     main3();

@@ -11,12 +11,9 @@ int findWaysBU(int n, int m, int V) {
 	for (int j = 1; j <= m && j <= V; j++)
 		dp[1][j] = 1;
 
-	for (int i = 2; i <= n; i++) // i is number of dice
-	{
-		for (int j = 1; j <= V; j++) // j is target value 
-		{
-			for (int k = 1; k <= j && k <= m; k++) // k value of m face dice.
-			{
+	for (int i = 2; i <= n; i++) { // i is number of dice
+		for (int j = 1; j <= V; j++) { // j is target value 
+			for (int k = 1; k <= j && k <= m; k++) { // k value of m face dice.
 				dp[i][j] += dp[i - 1][j - k];
 			}
 		}

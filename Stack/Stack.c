@@ -3,11 +3,10 @@
 #include <ctype.h>
 #include "string.h"
 
-#define ERROR_VALUE -999
+#define ERROR_VALUE -99999
 #define MAX_CAPACITY 100
 
-typedef struct Stack
-{
+typedef struct Stack {
     int top;
     int *data;
     int capacity;
@@ -22,7 +21,7 @@ Stack* createStack() {
 }
 
 void stackPush(Stack *stk, int value) {
-    if (stk->top + 1 == stk->capacity){
+    if (stk->top + 1 == stk->capacity) {
         printf("Stack is full.\n");
         return;
     }
@@ -33,7 +32,7 @@ void stackPush(Stack *stk, int value) {
 int stackPop(Stack *stk) {
     if (stk->top == -1) {
         printf("stack empty.\n");
-        return -99999;
+        return ERROR_VALUE;
     }
     
     int value = stk->data[stk->top];

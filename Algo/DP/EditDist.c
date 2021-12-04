@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
 int min(int x, int y, int z) {
 	x = (x < y)? x : y;
 	return x = (x < z)? x : z;

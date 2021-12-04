@@ -23,10 +23,10 @@ int main1() {
     printHeap(hp);
 
     int b[10] = {4, 5, 3, 2, 6, 7, 10, 8, 9, 1};
-    sort(b, 10, 1); // increasing
+    heapSort(b, 10, 1); // increasing
     printArray(b, 10);
     
-    sort(b, 10, 0); // decreasing
+    heapSort(b, 10, 0); // decreasing
     printArray(b, 10);
     return 0;
 }
@@ -42,7 +42,7 @@ Top value 1
 */
 
 int KthSmallest(int arr[], int size, int k) {
-    sort(arr, size, 1);
+    heapSort(arr, size, 1);
     return arr[k - 1];
 }
 
@@ -91,7 +91,7 @@ int main2() {
     int arr3[] = {8, 7, 6, 5, 7, 5, 2, 1};
     printf("isMaxHeap :: %d\n", isMaxHeap(arr3, sizeof(arr) / sizeof(int)));
     int arr4[] = {8, 7, 6, 5, 7, 5, 2, 1};
-    sort(arr4, sizeof(arr) / sizeof(int), 1);
+    heapSort(arr4, sizeof(arr) / sizeof(int), 1);
     printf("isMinHeap :: %d\n", isMinHeap(arr4, sizeof(arr) / sizeof(int)));
     return 0;
 }
@@ -104,7 +104,7 @@ isMinHeap :: 1
 */
 
 int KSmallestProduct(int arr[], int size, int k) {
-    sort(arr, size, 1);
+    heapSort(arr, size, 1);
     int product = 1;
     for (int i = 0; i < k; i++)
         product *= arr[i];
@@ -181,7 +181,7 @@ Kth Smallest product:: 10
 */
 
 void PrintLargerHalf(int arr[], int size) {
-    sort(arr, size, 1);
+    heapSort(arr, size, 1);
     for (int i = size / 2; i < size; i++)
         printf("%d ", arr[i]);
     printf("\n");
@@ -217,7 +217,7 @@ int main4() {
 6 7 7 8 
 */
 
-void sortK(int arr[], int size, int k) {
+void heapSortK(int arr[], int size, int k) {
     Heap* hp = createHeap2(arr, k, greater);
     int *output = (int *)malloc(sizeof(int) * size);
     int index = 0;
@@ -241,14 +241,14 @@ int main5() {
     int k = 3;
     int arr[] = {1, 5, 4, 10, 50, 9};
     int size = sizeof(arr) / sizeof(int);
-    sortK(arr, size, k);
+    heapSortK(arr, size, k);
     return 0;
 }
 
 //1 4 5 9 10 50 
 
 int JoinRopes(int ropes[], int size) {
-    sort(ropes, size, 0); // decreasing
+    heapSort(ropes, size, 0); // decreasing
     int total = 0;
     int value = 0;
     int temp, index;

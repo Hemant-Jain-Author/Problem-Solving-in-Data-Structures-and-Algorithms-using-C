@@ -109,7 +109,7 @@ void printHeap(Heap *hp) {
     printf("\n");
 }
 
-void sort(int arr[], int size, int inc) {
+void heapSort(int arr[], int size, int inc) {
     int(* comp )(int , int);
     if(inc)
         comp = less; // max heap for increasing.

@@ -31,7 +31,7 @@ Stack* createStack() {
 }
 
 void stackPush(Stack *stk, TreeNode *value) {
-    if (stk->top + 1 == stk->capacity){
+    if (stk->top + 1 == stk->capacity) {
         printf("Stack is full.\n");
         return;
     }

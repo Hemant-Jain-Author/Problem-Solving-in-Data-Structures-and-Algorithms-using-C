@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include<stdlib.h>
 
-typedef struct Item
-{
+typedef struct Item {
 	int wt;
 	int cost;
 	double density;

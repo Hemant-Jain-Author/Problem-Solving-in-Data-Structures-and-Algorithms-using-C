@@ -4,21 +4,19 @@
 #include "../Stack/Stack.c"
 #include "../Queue/Queue.c"
 
-typedef struct GraphEdge_t
-{
+typedef struct GraphEdge {
     int src;
     int dest;
     int cost;
-    struct GraphEdge_t *next;
+    struct GraphEdge *next;
 } GraphEdge;
 
-typedef struct graph
-{
+typedef struct Graph {
     int count;
     GraphEdge **adj;
 } Graph;
 
-int greater(GraphEdge* a, GraphEdge* b){
+int greater(GraphEdge* a, GraphEdge* b) {
     return a->cost > b->cost;
 }
 
@@ -31,8 +29,7 @@ int max(int first, int second) {
 
 #define INFINITE 9999999
 
-typedef struct Heap_t
-{
+typedef struct Heap {
     int capacity;
     int size;
     GraphEdge**array;
