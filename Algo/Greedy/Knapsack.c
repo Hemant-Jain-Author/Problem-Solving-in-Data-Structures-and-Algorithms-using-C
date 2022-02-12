@@ -6,7 +6,7 @@ typedef struct Item {
 	int wt;
 	int cost;
 	double density;
-} Item ;
+} Item;
 
 Item* createItem(int w, int v) {
 	Item* item = (Item*)malloc(sizeof(Item));

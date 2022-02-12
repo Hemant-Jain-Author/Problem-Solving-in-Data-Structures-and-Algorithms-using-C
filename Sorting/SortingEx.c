@@ -368,17 +368,17 @@ void separateEvenAndOdd2(int data[], int size) {
 // Testing code
 int main10() {
     int array[] = { 9, 1, 8, 2, 7, 3, 6, 4, 5 };
-    separateEvenAndOdd(array, array.length);
-    printArray(array, array.length);
+    separateEvenAndOdd(array, 9);
+    printArray(array, 9);
     int array2[] = { 9, 1, 8, 2, 7, 3, 6, 4, 5 };
-    separateEvenAndOdd2(array2, array2.length);
-    printArray(array2, array2.length);
+    separateEvenAndOdd2(array2, 9);
+    printArray(array2, 9);
 }
 // [ 4 6 8 2 7 3 1 9 5 ]
 
 
 int main() {
-    /*main1();
+    //main1();
     main2();
     main3();
     main4();
@@ -386,7 +386,6 @@ int main() {
     main6();
     main7();
     main8();
-    */
     main9();
     main10();
     return 0;

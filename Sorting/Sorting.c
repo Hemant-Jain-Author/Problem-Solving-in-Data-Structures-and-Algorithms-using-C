@@ -321,7 +321,7 @@ void radixSort(int *arr, int n) {
 }
 
 /* Testing code */
-int main1() {
+int mainA() {
     int arr[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
     BubbleSort(arr, sizeof(arr) / sizeof(int));
     printArray(arr, sizeof(arr) / sizeof(int));

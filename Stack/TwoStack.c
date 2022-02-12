@@ -17,7 +17,7 @@ Stack* createStack() {
     return stk;
 }
 
-void StackPush1(Stack *stk, int data) {
+void stackPush1(Stack *stk, int data) {
     if (stk->top1 < stk->top2 - 1) {
         stk->data[++stk->top1] = data;
     } else {
@@ -25,7 +25,7 @@ void StackPush1(Stack *stk, int data) {
     }
 }
 
-void StackPush2(Stack *stk, int data) {
+void stackPush2(Stack *stk, int data) {
     if (stk->top1 < stk->top2 - 1) {
         stk->data[--stk->top2] = data;
     } else {
@@ -33,7 +33,7 @@ void StackPush2(Stack *stk, int data) {
     }
 }
 
-int StackPop1(Stack *stk) {
+int stackPop1(Stack *stk) {
     if (stk->top1 >= 0) {
         int value = stk->data[stk->top1--];
         return value;
@@ -43,7 +43,7 @@ int StackPop1(Stack *stk) {
     return ERROR_VALUE;
 }
 
-int StackPop2(Stack *stk) {
+int stackPop2(Stack *stk) {
     if (stk->top2 < MAX_SIZE) {
         int value = stk->data[stk->top2++];
         return value;
@@ -55,14 +55,14 @@ int StackPop2(Stack *stk) {
 
 int main() {
     Stack* stk = createStack();
-    StackPush1(stk, 1);       
-    StackPush1(stk, 2);
-    StackPush2(stk, 3);
-    StackPush2(stk, 4);
-    printf("%d \n",StackPop1(stk));
-    printf("%d \n",StackPop1(stk));
-    printf("%d \n",StackPop2(stk));
-    printf("%d \n",StackPop2(stk));
+    stackPush1(stk, 1);       
+    stackPush1(stk, 2);
+    stackPush2(stk, 3);
+    stackPush2(stk, 4);
+    printf("%d \n",stackPop1(stk));
+    printf("%d \n",stackPop1(stk));
+    printf("%d \n",stackPop2(stk));
+    printf("%d \n",stackPop2(stk));
 }
 
 /*

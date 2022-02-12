@@ -399,7 +399,7 @@ int smallestPositiveMissingNumber2(int arr[], int size){
 		HashAdd(hs, arr[i], 1);
 	}
 	for(int i=1;i< size+1; i++) {
-		if (HashFind(hs, i)){
+		if (HashFind(hs, i)) {
 			return i;
 		}
 	}
@@ -489,7 +489,7 @@ int maxCircularSum(int arr[], int n) {
 /* Testing code */
 int main14() {
     int arr[] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    printf("MaxCirculrSm : %d\n", maxCircularSum(arr, sizeof(arr) / sizeof(int)));
+    printf("MaxCircularSm : %d\n", maxCircularSum(arr, sizeof(arr) / sizeof(int)));
 }
 
 int arrayIndexMaxDiff(int arr[], int size) {
@@ -728,7 +728,7 @@ int main18() {
     return 0;
 }
 
-int main(){
+int main() {
     main1();
     main2();
     main3();

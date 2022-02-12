@@ -2,16 +2,16 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct Node_t {
+typedef struct Node {
 	int data;
-	struct Node_t *left;
-	struct Node_t *right;
-	struct Node_t *parent;
-}Node;
+	struct Node *left;
+	struct Node *right;
+	struct Node *parent;
+} Node;
 
-typedef struct SPLAYTree_t {
+typedef struct SPLAYTree {
 	Node *root;
-}SPLAYTree;
+} SPLAYTree;
 
 int find(SPLAYTree* tree, int data);
 void insert(SPLAYTree* tree, int data);
@@ -40,12 +40,6 @@ SPLAYTree* createSPLAYTree() {
 	return tree;
 }
 
-void printTree(SPLAYTree* tree) {
-	char indent[100] = "";
-	printTreeUtil(tree->root, indent, 0);
-	printf("\n");
-}
-
 void printTreeUtil(Node *node, char* indent, int isLeft) {
 	if (node == NULL)
 		return;
@@ -64,6 +58,13 @@ void printTreeUtil(Node *node, char* indent, int isLeft) {
 	indent[strlen(indent) - 3] = '\0';
 }
 
+void printTree(SPLAYTree* tree) {
+	char indent[100] = "";
+	printTreeUtil(tree->root, indent, 0);
+	printf("\n");
+}
+
+// Function to right rotate subtree rooted with x
 Node *rightRotate(Node *x) {
 	Node *y = x->left;
 	Node *T = y->right;
@@ -86,6 +87,7 @@ Node *rightRotate(Node *x) {
 	return y;
 }
 
+// Function to left rotate subtree rooted with x
 Node *leftRotate(Node *x) {
 	Node *y = x->right;
 	Node *T = y->left;

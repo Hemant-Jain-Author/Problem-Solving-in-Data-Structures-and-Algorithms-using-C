@@ -3,7 +3,10 @@
 #include <ctype.h>
 #include "string.h"
 
-#define ERROR_VALUE -999
+#ifndef ERROR_VALUE
+#define ERROR_VALUE -99999
+#endif 
+
 #define MAX_CAPACITY 100
 
 typedef struct Stack {
@@ -20,7 +23,7 @@ Stack* createStack() {
     return stk;
 }
 
-void StackPush(Stack *stk, int value) {
+void stackPush(Stack *stk, int value) {
     if (stk->top + 1 == stk->capacity) {
         printf("Stack is full.\n");
         return;
@@ -29,10 +32,10 @@ void StackPush(Stack *stk, int value) {
     stk->data[stk->top] = value;
 }
 
-int StackPop(Stack *stk) {
+int stackPop(Stack *stk) {
     if (stk->top == -1) {
         printf("stack empty.\n");
-        return -99999;
+        return ERROR_VALUE;
     }
     
     int value = stk->data[stk->top];
@@ -40,20 +43,20 @@ int StackPop(Stack *stk) {
     return value;
 }
 
-int StackTop(Stack *stk) {
+int stackTop(Stack *stk) {
     int value = stk->data[stk->top];
     return value;
 }
 
-int StackIsEmpty(Stack *stk) {
+int stackIsEmpty(Stack *stk) {
     return (stk->top == -1);
 }
 
-int StackSize(Stack *stk) {
+int stackSize(Stack *stk) {
     return (stk->top + 1);
 }
 
-void StackPrint(Stack *stk) {
+void stackPrint(Stack *stk) {
     printf("[");
     for (int i = stk->top; i >= 0; i--) {
         printf("%d ", stk->data[i]);
@@ -63,12 +66,12 @@ void StackPrint(Stack *stk) {
 
 int mainA() {
     Stack* stk = createStack();
-    StackPush(stk, 1);       
-    StackPush(stk, 2);
-    StackPush(stk, 3);
-    StackPrint(stk);
-    printf("%d ",StackPop(stk));
-    printf("%d ",StackPop(stk));
+    stackPush(stk, 1);       
+    stackPush(stk, 2);
+    stackPush(stk, 3);
+    stackPrint(stk);
+    printf("%d ",stackPop(stk));
+    printf("%d ",stackPop(stk));
     return 0;
 }
 
@@ -80,13 +83,13 @@ int mainA() {
 int mainB() {
     Stack* stk = createStack();
     for (int i = 0; i < 20; i++)
-        StackPush(stk, i);
-    printf("StackTop %d \n", StackTop(stk));
-    printf("StackSize %d \n", StackSize(stk));
-    printf("StackIsEmpty %d \n", StackIsEmpty(stk));
-    StackPrint(stk);
+        stackPush(stk, i);
+    printf("stackTop %d \n", stackTop(stk));
+    printf("stackSize %d \n", stackSize(stk));
+    printf("stackIsEmpty %d \n", stackIsEmpty(stk));
+    stackPrint(stk);
     for (int i = 0; i < 20; i++)
-        printf("%d ",StackPop(stk));
-    printf("StackIsEmpty %d \n", StackIsEmpty(stk));
+        printf("%d ",stackPop(stk));
+    printf("stackIsEmpty %d \n", stackIsEmpty(stk));
     return 0;
 }

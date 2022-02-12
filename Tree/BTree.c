@@ -3,10 +3,11 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct Node_t {
+
+typedef struct Node {
 	int n; // Current number of keys
 	int* keys; // An array of keys
-	struct Node_t** arr; // An array of child pointers
+	struct Node** arr; // An array of child pointers
 	int leaf; // Is true when node is leaf. Otherwise false
 } Node;
 
@@ -19,7 +20,7 @@ Node* createNode(int leaf, int max) {
 	return node;
 }
 
-typedef struct BTree_t {
+typedef struct BTree {
 	Node *root; // Pointer to root node
 	int max; // Maximum degree
 	int min; // Minimum degree

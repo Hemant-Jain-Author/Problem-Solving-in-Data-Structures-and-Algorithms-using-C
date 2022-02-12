@@ -9,7 +9,7 @@ Graph* createGraph(int count) {
     return gph;
 }
 
-GraphEdge* createGraphEdge(int src, int dst, int cost){
+GraphEdge* createGraphEdge(int src, int dst, int cost) {
     GraphEdge *edge = (GraphEdge *)malloc(sizeof(GraphEdge));
     edge->src = src;
     edge->dest = dst;
@@ -83,15 +83,15 @@ int DFSStack(Graph *gph, int source, int target) {
     int *visited = (int *)calloc(count, sizeof(int));
     int curr, destination;
     Stack* stk = createStack(20);
-    StackPush(stk, source);
+    stackPush(stk, source);
     visited[source] = 1;
-    while (StackSize(stk) != 0) {
-        curr = StackPop(stk);
+    while (stackSize(stk) != 0) {
+        curr = stackPop(stk);
         GraphEdge *head = gph->adj[curr];
         while (head) {
             destination = head->dest;
             if (visited[destination] == 0) {
-                StackPush(stk, destination);
+                stackPush(stk, destination);
                 visited[destination] = 1;
             }
             head = head->next;
@@ -106,14 +106,14 @@ int BFS(Graph *gph, int source, int target) {
     visited[source] = 1;
     int curr, destination;
     Queue* que = createQueue();
-    QueueAdd(que, source);
-    while (QueueSize(que) != 0) {
-        curr = QueueRemove(que);
+    queueAdd(que, source);
+    while (queueSize(que) != 0) {
+        curr = queueRemove(que);
         GraphEdge *head = gph->adj[curr];
         while (head) {
             destination = head->dest;
             if (visited[destination] == 0) {
-                QueueAdd(que, destination);
+                queueAdd(que, destination);
                 visited[destination] = 1;
             }
             head = head->next;
@@ -194,7 +194,7 @@ void dfsUtil2(Graph *gph, int index, int *visited, Stack *stk) {
             dfsUtil2(gph, head->dest, visited, stk);
         head = head->next;
     }
-    StackPush(stk, index);
+    stackPush(stk, index);
 }
 
 void TopologicalSort(Graph *gph) {
@@ -207,8 +207,8 @@ void TopologicalSort(Graph *gph) {
     }
 
     printf("TopologicalSort :: ");
-    while (StackSize(stk) != 0)
-        printf("%d ", StackPop(stk));
+    while (stackSize(stk) != 0)
+        printf("%d ", stackPop(stk));
     printf("\n");
 }
 
@@ -281,10 +281,10 @@ int countAllPath(Graph *gph, int src, int dest) {
 
 void printAllPathDFS(Graph *gph, int *visited, int source, int dest, Stack *path) {
     int destination;
-    StackPush(path, source);
+    stackPush(path, source);
     if (source == dest) {
-        StackPrint(path);
-        StackPop(path);
+        stackPrint(path);
+        stackPop(path);
         return;
     }
     visited[source] = 1;
@@ -298,7 +298,7 @@ void printAllPathDFS(Graph *gph, int *visited, int source, int dest, Stack *path
         head = head->next;
     }
     visited[source] = 0;
-    StackPop(path);
+    stackPop(path);
 }
 
 void printAllPath(Graph *gph, int src, int dest) {
@@ -410,19 +410,19 @@ void BFSLevelNode(Graph *gph, int source) {
     int *visited = (int *)calloc(gph->count, sizeof(int));
     visited[source] = 1;
     Queue* que = createQueue();
-    QueueAdd(que, source);
-    QueueAdd(que, 0);
+    queueAdd(que, source);
+    queueAdd(que, 0);
     printf("Node - Level\n");
-    while (QueueSize(que) != 0) {
-        int curr = QueueRemove(que);
-        int depth = QueueRemove(que);
+    while (queueSize(que) != 0) {
+        int curr = queueRemove(que);
+        int depth = queueRemove(que);
         printf("%d - %d\n", curr, depth);
         GraphEdge *head = gph->adj[curr];
         while (head) {
             int destination = head->dest;
             if (visited[destination] == 0) {
-                QueueAdd(que, destination);
-                QueueAdd(que, depth + 1);
+                queueAdd(que, destination);
+                queueAdd(que, depth + 1);
                 visited[destination] = 1;
             }
             head = head->next;
@@ -433,20 +433,20 @@ void BFSLevelNode(Graph *gph, int source) {
 int BFSDistance(Graph *gph, int source, int dest) {
     int *visited = (int *)calloc(gph->count, sizeof(int));
     Queue* que = createQueue();
-    QueueAdd(que, source);
-    QueueAdd(que, 0);
+    queueAdd(que, source);
+    queueAdd(que, 0);
     visited[source] = 1;
-    while (QueueSize(que) != 0) {
-        int curr = QueueRemove(que);
-        int depth = QueueRemove(que);
+    while (queueSize(que) != 0) {
+        int curr = queueRemove(que);
+        int depth = queueRemove(que);
         GraphEdge *head = gph->adj[curr];
         while (head) {
             int destination = head->dest;
             if (destination == dest)
                 return depth + 1;
             if (visited[destination] == 0) {
-                QueueAdd(que, destination);
-                QueueAdd(que, depth + 1);
+                queueAdd(que, destination);
+                queueAdd(que, depth + 1);
                 visited[destination] = 1;
             }
             head = head->next;
@@ -706,7 +706,7 @@ void DFSRec2(Graph *gph, int index, int *visited, Stack *stk) {
     
         head = head->next;
     }
-    StackPush(stk, index);
+    stackPush(stk, index);
 }
 
 void stronglyConnectedComponent(Graph *gph) {
@@ -722,12 +722,12 @@ void stronglyConnectedComponent(Graph *gph) {
     for (int i = 0; i < count; i++)
         visited[i] = 0;
     
-    while (StackSize(stk) != 0) {
-        index = StackPop(stk);
+    while (stackSize(stk) != 0) {
+        index = stackPop(stk);
         if (visited[index] == 0) {
             Stack* stk2 = createStack(100);
             DFSRec2(gReversed, index, visited, stk2);
-            StackPrint(stk2);
+            stackPrint(stk2);
         }
     }
 }
@@ -764,12 +764,12 @@ int heightTreeParentArr(int arr[], int count) {
 	int *visited = (int *)calloc(count, sizeof(int));
 	visited[source] = 1;
 	Queue* que = createQueue();
-	QueueAdd(que, source);
-    QueueAdd(que, 0);
+	queueAdd(que, source);
+    queueAdd(que, 0);
 	int maxHeight = 0;
-	while (QueueSize(que) != 0) {
-		int curr = QueueRemove(que);
-        int height = QueueRemove(que);
+	while (queueSize(que) != 0) {
+		int curr = queueRemove(que);
+        int height = queueRemove(que);
 		if (height > maxHeight)
 			maxHeight = height;
         
@@ -778,8 +778,8 @@ int heightTreeParentArr(int arr[], int count) {
 			if (visited[head->dest] == 0)
 			{
                 visited[head->dest] = 1;
-				QueueAdd(que, head->dest);
-                QueueAdd(que, height + 1);			
+				queueAdd(que, head->dest);
+                queueAdd(que, height + 1);			
 			}
 			head = head->next;
 		}
@@ -886,7 +886,7 @@ void primsMST(Graph *gph) {
     for (int i = 0; i < gph->count; i++) {
         if (dist[i] == INFINITE)
             printf("(%d is unreachable.)", i);
-        else if(previous[i] != -1){
+        else if(previous[i] != -1) {
             printf("(%d, %d, %d) ", previous[i], i, dist[i]);
             total += dist[i];
         }
@@ -1073,17 +1073,17 @@ void shortestPath(Graph *gph, int source) {
         path[i] = -1;
     }
     Queue* que = createQueue();
-    QueueAdd(que, source);
+    queueAdd(que, source);
     cost[source] = 0;
-    while (QueueSize(que) != 0) {
-        curr = QueueRemove(que);
+    while (queueSize(que) != 0) {
+        curr = queueRemove(que);
         GraphEdge *head = gph->adj[curr];
         while (head) {
             destination = head->dest;
             if (cost[destination] == -1) {
                 cost[destination] = cost[curr] + 1;
                 path[destination] = curr;
-                QueueAdd(que, destination);
+                queueAdd(que, destination);
             }
             head = head->next;
         }
@@ -1321,24 +1321,24 @@ void DFSRec(Graph *gph, int index, int *visited) {
 }
 
 int main() {
-    //main1();
-    //main2();
-    //main3();
-    //main4();
-    //main5(); 
-    //main6();
-    //main7();
-    //main8();
-    //main9();
-    //main10();
-    //main11();
-    //main12();
-    //main13();
-    //main14();
-    //main15();
-    //main16();
-    //main17();
-    //main18();
+    main1();
+    main2();
+    main3();
+    main4();
+    main5(); 
+    main6();
+    main7();
+    main8();
+    main9();
+    main10();
+    main11();
+    main12();
+    main13();
+    main14();
+    main15();
+    main16();
+    main17();
+    main18();
     main19();
     main20();
    return 0;

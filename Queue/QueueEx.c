@@ -2,12 +2,12 @@
 
 int main1() {
     Queue* queue = createQueue();
-    QueueAdd(queue, 1);
-    QueueAdd(queue, 2);
-    QueueAdd(queue, 3);
-    printf("%d ", QueueRemove(queue));
-    printf("%d ", QueueRemove(queue));
-    printf("%d ", QueueRemove(queue));
+    queueAdd(queue, 1);
+    queueAdd(queue, 2);
+    queueAdd(queue, 3);
+    printf("%d ", queueRemove(queue));
+    printf("%d ", queueRemove(queue));
+    printf("%d ", queueRemove(queue));
 	printf("\n");
 	return 0;
 }
@@ -46,14 +46,14 @@ int CircularTour2(int arr[][2], int n) {
 	int count = 0;
 	int petrol = 0;
 
-	while (QueueSize(que) != n) {
-		while (petrol >= 0 && QueueSize(que) != n) {
-			QueueAdd(que, nextPump);
+	while (queueSize(que) != n) {
+		while (petrol >= 0 && queueSize(que) != n) {
+			queueAdd(que, nextPump);
 			petrol += (arr[nextPump][0] - arr[nextPump][1]);
 			nextPump = (nextPump + 1) % n;
 		}
-		while (petrol < 0 && QueueSize(que) > 0) {
-			prevPump = QueueRemove(que);
+		while (petrol < 0 && queueSize(que) > 0) {
+			prevPump = queueRemove(que);
 			petrol -= (arr[prevPump][0] - arr[prevPump][1]);
 		}
 		count += 1;
@@ -61,7 +61,7 @@ int CircularTour2(int arr[][2], int n) {
 			return -1;
 	}
 	if (petrol >= 0)
-		return QueueRemove(que);
+		return queueRemove(que);
 	else
 		return -1;
 }
@@ -84,9 +84,9 @@ int convertXY(int src, int dst) {
 	int index = 0;
 	int value;
 	Queue* que = createQueue();	
-	QueueAdd(que, src);
-	while (QueueSize(que) != 0) {
-		value = QueueRemove(que);
+	queueAdd(que, src);
+	while (queueSize(que) != 0) {
+		value = queueRemove(que);
 		arr[index++] = value;
 
 		if (value == dst) {
@@ -95,9 +95,9 @@ int convertXY(int src, int dst) {
 		}
 		steps++;
 		if (value < dst)
-			QueueAdd(que, value * 2);
+			queueAdd(que, value * 2);
 		else
-			QueueAdd(que, value - 1);
+			queueAdd(que, value - 1);
 	}
 	return -1;
 }
@@ -130,17 +130,17 @@ void maxSlidingWindows2(int arr[], int size, int k) {
 	Queue* que = createQueue();
 	for (int i = 0; i < size; i++) {
 		//Remove out of range elements
-		if (QueueSize(que) && QueueFront(que) <= i - k)
-			QueueRemove(que);
+		if (queueSize(que) && queueFront(que) <= i - k)
+			queueRemove(que);
 		//Remove smaller values at left.
-		while (QueueSize(que) && arr[QueueBack(que)] <= arr[i])
-			QueueRemoveBack(que);
+		while (queueSize(que) && arr[queueBack(que)] <= arr[i])
+			queueRemoveBack(que);
 
-		QueueAdd(que, i);
+		queueAdd(que, i);
 		//Largest value in window of size k is at index que[0]
 		//It is displayed to the screen.
 		if (i >= (k - 1))
-			printf("%d ", arr[QueueFront(que)]);
+			printf("%d ", arr[queueFront(que)]);
 	}
 	printf("\n");
 }
@@ -162,15 +162,15 @@ int minOfMaxSlidingWindows(int arr[], int size, int k) {
 	int minVal = 999999;
 	for (int i = 0; i < size; i++) {
 		//Remove out of range elements 
-		if (QueueSize(que) && QueueFront(que) <= i - k)
-			QueueRemove(que);
+		if (queueSize(que) && queueFront(que) <= i - k)
+			queueRemove(que);
 		//Remove smaller values at left.
-		while (QueueSize(que) && arr[QueueBack(que)] <= arr[i])
-			QueueRemove(que);
-		QueueAdd(que, i);
+		while (queueSize(que) && arr[queueBack(que)] <= arr[i])
+			queueRemove(que);
+		queueAdd(que, i);
 		//window of size k
-		if (i >= (k - 1) && minVal > arr[QueueFront(que)])
-			minVal = arr[QueueFront(que)];
+		if (i >= (k - 1) && minVal > arr[queueFront(que)])
+			minVal = arr[queueFront(que)];
 	}
 	printf("Min of max is :: %d\n", minVal);
 	return minVal;
@@ -192,15 +192,15 @@ void maxOfMinSlidingWindows(int arr[], int size, int k) {
 	int maxVal = -999999;
 	for (int i = 0; i < size; i++) {
 		//Remove out of range elements 
-		if (QueueSize(que) && QueueFront(que) <= i - k)
-			QueueRemove(que);
+		if (queueSize(que) && queueFront(que) <= i - k)
+			queueRemove(que);
 		//Remove smaller values at left.
-		while (QueueSize(que) && arr[QueueBack(que)] >= arr[i])
-			QueueRemove(que);
-		QueueAdd(que, i);
+		while (queueSize(que) && arr[queueBack(que)] >= arr[i])
+			queueRemove(que);
+		queueAdd(que, i);
 		//window of size k
-		if (i >= (k - 1) && maxVal < arr[QueueFront(que)])
-			maxVal = arr[QueueFront(que)];
+		if (i >= (k - 1) && maxVal < arr[queueFront(que)])
+			maxVal = arr[queueFront(que)];
 	}
 	printf("Max of min is :: %d\n", maxVal);
 }
@@ -220,14 +220,14 @@ void firstNegSlidingWindows(int arr[], int size, int k) {
 	Queue* que = createQueue();
 	for (int i = 0; i < size; i++) {
 		//Remove out of range elements 
-		if (QueueSize(que) && QueueFront(que) <= i - k)
-			QueueRemove(que);
+		if (queueSize(que) && queueFront(que) <= i - k)
+			queueRemove(que);
 		if (arr[i] < 0)
-			QueueAdd(que, i);
+			queueAdd(que, i);
 		//window of size k
 		if (i >= (k - 1)) {
-			if (QueueSize(que) > 0)
-				printf("%d ", arr[QueueFront(que)]);
+			if (queueSize(que) > 0)
+				printf("%d ", arr[queueFront(que)]);
 			else
 				printf("NAN");
 		}
@@ -305,9 +305,9 @@ int rottenFruit2(int arr[][5], int maxCol, int maxRow) {
         for (int j = 0; j < maxRow; j++) {
             traversed[i][j] = 0;
 			if (arr[i][j] == 2) {    
-				QueueAdd(que, i);
-				QueueAdd(que, j);
-				QueueAdd(que, 0);
+				queueAdd(que, i);
+				queueAdd(que, j);
+				queueAdd(que, 0);
 				traversed[i][j] = 1;
 			}
         }
@@ -316,10 +316,10 @@ int rottenFruit2(int arr[][5], int maxCol, int maxRow) {
 	int dir[][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 	int maxVal = 0, x, y, day;
 	int tempX, tempY, tempDay;
-	while(!QueueIsEmpty(que)){
-		tempX = QueueRemove(que);
-		tempY = QueueRemove(que);
-		tempDay = QueueRemove(que);
+	while(!queueIsEmpty(que)){
+		tempX = queueRemove(que);
+		tempY = queueRemove(que);
+		tempDay = queueRemove(que);
 
 		for(int i=0;i<4;i++){
 			x = tempX + dir[i][0];
@@ -327,9 +327,9 @@ int rottenFruit2(int arr[][5], int maxCol, int maxRow) {
 			day = tempDay + 1;
 			if(x >= 0 && x < maxCol && y >= 0 && y < maxRow && 
 				arr[x][y] != 0 && traversed[x][y] == 0) {
-				QueueAdd(que, x);
-				QueueAdd(que, y);
-				QueueAdd(que, day);
+				queueAdd(que, x);
+				queueAdd(que, y);
+				queueAdd(que, day);
 				maxVal = max(maxVal, day);
 				traversed[x][y] = 1;
 			}
@@ -413,16 +413,16 @@ int stepsOfKnight2(int size, int srcX, int srcY,
 	{-1, -2}, {1, -2}, {-1, 2}, {1, 2}};
 	Queue* que = createQueue();	
 	traversed[srcX-1][srcY-1] = 0;
-	QueueAdd(que, srcX-1);
-	QueueAdd(que, srcY-1);
-	QueueAdd(que, 0);
+	queueAdd(que, srcX-1);
+	queueAdd(que, srcY-1);
+	queueAdd(que, 0);
 	
 	int x, y, cost;
 	int tempX, tempY, tempCost;
-	while(!QueueIsEmpty(que)){
-		tempX = QueueRemove(que);
-		tempY = QueueRemove(que);
-		tempCost = QueueRemove(que);
+	while(!queueIsEmpty(que)){
+		tempX = queueRemove(que);
+		tempY = queueRemove(que);
+		tempCost = queueRemove(que);
 
 		for(int i=0;i<8;i++){
 			x = tempX + dir[i][0];
@@ -431,9 +431,9 @@ int stepsOfKnight2(int size, int srcX, int srcY,
 			if(x >= 0 && x < size && y >= 0 && y < size && 
 					traversed[x][y] > cost){
 				traversed[x][y] = cost;
-				QueueAdd(que, x);
-				QueueAdd(que, y);
-				QueueAdd(que, cost);
+				queueAdd(que, x);
+				queueAdd(que, y);
+				queueAdd(que, cost);
 			}
 		}
 	}
@@ -507,9 +507,9 @@ void distNearestFill2(int arr[][5], int maxCol, int maxRow) {
         for (int j = 0; j < maxRow; j++) {
             traversed[i][j] = 9999;
 			if (arr[i][j] == 1) {    
-				QueueAdd(que, i);
-				QueueAdd(que, j);
-				QueueAdd(que, 0);
+				queueAdd(que, i);
+				queueAdd(que, j);
+				queueAdd(que, 0);
 				traversed[i][j] = 0;
 			}
         }
@@ -518,10 +518,10 @@ void distNearestFill2(int arr[][5], int maxCol, int maxRow) {
 	int dir[][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 	int x, y, dist;
 	int tempX, tempY, tempDist;
-	while(!QueueIsEmpty(que)){
-		tempX = QueueRemove(que);
-		tempY = QueueRemove(que);
-		tempDist = QueueRemove(que);
+	while(!queueIsEmpty(que)){
+		tempX = queueRemove(que);
+		tempY = queueRemove(que);
+		tempDist = queueRemove(que);
 
 		for(int i=0;i<4;i++){
 			x = tempX + dir[i][0];
@@ -530,9 +530,9 @@ void distNearestFill2(int arr[][5], int maxCol, int maxRow) {
 			if(x >= 0 && x < maxCol && 
 			y >= 0 && y < maxRow && 
 			traversed[x][y] > dist) {
-				QueueAdd(que, x);
-				QueueAdd(que, y);
-				QueueAdd(que, dist);
+				queueAdd(que, x);
+				queueAdd(que, y);
+				queueAdd(que, dist);
 				traversed[x][y] = dist;
 			}
 		}
@@ -634,15 +634,15 @@ int Josephus(int n, int k) {
 	Queue* que = createQueue();	
 
 	for(int i=0;i<n;i++)
-		QueueAdd(que, i+1);
+		queueAdd(que, i+1);
 	
-	while(QueueSize(que) > 1) {
+	while(queueSize(que) > 1) {
 		for(int i=0;i<k-1;i++) {
-			QueueAdd(que, QueueRemove(que));
+			queueAdd(que, queueRemove(que));
 		}
-		QueueRemove(que);// Kth person executed.
+		queueRemove(que);// Kth person executed.
 	}
-	return QueueFront(que);
+	return queueFront(que);
 }
 
 int main12(){
@@ -652,8 +652,7 @@ int main12(){
 Position : 8
 */
 
-
-int main(){
+int main() {
 	main1();	
 	main2();
 	main3();

@@ -3,7 +3,10 @@
 #include "stdlib.h"
 
 #define QUEUE_CAPACITY 2000
-#define ERROR_VALUE -999
+
+#ifndef ERROR_VALUE
+#define ERROR_VALUE -99999
+#endif 
 
 typedef struct Queue {
 	int front;
@@ -20,7 +23,7 @@ Queue* createQueue() {
 	return que;
 }
 
-void QueueAdd(Queue *que, int value) {
+void queueAdd(Queue *que, int value) {
 	if (que->size == QUEUE_CAPACITY) {
 		printf("Queue is full.\n");
 		return;
@@ -30,7 +33,7 @@ void QueueAdd(Queue *que, int value) {
 	que->back = (que->back + 1) % QUEUE_CAPACITY;
 }
 
-int QueueRemove(Queue *que) {
+int queueRemove(Queue *que) {
 	int value;
 	if (que->size == 0) {
 		printf("Queue is empty.\n");
@@ -42,15 +45,15 @@ int QueueRemove(Queue *que) {
 	return value;
 }
 
-int QueueFront(Queue *que) {
+int queueFront(Queue *que) {
 	return que->data[que->front];
 }
 
-int QueueBack(Queue *que) {
+int queueBack(Queue *que) {
 	return que->data[que->back-1];
 }
 
-int QueueRemoveBack(Queue *que) {
+int queueRemoveBack(Queue *que) {
 	int value;
 	if (que->size == 0) {
 		printf("Queue is empty.\n");
@@ -62,15 +65,15 @@ int QueueRemoveBack(Queue *que) {
 	return value;
 }
 
-int QueueIsEmpty(Queue *que) {
+int queueIsEmpty(Queue *que) {
 	return que->size == 0;
 }
 
-int QueueSize(Queue *que) {
+int queueSize(Queue *que) {
 	return que->size;
 }
 
-void QueuePrint(Queue *que) {
+void queuePrint(Queue *que) {
 	int size = que->size;
 	printf("[ ");
 	int index = que->front;

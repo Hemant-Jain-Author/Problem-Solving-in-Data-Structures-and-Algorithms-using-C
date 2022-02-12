@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node
-{
+typedef struct Node {
     int value;
     struct Node *next;
 } Node;
@@ -14,12 +13,11 @@ Node* createNode(int value, Node* next) {
     return node;
 }
 
-typedef struct LinkedList
-{
+typedef struct LinkedList {
     Node *head;
 } LinkedList;
 
-LinkedList* createLinkedList(){
+LinkedList* createLinkedList() {
     LinkedList* list = (LinkedList*)malloc(sizeof(LinkedList));
     list->head = NULL;
     return list;
@@ -501,7 +499,7 @@ Node *findIntersecton2(LinkedList* list1, LinkedList* list2) {
     }
 
     Node* diff;
-    if(!head1){
+    if(!head1) {
         diff = head2;
         head1 = list1->head;
         head2 = list2->head;
@@ -513,7 +511,7 @@ Node *findIntersecton2(LinkedList* list1, LinkedList* list2) {
         diff = head1;
         head1 = list1->head;
         head2 = list2->head;
-        while(diff){
+        while(diff) {
             diff = diff->next;
             head1 = head1->next;
         }

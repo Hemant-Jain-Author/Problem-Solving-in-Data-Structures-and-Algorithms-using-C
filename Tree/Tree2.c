@@ -12,11 +12,11 @@ int isBSTArray(int preorder[], int size) {
             return 0;
         // First left child `alues will be popped
         // Last popped value will be the roo
-        while (StackIsEmpty(stk) == 0 && StackTop(stk) < value) {
-            root = StackPop(stk);
+        while (stackIsEmpty(stk) == 0 && stackTop(stk) < value) {
+            root = stackPop(stk);
         }
         // add current value to the stack.
-        StackPush(stk, value);
+        stackPush(stk, value);
     }
     return 1;
 }

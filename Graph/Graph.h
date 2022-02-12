@@ -16,7 +16,7 @@ typedef struct graph {
     GraphEdge **adj;
 } Graph;
 
-int greater(GraphEdge* a, GraphEdge* b){
+int greater(GraphEdge* a, GraphEdge* b) {
     return a->cost > b->cost;
 }
 
@@ -25,12 +25,14 @@ int max(int first, int second) {
 }
 
 #define CAPACITY 100
-#define ERROR_VALUE -999
+
+#ifndef ERROR_VALUE
+#define ERROR_VALUE -99999
+#endif 
 
 #define INFINITE 9999999
 
-typedef struct Heap_t
-{
+typedef struct Heap {
     int capacity;
     int size;
     GraphEdge**array;

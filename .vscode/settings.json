@@ -17,9 +17,19 @@
         "cmath": "c"
     },
     "cSpell.words": [
+        "APLE",
+        "Bhim",
+        "bitonic",
+        "chota",
         "DCLL",
+        "expn",
         "heapify",
-        "htree"
+        "htree",
+        "kruskal",
+        "swapch"
     ],
-    "C_Cpp.errorSquiggles": "Disabled"
+    "C_Cpp.errorSquiggles": "Disabled",
+    "cSpell.ignoreWords": [
+        "bbaaaabb"
+    ]
 }

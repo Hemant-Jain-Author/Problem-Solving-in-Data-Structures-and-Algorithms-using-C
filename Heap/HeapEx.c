@@ -106,10 +106,15 @@ int main2() {
     int arr3[] = {8, 7, 6, 5, 7, 5, 2, 1};
     printf("Kth Smallest :: %d\n", KthSmallest3(arr3, 8, 3));
     int arr4[] = {8, 7, 6, 5, 7, 5, 2, 1};
+<<<<<<< HEAD
     printf("isMaxHeap :: %d\n", isMaxHeap(arr4, sizeof(arr) / sizeof(int)));
     int arr5[] = {8, 7, 6, 5, 7, 5, 2, 1};
     heapSort(arr5, sizeof(arr) / sizeof(int), 1);
     printf("isMinHeap :: %d\n", isMinHeap(arr5, sizeof(arr) / sizeof(int)));
+=======
+    heapSort(arr4, sizeof(arr) / sizeof(int), 1);
+    printf("isMinHeap :: %d\n", isMinHeap(arr4, sizeof(arr) / sizeof(int)));
+>>>>>>> 79fd0c710c076cec7823e04ef40e71bf8202f03a
     return 0;
 }
 
@@ -255,7 +260,7 @@ int main4() {
 6 7 7 8 
 */
 
-void sortK(int arr[], int size, int k) {
+void heapSortK(int arr[], int size, int k) {
     Heap* hp = createHeap2(arr, k, greater);
     int *output = (int *)malloc(sizeof(int) * size);
     int index = 0;
@@ -279,7 +284,7 @@ int main5() {
     int k = 3;
     int arr[] = {1, 5, 4, 10, 50, 9};
     int size = sizeof(arr) / sizeof(int);
-    sortK(arr, size, k);
+    heapSortK(arr, size, k);
     return 0;
 }
 

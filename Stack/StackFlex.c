@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include "string.h"
 
-#define ERROR_VALUE -999
+#define ERROR_VALUE -999999
 
 typedef struct stack {
     int top;
@@ -21,7 +21,7 @@ Stack* createStack(int size) {
     return stk;
 }
 
-void StackPush(Stack *stk, int value) {
+void stackPush(Stack *stk, int value) {
     if (stk->top < stk->capacity - 1) {
         stk->top++;
         stk->data[stk->top] = value;
@@ -31,11 +31,11 @@ void StackPush(Stack *stk, int value) {
         stk->data = (int *)realloc(stk->data, stk->capacity * sizeof(int));
         printf("Stack size doubled.\n");
         printf("Stack capacity %d.\n", stk->capacity);
-        StackPush(stk, value);
+        stackPush(stk, value);
     }
 }
 
-int StackPop(Stack *stk) {
+int stackPop(Stack *stk) {
     if (stk->top >= 0) {
         int value = stk->data[stk->top];
         stk->top--;
@@ -53,8 +53,8 @@ int StackPop(Stack *stk) {
 int main() {
     Stack* stk = createStack(5);
     for (int i = 0; i < 20; i++)
-        StackPush(stk, i);
+        stackPush(stk, i);
     for (int i = 0; i < 20; i++)
-        printf("%d ", StackPop(stk));
+        printf("%d ", stackPop(stk));
     return 0;
 }

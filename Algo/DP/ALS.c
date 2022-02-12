@@ -7,7 +7,7 @@ int min(int a, int b) {
 
 int fastestWayBU2(int n, int a[][n], int t[][n],	int e[], int x[]) {
 	int f1[n], f2[n];
-	for(int i=0;i<n;i++) {
+	for(int i=0; i<n; i++) {
 		f1[i] = 0;
 		f2[i] = 0;	
 	}

@@ -16,8 +16,7 @@ int fibonacciBU(int n) {
 	if (n <= 2)
 		return n - 1;
 
-	int first = 0, second = 1;
-	int temp = 0;
+	int first = 0, second = 1, temp = 0;
 
 	for (int i = 2; i < n; i++) {
 		temp = first + second;
@@ -65,7 +64,6 @@ void fibonacciSeriesTD(int n) {
 }
 
 int main() {
-
 	fibonacciSeries(6);
 	printf("\n");
 

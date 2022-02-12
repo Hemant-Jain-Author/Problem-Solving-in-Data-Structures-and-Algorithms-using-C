@@ -278,6 +278,7 @@ int removeDuplicates(int arr[], int size) {
 int removeDuplicates2(int arr[], int size) {
     if (size == 0)
         return 0;
+    
     Set* st = createSet();
     int j = 0;
     for (int i = 1; i < size; i++) {
@@ -1856,7 +1857,7 @@ Profit is 144
 */
 
 int findMedian(int dataFirst[], int sizeFirst, int dataSecond[], int sizeSecond) {
-    int medianIndex = ((sizeFirst + sizeSecond) + (sizeFirst + sizeSecond) % 2) / 2; // cealing function.
+    int medianIndex = ((sizeFirst + sizeSecond) + (sizeFirst + sizeSecond) % 2) / 2; // ceiling function.
     int i = 0, j = 0;
     int count = 0;
     while (count < medianIndex - 1) {
@@ -2312,7 +2313,7 @@ int findBalancedPoint(int arr[], int size) {
         second += arr[i];
 
     for (int i = 0; i < size; i++) {
-        if (first == second){
+        if (first == second) {
             return i;
         }
         if (i < size - 1)

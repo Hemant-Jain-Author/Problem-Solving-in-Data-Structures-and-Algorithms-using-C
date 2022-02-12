@@ -2,11 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct Node_t
-{
+typedef struct Node {
 	int data;
-	struct Node_t* left;
-	struct Node_t* right;
+	struct Node* left;
+	struct Node* right;
 	int height;
 }Node;
 
@@ -19,10 +18,9 @@ Node* createNode(int d, Node* l, Node* r) {
 	return node;
 }
 
-typedef struct AVLTree_t
-{
+typedef struct AVLTree {
 	Node* root;
-}AVLTree;
+} AVLTree;
 
 AVLTree*  createAVLTree() {
 	AVLTree* tree = (AVLTree*) malloc (sizeof(AVLTree));
@@ -45,6 +43,7 @@ Node* findMin(Node* curr);
 int height(Node* n);
 int getBalance(Node* node);
 
+
 int height(Node* n) {
 	if (n == NULL)
 		return -1;
@@ -54,6 +53,12 @@ int height(Node* n) {
 
 int getBalance(Node* node) {
 	return (node == NULL) ? 0 : height(node->left) - height(node->right);
+}
+
+int max(int x, int y) {
+	if (x > y)
+		return x;
+	return y;
 }
 
 void insert(AVLTree* tree, int data) {
@@ -137,6 +142,14 @@ Node* leftRightRotate(Node* x) {
 	x->left = leftRotate(x->left);
 	return rightRotate(x);
 }
+Node* findMin(Node* curr) {
+    Node* node = curr;
+    if (node == NULL)
+        return NULL;
+    while (node->left != NULL)
+        node = node->left;
+    return node;
+}
 
 void delete(AVLTree* tree, int data) {
 	tree->root = deleteUtil(tree->root, data);
@@ -159,9 +172,7 @@ Node* deleteUtil(Node* node, int data) {
 			node->data = minNode->data;
 			node->right = deleteUtil(node->right, minNode->data);
 		}
-	}
-	else
-	{
+	} else {
 		if (node->data > data)
 			node->left = deleteUtil(node->left, data);
 		else
@@ -189,22 +200,6 @@ Node* deleteUtil(Node* node, int data) {
 	return node;
 }
 
-Node* findMin(Node* curr) {
-	Node* node = curr;
-	if (node == NULL)
-		return NULL;
-
-	while (node->left != NULL)
-		node = node->left;
-	
-	return node;
-}
-
-void printTree(AVLTree* tree) {
-	char str[100] = "";
-	printTreeUtil(tree->root, str,  0);
-	printf("\n");
-}
 
 void printTreeUtil(Node* node, char* indent, int isLeft) {
 	if (node == NULL)
@@ -213,9 +208,7 @@ void printTreeUtil(Node* node, char* indent, int isLeft) {
 	if (isLeft) {
 		printf("%s%s", indent, "L:");
 		strcat(indent, "|  ");
-	}
-	else
-	{
+	} else {
 		printf("%s%s", indent, "R:");
 		strcat(indent, "   ");
 	}
@@ -226,8 +219,10 @@ void printTreeUtil(Node* node, char* indent, int isLeft) {
 	indent[strlen(indent) - 3] = '\0';
 }
 
-int max(int a, int b) {
-	return (a > b) ? a : b;
+void printTree(AVLTree* tree) {
+	char str[100] = "";
+	printTreeUtil(tree->root, str,  0);
+	printf("\n");
 }
 
 int main() {

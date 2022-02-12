@@ -57,7 +57,7 @@ int insertAtTail(DCLL *list, int value) {
 
 int deleteFromHead(DCLL *list) {
     Node *head = list->head;
-    if (!head){
+    if (!head) {
         printf("Empty List Error");
         return -99999;
     }
@@ -81,7 +81,7 @@ int deleteFromHead(DCLL *list) {
 
 int deleteFromTail(DCLL *list) {
     Node *head = list->head;
-    if (!head){
+    if (!head) {
         printf("Empty List Error");
         return -99999;
     }

@@ -2,17 +2,24 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct BinaryIndexTree_t
-{
+typedef struct BinaryIndexTree {
 	int* BIT;
 	int size;
 }BinaryIndexTree;
-	
-BinaryIndexTree* createBinaryIndexTree(int arr[], int n);
-void set(BinaryIndexTree*, int arr[], int index, int val);
-void update(BinaryIndexTree*, int index, int val);
-int rangeSum(BinaryIndexTree*, int start, int end); // Range sum in the range start to end.
-int prefixSum(BinaryIndexTree*, int index); // Prefix sum in the range 0 to index.
+
+void update(BinaryIndexTree* tree, int index, int val) {
+	// Index in bit is 1 more than the input array.
+	index = index + 1;
+
+	// Traverse to ancestors of nodes.
+	while (index <= tree->size) {
+		// Add val to current node of Binary Index Tree.
+		tree->BIT[index] += val;
+
+		// Next element which need to store val.
+		index += index & (-index);
+	}
+}
 
 BinaryIndexTree* createBinaryIndexTree(int arr[], int n) {
 	BinaryIndexTree* tree = (BinaryIndexTree*)malloc(sizeof(BinaryIndexTree));
@@ -33,30 +40,7 @@ void set(BinaryIndexTree* tree, int arr[], int index, int val) {
 	update(tree, index, diff);
 }
 
-void update(BinaryIndexTree* tree, int index, int val) {
-	// Index in bit is 1 more than the input array.
-	index = index + 1;
-
-	// Traverse to ancestors of nodes.
-	while (index <= tree->size) {
-		// Add val to current node of Binary Index Tree.
-		tree->BIT[index] += val;
-
-		// Next element which need to store val.
-		index += index & (-index);
-	}
-}
-
-int rangeSum(BinaryIndexTree* tree, int start, int end) {
-	// Check for error conditions.
-	if (start > end || start < 0 || end > tree->size - 1) {
-		printf("Invalid Input.\n");
-		return -1;
-	}
-
-	return prefixSum(tree, end) - prefixSum(tree, start - 1);
-}
-
+// Prefix sum in the range 0 to index.
 int prefixSum(BinaryIndexTree* tree, int index) {
 	int sum = 0;
 	index = index + 1;
@@ -70,6 +54,17 @@ int prefixSum(BinaryIndexTree* tree, int index) {
 		index -= index & (-index);
 	}
 	return sum;
+}
+
+// Range sum in the range start to end.
+int rangeSum(BinaryIndexTree* tree, int start, int end) {
+	// Check for error conditions.
+	if (start > end || start < 0 || end > tree->size - 1) {
+		printf("Invalid Input.\n");
+		return -1;
+	}
+
+	return prefixSum(tree, end) - prefixSum(tree, start - 1);
 }
 
 int main() {

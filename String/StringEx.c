@@ -458,11 +458,13 @@ int main16() {
 World! Hello,
 */
 
+
 void printAnagramUtil(char arr[], int i, int length) {
 	if (length == i) {
 		printf("%s\n", arr);
 		return;
 	}
+    
     char temp;
 	for (int j = i; j < length; j++) {
         temp = arr[i];
@@ -596,13 +598,13 @@ aaaabbbb.
 
 int main()
 {
-    main1();
+    //main1();
     main2();
     main3();
     main4();
     main5();
     main6();
-    main7();
+    //main7();
     main8();
     main9();
     main10();

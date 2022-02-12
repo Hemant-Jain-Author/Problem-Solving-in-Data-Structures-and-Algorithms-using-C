@@ -117,7 +117,7 @@ int CounterRemove(Counter *hTable, int key) {
     return 0;
 }
 
-int main() {
+int mainA() {
     Counter* ctr = createCounter();
     CounterAdd(ctr, 2);
     CounterAdd(ctr, 3);
