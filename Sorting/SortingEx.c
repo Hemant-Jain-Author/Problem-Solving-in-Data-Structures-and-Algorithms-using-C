@@ -19,6 +19,33 @@ int Partition01(int arr[], int size) {
     return count;
 }
 
+void partition012_(int arr[], int size) {
+    int zero = 0, one = 0, two = 0;
+
+    for (int i =0; i < size;i++) {
+        if (arr[i] == 0) {
+            zero += 1;
+        } else if (arr[i] == 1) {
+            one += 1;
+        } else {
+            two += 1;
+        }
+    }
+    int index = 0;
+    while(zero > 0){
+        arr[index++] = 0;
+        zero -= 1;
+    }
+    while(one > 0){
+        arr[index++] = 1;
+        one -= 1;
+    }
+    while(two > 0){
+        arr[index++] = 2;
+        two -= 1;
+    }
+}
+
 void Partition012(int arr[], int size) {
     int left = 0;
     int right = size - 1;
@@ -47,6 +74,10 @@ int main2() {
     int arr2[] = {0, 1, 1, 0, 1, 2, 1, 2, 0, 0, 0, 1};
     Partition012(arr2, sizeof(arr2) / sizeof(int));
     printArray(arr2, sizeof(arr2) / sizeof(int));
+
+    int arr3[] = {0, 1, 1, 0, 1, 2, 1, 2, 0, 0, 0, 1};
+    Partition012(arr3, sizeof(arr3) / sizeof(int));
+    printArray(arr3, sizeof(arr3) / sizeof(int));
 }
 
 /*
@@ -275,8 +306,79 @@ int main8() {
 [ 2 5 8 ]
 */
 
+int minSwaps(int arr[], int size, int val) {
+    int swapCount = 0;
+    int first = 0;
+    int second = size - 1;
+    printf("%d %d\n", first, second);
+    int temp;
+    while (first < second) {
+        if (arr[first] <= val)
+            first += 1;
+        else if (arr[second] > val)
+            second -= 1;
+        else {
+            temp = arr[first];
+            arr[first] = arr[second];
+            arr[second] = temp;
+            swapCount += 1;
+        }
+    }
+    return swapCount;
+}
+
+//Testing code
+int main9() {
+ int array[] = {1, 2, 3, 4, 18, 5, 17, 6, 16, 7, 15, 8, 14, 9, 13, 10, 12, 11};
+ printf("minSwaps: %d\n", minSwaps(array, sizeof(array) / sizeof(int), 10));
+}
+
+void separateEvenAndOdd(int data[], int size) {
+    int left = 0, right = size - 1;
+    int aux[size];
+    
+    for (int i=0;i< size;i++) {
+        if (data[i] % 2 == 0) {
+            aux[left] = data[i];
+            left++;
+        } else if (data[i] % 2 == 1) {
+            aux[right] = data[i];
+            right--;
+        }
+    }
+    for (int i=0;i< size;i++)
+        data[i] = aux[i];
+}
+
+void separateEvenAndOdd2(int data[], int size) {
+    int left = 0, right = size - 1;
+    while (left < right) {
+        if (data[left] % 2 == 0)
+            left++;
+        else if (data[right] % 2 == 1)
+            right--;
+        else {
+            swap(data, left, right);
+            left++;
+            right--;
+        }
+    }
+}
+
+// Testing code
+int main10() {
+    int array[] = { 9, 1, 8, 2, 7, 3, 6, 4, 5 };
+    separateEvenAndOdd(array, array.length);
+    printArray(array, array.length);
+    int array2[] = { 9, 1, 8, 2, 7, 3, 6, 4, 5 };
+    separateEvenAndOdd2(array2, array2.length);
+    printArray(array2, array2.length);
+}
+// [ 4 6 8 2 7 3 1 9 5 ]
+
+
 int main() {
-    main1();
+    /*main1();
     main2();
     main3();
     main4();
@@ -284,5 +386,8 @@ int main() {
     main6();
     main7();
     main8();
+    */
+    main9();
+    main10();
     return 0;
 }

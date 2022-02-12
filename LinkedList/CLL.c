@@ -2,32 +2,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node
-{
+typedef struct Node {
     int value;
     struct Node *next;
 } Node;
 
-Node* createNode(int value){
+Node* createNode(int value) {
     Node* node = (Node*)malloc(sizeof(Node));
     node->value = value;
     node->next = node;
     return node;
 }
 
-
-typedef struct CircularLL
-{
+typedef struct CircularLL {
     Node *tail;
 } CircularLL;
 
-CircularLL* createCircularLL(){
+CircularLL* createCircularLL() {
     CircularLL *list = (CircularLL *)malloc(sizeof(CircularLL));
     list->tail = NULL;
     return list;
 }
 
-int insertAtStart(CircularLL* list, int value) {
+int insertAtHead(CircularLL* list, int value) {
     Node *temp = createNode(value);
     Node *tail = list->tail;
     if (!tail) 
@@ -40,7 +37,7 @@ int insertAtStart(CircularLL* list, int value) {
     return 1;
 }
 
-int insertAtEnd(CircularLL *list, int value) {
+int insertAtTail(CircularLL *list, int value) {
     Node *temp = createNode(value);
     Node *tail = list->tail;
     if (!tail) {
@@ -142,28 +139,103 @@ int deleteHeadNode(CircularLL *list) {
     return 1;
 }
 
-int main() {
+CircularLL*  copyListReversed(CircularLL *list) {
+    CircularLL* l2 = createCircularLL();
+    Node* tail = list->tail;
+    if (!tail)
+        return l2;
+    
+    Node *curr = tail->next;
+    while (curr != tail) {
+        insertAtHead(l2, curr->value);
+        curr = curr->next;
+    }
+    insertAtHead(l2, curr->value);
+    return l2;
+}
+
+CircularLL*  copyList(CircularLL *list) {
+    CircularLL* l2 = createCircularLL();
+    Node* tail = list->tail;
+    if (!tail)
+        return l2;
+    
+    Node *curr = tail->next;
+    while (curr != tail) {
+        insertAtTail(l2, curr->value);
+        curr = curr->next;
+    }
+    insertAtTail(l2, curr->value);
+    return l2;
+}
+
+int main1() {
     CircularLL* list = createCircularLL();
-    insertAtStart(list, 1);
-    insertAtStart(list, 2);
-    insertAtStart(list, 3);
-    insertAtStart(list, 4);
-    insertAtStart(list, 5);
-    insertAtEnd(list, 6);
-    insertAtEnd(list, 7);
+    insertAtHead(list, 1);
+    insertAtHead(list, 2);
+    insertAtHead(list, 3);
     printList(list);
-
-    deleteNode(list, 4);
-    printList(list);
-
-    printf("Search list : %d\n", searchList(list, 3));
-    printf("Search list : %d\n", searchList(list, 6));
-    printf("Search list : %d\n", searchList(list, 4));
-
     deleteHeadNode(list);
     printList(list);
-
     deleteList(list);
     printList(list);
+    return 0;
+}
+/*
+3 2 1 
+2 1 */
+
+int main2() {
+    CircularLL* list = createCircularLL();
+    insertAtTail(list, 1);
+    insertAtTail(list, 2);
+    insertAtTail(list, 3);
+    printList(list);
+    return 0;
+}
+
+/*
+1 2 3
+*/
+
+int main3() {
+    CircularLL* list = createCircularLL();
+    insertAtHead(list, 1);
+    insertAtHead(list, 2);
+    insertAtHead(list, 3);
+    printList(list);
+    printf("Search list : %d\n", searchList(list, 3));
+    printf("Search list : %d\n", searchList(list, 6)); 
+    deleteNode(list, 2);  
+    printList(list);
+    return 0;
+}
+/*
+3 2 1 
+Search list : 1
+Search list : 0
+3 1 
+*/
+
+int main4() {
+    CircularLL* list = createCircularLL();
+    insertAtHead(list, 1);
+    insertAtHead(list, 2);
+    insertAtHead(list, 3);
+    printList(list);
+    CircularLL* list2 = copyList(list);
+    printList(list2);
+    CircularLL* list3 = copyListReversed(list);
+    printList(list3);
+    return 0;
+}
+
+int main() {
+    /*
+    main1();
+    main2();
+    main3();
+    */
+    main4();
     return 0;
 }

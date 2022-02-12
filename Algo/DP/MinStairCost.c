@@ -5,7 +5,7 @@ int min(int a, int b) {
 	return (a < b)? a : b;
 }
 
-int minCost(int cost[], int n) {
+int minStairCost(int cost[], int n) {
 	// base case
 	if (n == 1)
 		return cost[0];
@@ -23,10 +23,10 @@ int minCost(int cost[], int n) {
 int main() {
 	int a[] = {1, 5, 6, 3, 4, 7, 9, 1, 2, 11};
 	int n = sizeof(a)/sizeof(int);
-	printf("minCost : %d\n", minCost(a, n));
+	printf("minStairCost : %d\n", minStairCost(a, n));
 	return 0;
 }
 
 /*
-minCost : 18
+minStairCost : 18
 */

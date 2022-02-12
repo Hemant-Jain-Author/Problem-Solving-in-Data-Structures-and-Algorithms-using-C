@@ -34,7 +34,7 @@ void printGraph(Graph *gph) {
 
     for (int i = 0; i < gph->count; i++) {
         GraphEdge* head = gph->adj[i];
-        printf(" Node [ %d ] ::", i);
+        printf("Vertex %d is connected to ::", i);
         while (head) {
             printf(" %d(%d) ", head->dest, head->cost);
             head = head->next;
@@ -44,23 +44,22 @@ void printGraph(Graph *gph) {
 }
 
 int main1() {
-    int nodeCount = 8;
+    int nodeCount = 4;
     Graph* gph = createGraph(nodeCount);
-    addDirectedEdge(gph, 1, 2, 2);
-    addDirectedEdge(gph, 1, 4, 1);
-    addDirectedEdge(gph, 2, 4, 3);
-    addDirectedEdge(gph, 2, 5, 10);
-    addDirectedEdge(gph, 3, 1, 4);
-    addDirectedEdge(gph, 3, 6, 5);
-    addDirectedEdge(gph, 4, 3, 2);
-    addDirectedEdge(gph, 4, 5, 7);
-    addDirectedEdge(gph, 4, 6, 8);
-    addDirectedEdge(gph, 4, 7, 4);
-    addDirectedEdge(gph, 5, 7, 6);
-    addDirectedEdge(gph, 7, 6, 1);
+    addUndirectedEdge(gph, 0, 1, 1);
+    addUndirectedEdge(gph, 0, 2, 1);
+    addUndirectedEdge(gph, 1, 2, 1);
+    addUndirectedEdge(gph, 2, 3, 1);
     printGraph(gph);
     return 0;
 }
+
+/*
+Vertex 0 is connected to :: 2(1)  1(1) 
+Vertex 1 is connected to :: 2(1)  0(1) 
+Vertex 2 is connected to :: 3(1)  1(1)  0(1) 
+Vertex 3 is connected to :: 2(1) 
+*/
 
 void dfsUtil(Graph *gph, int index, int *visited) {
     visited[index] = 1;
@@ -166,25 +165,26 @@ int bestFirstSearchPQ(Graph *gph, int source, int destination) {
 }
 
 int main2() {
-    Graph* gph = createGraph(9);
-    addUndirectedEdge(gph, 0, 2, 1);
-    addUndirectedEdge(gph, 1, 2, 5);
-    addUndirectedEdge(gph, 1, 3, 7);
-    addUndirectedEdge(gph, 1, 4, 9);
-    addUndirectedEdge(gph, 3, 2, 2);
-    addUndirectedEdge(gph, 3, 5, 4);
-    addUndirectedEdge(gph, 4, 5, 6);
-    addUndirectedEdge(gph, 4, 6, 3);
-    addUndirectedEdge(gph, 5, 7, 1);
-    addUndirectedEdge(gph, 6, 7, 7);
-    addUndirectedEdge(gph, 7, 8, 17);
-    //printGraph(gph);
-    printf("Path between 0 & 6 : %d\n", DFS(gph, 0, 6));
-    printf("Path between 0 & 6 : %d\n", DFSStack(gph, 0, 6));
-    printf("Path between 0 & 6 : %d\n", BFS(gph, 0, 6));
-    printf("Path between 0 & 6 : %d\n", bestFirstSearchPQ(gph, 0, 6));
+    Graph* gph = createGraph(5);
+    addDirectedEdge(gph, 0, 1, 3);
+    addDirectedEdge(gph, 0, 4, 2);
+    addDirectedEdge(gph, 1, 2, 1);
+    addDirectedEdge(gph, 2, 3, 1);
+    addDirectedEdge(gph, 4, 1, 2);
+    addDirectedEdge(gph, 4, 3, 1);
+    printf("Path between 0 & 6 : %d\n", DFS(gph, 0, 2));
+    printf("Path between 0 & 6 : %d\n", DFSStack(gph, 0, 2));
+    printf("Path between 0 & 6 : %d\n", BFS(gph, 0, 2));
+    printf("Path between 0 & 6 : %d\n", bestFirstSearchPQ(gph, 0, 2));
     return 0;
 }
+
+/*
+Path between 0 & 6 : 1
+Path between 0 & 6 : 1
+Path between 0 & 6 : 1
+Path between 0 & 6 : 1
+*/
 
 void dfsUtil2(Graph *gph, int index, int *visited, Stack *stk) {
     visited[index] = 1;
@@ -213,17 +213,26 @@ void TopologicalSort(Graph *gph) {
 }
 
 int main3() {
-    Graph* gph = createGraph(6);
-    addDirectedEdge(gph, 5, 2, 1);
-    addDirectedEdge(gph, 5, 0, 1);
-    addDirectedEdge(gph, 4, 0, 1);
-    addDirectedEdge(gph, 4, 1, 1);
-    addDirectedEdge(gph, 2, 3, 1);
-    addDirectedEdge(gph, 3, 1, 1);
-    printGraph(gph);
+    Graph* gph = createGraph(9);
+    addDirectedEdge(gph, 0, 2, 1);
+    addDirectedEdge(gph, 1, 2, 1);
+    addDirectedEdge(gph, 1, 3, 1);
+    addDirectedEdge(gph, 1, 4, 1);
+    addDirectedEdge(gph, 3, 2, 1);
+    addDirectedEdge(gph, 3, 5, 1);
+    addDirectedEdge(gph, 4, 5, 1);
+    addDirectedEdge(gph, 4, 6, 1);
+    addDirectedEdge(gph, 5, 7, 1);
+    addDirectedEdge(gph, 6, 7, 1);
+    addDirectedEdge(gph, 7, 8, 1);
     TopologicalSort(gph);
     return 0;
 }
+
+/*
+TopologicalSort :: 1 3 4 5 6 7 8 0 2 
+*/
+
 
 int pathExist(Graph *gph, int source, int destination) {
     int *visited = (int *)calloc(gph->count, sizeof(int));
@@ -242,6 +251,10 @@ int main4() {
     printf("PathExist :: %d", pathExist(gph, 0, 4));
     return 0;
 }
+
+/*
+PathExist :: 1
+*/
 
 int countAllPathDFS(Graph *gph, int *visited, int source, int dest) {
     if (source == dest)
@@ -271,6 +284,7 @@ void printAllPathDFS(Graph *gph, int *visited, int source, int dest, Stack *path
     StackPush(path, source);
     if (source == dest) {
         StackPrint(path);
+        StackPop(path);
         return;
     }
     visited[source] = 1;
@@ -305,7 +319,12 @@ int main5() {
     printAllPath(gph, 0, 4);
     return 0;
 }
-
+/*
+All path count : 3
+[4 3 2 0 ]
+[4 1 0 ]
+[4 3 1 0 ]
+*/
 int rootVertex(Graph *gph) {
     int count = gph->count;
     int *visited = (int *)calloc(count, sizeof(int));
@@ -333,6 +352,10 @@ int main6() {
     rootVertex(gph);
     return 0;
 }
+
+/*
+Root vertex is :: 5
+*/
 
 void transitiveClosureUtil(Graph *gph, int source, int index, int **tc) {
     if (tc[source][index] == 1)
@@ -376,6 +399,12 @@ int main7() {
     }
     return 0;
 }
+/*
+ 1  1  1  1 
+ 1  1  1  1 
+ 1  1  1  1 
+ 0  0  0  1 
+ */
 
 void BFSLevelNode(Graph *gph, int source) {
     int *visited = (int *)calloc(gph->count, sizeof(int));
@@ -440,6 +469,17 @@ int main8() {
     printf("BFSDistance(1, 6) : %d ", BFSDistance(gph, 1, 6));
     return 0;
 }
+/*
+Node - Level
+1 - 0
+2 - 1
+0 - 1
+5 - 2
+4 - 2
+6 - 3
+3 - 3
+BFSDistance(1, 6) : 3 
+*/
 
 int isCyclePresentUndirectedDFS(Graph *graph, int index, int parentIndex, int *visited) {
     visited[index] = 1;
@@ -476,6 +516,10 @@ int main9() {
     printf("isCyclePresentUndirected : %d\n", isCyclePresentUndirected(gph));
     return 0;
 }
+
+/*
+isCyclePresentUndirected : 0
+*/
 
 int isCyclePresentDFS(Graph *graph, int index, int *visited, int *marked) {
     visited[index] = 1;
@@ -551,6 +595,11 @@ int main10() {
     return 0;
 }
 
+/*
+isCyclePresent : 1
+isCyclePresent : 1
+*/
+
 Graph *TransposeGraph(Graph *gph) {
     int count = gph->count;
     Graph *gph2 = createGraph(count);
@@ -579,6 +628,14 @@ int main11() {
     return 0;
 }
 
+/*
+Vertex 0 is connected to ::
+Vertex 1 is connected to :: 4(1)  0(1) 
+Vertex 2 is connected to :: 0(1) 
+Vertex 3 is connected to :: 2(1)  1(1) 
+Vertex 4 is connected to :: 3(1)
+*/
+
 int isConnectedUndirected(Graph *gph) {
     int count = gph->count;
     int *visited = (int *)calloc(count, sizeof(int));
@@ -600,6 +657,10 @@ int main12() {
     printf("isConnectedUndirected :: %d", isConnectedUndirected(gph));
     return 0;
 }
+
+/*
+isConnectedUndirected :: 1
+*/
 
 int isStronglyConnected(Graph *gph) {
     int count = gph->count;
@@ -628,9 +689,13 @@ int main13() {
     addDirectedEdge(gph, 3, 0, 1);
     addDirectedEdge(gph, 2, 4, 1);
     addDirectedEdge(gph, 4, 2, 1);
-    printf(" IsStronglyConnected:: %d \n", isStronglyConnected(gph));
+    printf("IsStronglyConnected:: %d \n", isStronglyConnected(gph));
     return 0;
 }
+
+/*
+IsStronglyConnected:: 1 
+*/
 
 void DFSRec2(Graph *gph, int index, int *visited, Stack *stk) {
     visited[index] = 1;
@@ -680,6 +745,12 @@ int main14() {
     stronglyConnectedComponent(gph);
     return 0;
 }
+
+/*
+[0 2 1 ]
+[3 5 4 ]
+[6 ]
+*/
 
 int heightTreeParentArr(int arr[], int count) {
 	Graph* gph = createGraph(count);
@@ -743,6 +814,12 @@ int main15() {
     printf("Height : %d\n", heightTreeParentArr2(parentArray, 5));
     return 0;
 }
+
+/*
+Height : 4
+Height : 4
+*/
+
 
 int isConnected(Graph *graph) {
     int count = graph->count;
@@ -862,8 +939,7 @@ void dijkstra(Graph *gph, int source) {
     }
 }
 
-typedef struct Set_t
-{
+typedef struct Set_t {
     int parent;
     int rank;
 }Set;
@@ -964,11 +1040,28 @@ int main16() {
     addUndirectedEdge(gph, 6, 8, 6);
     addUndirectedEdge(gph, 7, 8, 7);
     kruskalMST(gph);
-    printGraph(gph);
     primsMST(gph);
     dijkstra(gph, 0);
     return 0;
 }
+
+/*
+Edges are (6, 7, 1) (2, 8, 2) (5, 6, 2) (0, 1, 4) (2, 5, 4) (2, 3, 7) (0, 7, 8) (3, 4, 9) 
+Total MST cost: 37
+
+Edges are (0, 1, 4) (5, 2, 4) (2, 3, 7) (3, 4, 9) (6, 5, 2) (7, 6, 1) (0, 7, 8) (2, 8, 2) 
+Total MST cost: 37
+
+node id 0 prev -1 cost : 0
+node id 1 prev 0 cost : 4
+node id 2 prev 1 cost : 12
+node id 3 prev 2 cost : 19
+node id 4 prev 5 cost : 21
+node id 5 prev 6 cost : 11
+node id 6 prev 7 cost : 9
+node id 7 prev 0 cost : 8
+node id 8 prev 2 cost : 14
+*/
 
 void shortestPath(Graph *gph, int source) {
     int count = gph->count;
@@ -1019,6 +1112,18 @@ int main17() {
     return 0;
 }
 
+/*
+-1 to 0 cost 0 
+0 to 1 cost 1 
+1 to 2 cost 2 
+2 to 3 cost 3 
+5 to 4 cost 4 
+6 to 5 cost 3 
+7 to 6 cost 2 
+0 to 7 cost 1 
+7 to 8 cost 2 
+*/
+
 void bellmanFordshortestPath(Graph *gph, int source) {
     int count = gph->count;
     int previous[count];
@@ -1065,6 +1170,14 @@ int main18() {
     bellmanFordshortestPath(gph, 0);
     return 0;
 }
+
+/*
+-1 to 0 weight 0
+4 to 1 weight 0
+1 to 2 weight 1
+2 to 3 weight 2
+0 to 4 weight 2
+*/
 
 int isEulerian(Graph *graph) {
     //Check if all non - zero degree nodes are connected
@@ -1115,6 +1228,11 @@ int main19() {
     printf("isEulerian %d\n", isEulerian(gph));
     return 0;
 }
+
+/*
+graph is Semi-Eulerian.
+isEulerian 1
+*/
 
 int isStronglyConnected2(Graph *graph) {
     int count = graph->count;
@@ -1186,6 +1304,10 @@ int main20() {
     return 0;
 }
 
+/*
+isEulerianCycle 1
+*/
+
 void DFSRec(Graph *gph, int index, int *visited) {
     int destination;
     visited[index] = 1;
@@ -1199,24 +1321,24 @@ void DFSRec(Graph *gph, int index, int *visited) {
 }
 
 int main() {
-    main1();
-    main2();
-    main3();
-    main4();
-    main5(); 
-    main6();
-    main7();
-    main8();
-    main9();
-    main10();
-    main11();
-    main12();
-    main13();
-    main14();
-    main15();
-    main16();
-    main17();
-    main18();
+    //main1();
+    //main2();
+    //main3();
+    //main4();
+    //main5(); 
+    //main6();
+    //main7();
+    //main8();
+    //main9();
+    //main10();
+    //main11();
+    //main12();
+    //main13();
+    //main14();
+    //main15();
+    //main16();
+    //main17();
+    //main18();
     main19();
     main20();
    return 0;

@@ -2,20 +2,17 @@
 #include <stdio.h>
 #define ERROR_VALUE -99999
 
-typedef struct StackNode
-{
+typedef struct StackNode {
     int value;
     struct StackNode *next;
 } StackNode;
 
 
-typedef struct Stack
-{
+typedef struct Stack {
     StackNode *head;
 } Stack;
 
-Stack* createStack() 
-{
+Stack* createStack() {
     Stack *stk = (Stack*)malloc(sizeof(Stack));
     stk->head = NULL;
     return stk;
@@ -69,7 +66,11 @@ int main() {
     StackPush(stk, 2);
     StackPush(stk, 3);
     StackPrint(stk);
-    while (!StackIsEmpty(stk))
-        printf("%d ", StackPop(stk));
+    printf("%d ", StackPop(stk));
+    printf("%d ", StackPop(stk));
     return 0;
 }
+/*
+Stack : 3 2 1 
+3 2 
+*/

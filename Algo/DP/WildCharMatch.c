@@ -60,11 +60,11 @@ int matchExpDP(char* exp, char* str) {
 }
 
 int main() {
-	printf("%d\n",matchExp("*llo,?World?", "Hello, World!"));
-	printf("%d\n",matchExpDP("*llo,?World?", "Hello, World!"));
+	printf("matchExp :: %d\n",matchExp("*llo,?World?", "Hello, World!"));
+	printf("matchExp :: %d\n",matchExpDP("*llo,?World?", "Hello, World!"));
 }
 
 /*
-1
-1
+matchExp :: 1
+matchExp :: 1
 */

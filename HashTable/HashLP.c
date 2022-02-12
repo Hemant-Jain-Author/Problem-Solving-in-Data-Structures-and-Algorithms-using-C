@@ -5,9 +5,8 @@
 #define FILLED_NODE 1
 #define DELETED_NODE 2
 
-unsigned int Hash(int key, int size) { //division method
-    unsigned int hashValue = key;
-    return hashValue % size;
+int Hash(int key, int size) { //division method
+    return key % size;
 }
 
 int CollisionFunction(int i) {
@@ -38,6 +37,7 @@ void HashPrint(HashTable *hTable) {
     }
     printf("\n");
 }
+
 
 int HashFind(HashTable *hTable, int value) {
     int hashValue = Hash(value, hTable->size);

@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include<stdlib.h>
 
-typedef struct Item
-{
+typedef struct Item {
 	int wt;
 	int cost;
 	double density;
-}Item;
+} Item ;
 
 Item* createItem(int w, int v) {
 	Item* item = (Item*)malloc(sizeof(Item));
@@ -46,9 +45,7 @@ double getMaxCostFractional(int wt[], int cost[], int n, int capacity) {
 		if (capacity - itemList[i]->wt >= 0) {
 			capacity -= itemList[i]->wt;
 			totalCost += itemList[i]->cost;
-		}
-		else
-		{
+		} else {
 			totalCost += (itemList[i]->density * capacity);
 			break;
 		}

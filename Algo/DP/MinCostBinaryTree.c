@@ -3,11 +3,11 @@
 
 int INFINITY = 99999;
 
-int max(int a, int b){
+int max(int a, int b) {
 	return (a > b)? a : b;
 }
 
-int min(int a, int b){
+int min(int a, int b) {
 	return (a < b)? a : b;
 }
 
@@ -21,19 +21,19 @@ int maxVal(int n, int maxArr[][n], int i, int j) {
 	return maxArr[i][j];
 }
 
-int findSumTDUtil(int n, int dp[][n], int maxArr[][n], int i, int j) {
+int minCostBstTDUtil(int n, int dp[][n], int maxArr[][n], int i, int j) {
 	if (dp[i][j] != INFINITY)
 		return dp[i][j];
 
 	for (int k = i;k < j;k++) {
-		dp[i][j] = min(dp[i][j], findSumTDUtil(n, dp, maxArr, i, k) + 
-									findSumTDUtil(n, dp, maxArr, k + 1, j) + 
+		dp[i][j] = min(dp[i][j], minCostBstTDUtil(n, dp, maxArr, i, k) + 
+									minCostBstTDUtil(n, dp, maxArr, k + 1, j) + 
 									maxVal(n, maxArr, i, k) * maxVal(n, maxArr, k + 1,j));
 	}
 	return dp[i][j];
 }
 
-int findSumTD(int arr[], int n) {
+int minCostBstTD(int arr[], int n) {
 	int dp[n][n];
 	int maxArr[n][n];
 
@@ -49,10 +49,10 @@ int findSumTD(int arr[], int n) {
 		dp[i][i] = 0; //  single element product cost 0
 	}
 
-	return findSumTDUtil(n, dp, maxArr, 0, n - 1);
+	return minCostBstTDUtil(n, dp, maxArr, 0, n - 1);
 }
 
-int findSumBU(int arr[], int n) {
+int minCostBstBU(int arr[], int n) {
 	int dp[n][n];
 	int maxArr[n][n];
 
@@ -81,8 +81,8 @@ int findSumBU(int arr[], int n) {
 
 int main() {
 	int arr[] = {6, 2, 4};
-	printf("Total cost: %d\n" , findSumTD(arr, 3));
-	printf("Total cost: %d\n" , findSumBU(arr, 3));
+	printf("Total cost: %d\n" , minCostBstTD(arr, 3));
+	printf("Total cost: %d\n" , minCostBstBU(arr, 3));
 	return 0;
 }
 

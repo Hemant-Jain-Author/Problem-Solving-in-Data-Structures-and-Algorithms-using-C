@@ -5,8 +5,7 @@
 
 #define ERROR_VALUE -999
 
-typedef struct stack
-{
+typedef struct stack {
     int top;
     int *data;
     int capacity;

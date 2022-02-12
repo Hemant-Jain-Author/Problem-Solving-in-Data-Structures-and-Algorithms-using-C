@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-int less(int a, int b){
+int less(int a, int b) {
 	return a < b;
 }
 
@@ -21,8 +21,7 @@ void sort(int arr[], int size, int (*comp)(int p1, int p2)) {
     }
 }
 
-typedef struct Heap_t
-{
+typedef struct Heap_t {
     int capacity;
     int size;
     int *array;

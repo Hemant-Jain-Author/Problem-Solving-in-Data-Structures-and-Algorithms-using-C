@@ -18,11 +18,11 @@ typedef struct RBTree_t
 void printTree(RBTree* tree);
 void printTreeUtil(RBTree* tree, Node *node, char* indent, int isLeft);
 
-void insertData(RBTree* tree, int data);
-Node *insertDataUtil(RBTree* tree, Node *node, int data);
+void insert(RBTree* tree, int data);
+Node *insertUtil(RBTree* tree, Node *node, int data);
 
-void removeData(RBTree* tree, int data);
-void removeDataUtil(RBTree* tree, Node *node, int key);
+void delete(RBTree* tree, int data);
+void deleteUtil(RBTree* tree, Node *node, int key);
 
 Node * find(RBTree *tree, int data);
 
@@ -155,15 +155,13 @@ void printTree(RBTree *tree) {
 }
 
 void printTreeUtil(RBTree* tree, Node *node, char* indent, int isLeft) {
-	if (node == tree->nullNode) {
+	if (node == tree->nullNode)
 		return;
-	}
+	
 	if (isLeft) {
 		printf("%s%s", indent, "L:");
 		strcat(indent, "|  ");
-	}
-	else
-	{
+	} else {
 		printf("%s%s", indent, "R:");
 		strcat(indent, "   ");
 	}
@@ -174,22 +172,22 @@ void printTreeUtil(RBTree* tree, Node *node, char* indent, int isLeft) {
 	indent[strlen(indent) - 3] = '\0';
 }
 
-void insertData(RBTree *tree, int data) {
-	tree->root = insertDataUtil(tree, tree->root, data);
+void insert(RBTree *tree, int data) {
+	tree->root = insertUtil(tree, tree->root, data);
 	Node *temp = find(tree, data);
 	fixRedRed(tree, temp);
 }
 
-Node *insertDataUtil(RBTree* tree, Node *node, int data) {
+Node *insertUtil(RBTree* tree, Node *node, int data) {
 	if (node == tree->nullNode) {
 		node = createNode(data, tree->nullNode);
 	}
 	else if (node->data > data) {
-		node->left = insertDataUtil(tree, node->left, data);
+		node->left = insertUtil(tree, node->left, data);
 		node->left->parent = node;
 	}
 	else if (node->data < data) {
-		node->right = insertDataUtil(tree, node->right, data);
+		node->right = insertUtil(tree, node->right, data);
 		node->right->parent = node;
 	}
 	return node;
@@ -247,11 +245,11 @@ void fixRedRed(RBTree* tree, Node *x) {
 	mid->right->colour = 1;
 }
 
-void removeData(RBTree *tree, int data) {
-	removeDataUtil(tree, tree->root, data);
+void delete(RBTree *tree, int data) {
+	deleteUtil(tree, tree->root, data);
 }
 
-void removeDataUtil(RBTree* tree, Node *node, int key) {
+void deleteUtil(RBTree* tree, Node *node, int key) {
 	Node *z = tree->nullNode;
 	Node *x, *y;
 	while (node != tree->nullNode) {
@@ -427,21 +425,21 @@ Node* minimum(RBTree* tree, Node *node) {
 
 int main() {
 	RBTree *tree = createRBTree();
-	insertData(tree, 1);
-	insertData(tree, 2);
-	insertData(tree, 3);
-	insertData(tree, 4);
-	insertData(tree, 5);
-	insertData(tree, 7);
-	insertData(tree, 6);
-	insertData(tree, 8);
-	insertData(tree, 9);
+	insert(tree, 1);
+	insert(tree, 2);
+	insert(tree, 3);
+	insert(tree, 4);
+	insert(tree, 5);
+	insert(tree, 7);
+	insert(tree, 6);
+	insert(tree, 8);
+	insert(tree, 9);
 	printTree(tree);
 
-	removeData(tree, 4);
+	delete(tree, 4);
 	printTree(tree);
 
-	removeData(tree, 7);
+	delete(tree, 7);
 	printTree(tree);
 }
 

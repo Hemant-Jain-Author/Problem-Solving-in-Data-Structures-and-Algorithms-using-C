@@ -34,8 +34,7 @@ int editDist(char* str1, char* str2) {
 	return editDistUtil(str1, str2, m, n);
 }
 
-int editDistDP(char* str1, char* str2) // bottom up approach
-{
+int editDistDP(char* str1, char* str2) { // bottom up approach
 	int m = strlen(str1);
 	int n = strlen(str2);
 	int dp[m + 1][n + 1];

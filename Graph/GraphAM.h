@@ -1,14 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Graph_t
-{
+typedef struct graph {
     int count;
     int **adj;
 } Graph;
 
-typedef struct GraphEdge_t
-{
+typedef struct graphEdge {
     int src;
     int dest;
     int cost;

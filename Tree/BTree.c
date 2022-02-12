@@ -3,8 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct Node_t
-{
+typedef struct Node_t {
 	int n; // Current number of keys
 	int* keys; // An array of keys
 	struct Node_t** arr; // An array of child pointers
@@ -20,8 +19,7 @@ Node* createNode(int leaf, int max) {
 	return node;
 }
 
-typedef struct BTree_t
-{
+typedef struct BTree_t {
 	Node *root; // Pointer to root node
 	int max; // Maximum degree
 	int min; // Minimum degree
@@ -37,22 +35,22 @@ BTree* createBTree(int dg) {
 
 BTree* createBTree(int dg);
 void printTree(BTree* tree);
-void insertValue(BTree* tree, int key);
-void removeValue(BTree* tree, int key);
+void insert(BTree* tree, int key);
+void delete(BTree* tree, int key);
 int search(BTree* tree, int key);
 
 void printTreeUtil(Node *node, char* indent);
 int searchUtil(Node *node, int key);
 // Insert a new key in this node, Arguments are parent, child, index of child and key.
-void insertValueUtil(Node *parent, Node *child, int index, int key, int max);
+void insertUtil(Node *parent, Node *child, int index, int key, int max);
 void split(Node *parent, Node *child, int index, int max);
-void removeUtil(Node *node, int key, int min);
+void deleteUtil(Node *node, int key, int min);
 // Returns the index of first key which is greater than or equal to key.
 int findKey(Node *node, int key);
-// Remove the index key from leaf node.
-void removeFromLeaf(Node *node, int index);
-// Remove the index key from a non-leaf node.
-void removeFromNonLeaf(Node *node, int index, int min);
+// delete the index key from leaf node.
+void deleteFromLeaf(Node *node, int index);
+// delete the index key from a non-leaf node.
+void deleteFromNonLeaf(Node *node, int index, int min);
 // To get predecessor of keys[index]
 int getPred(Node *node, int index);
 // To get successor of keys[index]
@@ -113,7 +111,7 @@ int searchUtil(Node *node, int key) {
 	return searchUtil(node->arr[i], key);
 }
 
-void insertValue(BTree* tree, int key) {
+void insert(BTree* tree, int key) {
 	// If tree is empty
 	if (tree->root == NULL) {
 		// Allocate memory for root
@@ -135,14 +133,12 @@ void insertValue(BTree* tree, int key) {
 		// Insert the new key at found location
 		tree->root->keys[i + 1] = key;
 		tree->root->n = tree->root->n + 1;
-	}
-	else
-	{
+	} else {
 		int i = 0;
 		while (i < tree->root->n && tree->root->keys[i] < key)
 			i++;
 	
-		insertValueUtil(tree->root, tree->root->arr[i], i, key, tree->max);
+		insertUtil(tree->root, tree->root->arr[i], i, key, tree->max);
 	}
 	if (tree->root->n == tree->max) {
 		// If root contains more then allowed nodes, then tree grows in height.
@@ -154,7 +150,7 @@ void insertValue(BTree* tree, int key) {
 	}
 }
 
-void insertValueUtil(Node *parent, Node *child, int index, int key, int max) {
+void insertUtil(Node *parent, Node *child, int index, int key, int max) {
 	if (child->leaf == 1) {
 		// Finds the location where new key will be inserted 
 		// by moving all keys greater than key to one place forward.
@@ -167,15 +163,13 @@ void insertValueUtil(Node *parent, Node *child, int index, int key, int max) {
 		// Insert the new key at found location
 		child->keys[i + 1] = key;
 		child->n += 1;
-	}
-	else
-	{
+	} else {
 		int i = 0;
 		// insert the node to the proper child.
 		while (i < child->n && child->keys[i] < key) {
 			i++;
 		}
-		insertValueUtil(child, child->arr[i], i, key, max); // parent, child and index of child.
+		insertUtil(child, child->arr[i], i, key, max); // parent, child and index of child.
 	}
 
 	if (child->n == max) // More nodes than allowed.
@@ -230,8 +224,8 @@ void split(Node *parent, Node *child, int index, int max) {
 	parent->n += 1;
 }
 
-void removeValue(BTree* tree, int key) {
-	removeUtil(tree->root, key, tree->min);
+void delete(BTree* tree, int key) {
+	deleteUtil(tree->root, key, tree->min);
 
 	if (tree->root->n == 0) {
 		// Shrinking : If root is pointing to empty node.
@@ -239,38 +233,30 @@ void removeValue(BTree* tree, int key) {
 		// Else root will point to first child of node.
 		if (tree->root->leaf) {
 			tree->root = NULL;
-		}
-		else
-		{
+		} else {
 			tree->root = tree->root->arr[0];
 		}
 	}
 }
 
-void removeUtil(Node *node, int key, int min) {
+void deleteUtil(Node *node, int key, int min) {
 	int index = findKey(node, key);
 	if (node->leaf) {
 		if (index < node->n && node->keys[index] == key) {
-			removeFromLeaf(node, index); // Leaf node key found.
-		}
-		else
-		{
+			deleteFromLeaf(node, index); // Leaf node key found.
+		} else {
 			printf("The key %d not found.\n", key);
 			return;
 		}
-	}
-	else
-	{
+	} else {
 		if (index < node->n && node->keys[index] == key) {
-			removeFromNonLeaf(node, index, min); // Internal node key found.
-		}
-		else
-		{
-			removeUtil(node->arr[index], key, min);
+			deleteFromNonLeaf(node, index, min); // Internal node key found.
+		} else {
+			deleteUtil(node->arr[index], key, min);
 		}
 
 		// All the property violation in index subtree only.
-		// which include remove from leaf case too.
+		// which include delete from leaf case too.
 		if (node->arr[index]->n < min) {
 			fixBTree(node, index, min);
 		}
@@ -285,7 +271,7 @@ int findKey(Node *node, int key) {
 	return index;
 }
 
-void removeFromLeaf(Node *node, int index) {
+void deleteFromLeaf(Node *node, int index) {
 	// Move all the keys after the index position one step left.
 	for (int i = index + 1; i < node->n; ++i)
 		node->keys[i - 1] = node->keys[i];
@@ -295,7 +281,7 @@ void removeFromLeaf(Node *node, int index) {
 	return;
 }
 
-void removeFromNonLeaf(Node *node, int index, int min) {
+void deleteFromNonLeaf(Node *node, int index, int min) {
 	int key = node->keys[index];
 
 	// If the child that precedes key has at least min keys,
@@ -304,7 +290,7 @@ void removeFromNonLeaf(Node *node, int index, int min) {
 	if (node->arr[index]->n > min) {
 		int pred = getPred(node, index);
 		node->keys[index] = pred;
-		removeUtil(node->arr[index], pred, min);
+		deleteUtil(node->arr[index], pred, min);
 	}
 
 	// If the child that succeeds key has at least min keys,
@@ -313,16 +299,15 @@ void removeFromNonLeaf(Node *node, int index, int min) {
 	else if (node->arr[index + 1]->n > min) {
 		int succ = getSucc(node, index);
 		node->keys[index] = succ;
-		removeUtil(node->arr[index + 1], succ, min);
+		deleteUtil(node->arr[index + 1], succ, min);
 	}
 
 	// If both left and right subtree has min number of keys.
 	// Then merge left, right child along with parent key.
-	// Then call remove on the merged child.
-	else
-	{
+	// Then call delete on the merged child.
+	else {
 		merge(node, index);
-		removeUtil(node->arr[index], key, min);
+		deleteUtil(node->arr[index], key, min);
 	}
 	return;
 }
@@ -357,13 +342,10 @@ void fixBTree(Node *node, int index, int min) {
 	// If both siblings has less than min keys.
 	// When right sibling exist always merge with the right sibling.
 	// When right sibling does not exist then merge with left sibling.
-	else
-	{
+	else {
 		if (index != node->n) {
 			merge(node, index);
-		}
-		else
-		{
+		} else {
 			merge(node, index - 1);
 		}
 	}
@@ -456,24 +438,24 @@ void merge(Node *node, int index) {
 
 int main() {
 	BTree* tree = createBTree(3); // A B-Tree with max key 3
-	insertValue(tree, 1);
-	insertValue(tree, 2);
-	insertValue(tree, 3);
-	insertValue(tree, 4);
-	insertValue(tree, 5);
-	insertValue(tree, 6);
-	insertValue(tree, 7);
-	insertValue(tree, 8);
-	insertValue(tree, 9);
-	insertValue(tree, 10);
+	insert(tree, 1);
+	insert(tree, 2);
+	insert(tree, 3);
+	insert(tree, 4);
+	insert(tree, 5);
+	insert(tree, 6);
+	insert(tree, 7);
+	insert(tree, 8);
+	insert(tree, 9);
+	insert(tree, 10);
 	printTree(tree);
 	
 	printf("6 found: %d\n", search(tree, 6));
 	printf("11 found: %d\n", search(tree, 11));
 
-	removeValue(tree, 6);
-	removeValue(tree, 3);
-	removeValue(tree, 7);
+	delete(tree, 6);
+	delete(tree, 3);
+	delete(tree, 7);
 	printTree(tree);
 }
 

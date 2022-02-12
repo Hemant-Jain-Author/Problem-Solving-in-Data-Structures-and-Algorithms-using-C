@@ -92,37 +92,37 @@ int binarySearchRecursive(int arr[], int size, int value) {
 
 int fibonacciSearch(int arr[], int size, int value) {
     /* Initialize fibonacci numbers */
-	int fibNMn2 = 0;
-	int fibNMn1 = 1;
-	int fibN = fibNMn2 + fibNMn1;
+    int fibNMn2 = 0;
+    int fibNMn1 = 1;
+    int fibN = fibNMn2 + fibNMn1;
 
-	while (fibN < size) {
-		fibNMn2 = fibNMn1;
-		fibNMn1 = fibN;
-		fibN = fibNMn2 + fibNMn1;
-	}
+    while (fibN < size) {
+        fibNMn2 = fibNMn1;
+        fibNMn1 = fibN;
+        fibN = fibNMn2 + fibNMn1;
+    }
 
-	int low = 0;
-	while (fibN > 1) { // fibonacci series start with 0, 1, 1, 2
-		int i = min(low + fibNMn2, size-1);
-		if (arr[i] == value) {
-			return 1;
-		} else if (arr[i] < value) {
-			fibN = fibNMn1;
-			fibNMn1 = fibNMn2;
-			fibNMn2 = fibN - fibNMn1;
-			low = i;
-		} else { // for feb2 <= 1, these will be invalid.
-			fibN = fibNMn2;
-			fibNMn1 = fibNMn1 - fibNMn2;
-			fibNMn2 = fibN - fibNMn1;
-		}
-	}
-	if (arr[low + fibNMn2] == value) // above loop does not check when fibNMn2 = 0
-	{
-		return 1;
-	}
-	return 0;
+    int low = 0;
+    while (fibN > 1) { // fibonacci series start with 0, 1, 1, 2
+        int i = min(low + fibNMn2, size-1);
+        if (arr[i] == value) {
+            return 1;
+        } else if (arr[i] < value) {
+            fibN = fibNMn1;
+            fibNMn1 = fibNMn2;
+            fibNMn2 = fibN - fibNMn1;
+            low = i;
+        } else { // for feb2 <= 1, these will be invalid.
+            fibN = fibNMn2;
+            fibNMn1 = fibNMn1 - fibNMn2;
+            fibNMn2 = fibN - fibNMn1;
+        }
+    }
+    if (arr[low + fibNMn2] == value) // above loop does not check when fibNMn2 = 0
+    {
+        return 1;
+    }
+    return 0;
 }
 
 int main1() {
@@ -295,13 +295,13 @@ int main4() {
     int end = removeDuplicates(arr, 7);
     for (int i = 0; i  < end; i++)
         printf("%d ", arr[i]);
-	printf("\n");
+    printf("\n");
 
     int arr2[] = { 1, 3, 5, 3, 9, 1, 30 };
     end = removeDuplicates(arr2, 7);
     for (int i = 0; i < end; i++)
         printf("%d ", arr2[i]);
-	printf("\n");
+    printf("\n");
     return 0;
 }
 
@@ -373,7 +373,7 @@ int findMissingNumber4(int arr[], int size) {
 }
 
 
-int findMissingNumber5(int arr[], int size) {
+int findMissingNumber6(int arr[], int size) {
     int sum = 0;
     for (int i = 0; i < size+2; i++) {
         sum += i;
@@ -384,20 +384,20 @@ int findMissingNumber5(int arr[], int size) {
     return sum;
 }
 
-int findMissingNumber6(int arr[], int size) {
-	for (int i = 0; i < size; i++) {
-		// len(arr)+1 value should be ignored.
-		if (arr[i] != size+1 && arr[i] != size * 3 + 1) {
-			// 1 should not become (len(arr)+1) so multiplied by 2
-			arr[(arr[i] - 1) % size] += size * 2;
-		}
-	}
+int findMissingNumber5(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        // len(arr)+1 value should be ignored.
+        if (arr[i] != size+1 && arr[i] != size * 3 + 1) {
+            // 1 should not become (len(arr)+1) so multiplied by 2
+            arr[(arr[i] - 1) % size] += size * 2;
+        }
+    }
 
-	for (int i = 0; i < size; i++) {
-		if (arr[i] < (size * 2)) {
-			return i + 1;
-		}
-	}
+    for (int i = 0; i < size; i++) {
+        if (arr[i] < (size * 2)) {
+            return i + 1;
+        }
+    }
     printf("No Number Missing");
     return -9999999;
 }
@@ -420,10 +420,10 @@ int findMissingNumber7(int arr[], int size, int range) {
 int main5() {
     int first[]= {1, 5, 4, 3, 2, 7, 8, 9};
     printf("MissingNumber : %d\n", findMissingNumber(first, 8));
-	printf("MissingNumber : %d\n", findMissingNumber2(first, 8));
-	printf("MissingNumber : %d\n", findMissingNumber3(first, 8));
-	printf("MissingNumber : %d\n", findMissingNumber4(first, 8));
-	printf("MissingNumber : %d\n", findMissingNumber5(first, 8));
+    printf("MissingNumber : %d\n", findMissingNumber2(first, 8));
+    printf("MissingNumber : %d\n", findMissingNumber3(first, 8));
+    printf("MissingNumber : %d\n", findMissingNumber4(first, 8));
+    printf("MissingNumber : %d\n", findMissingNumber5(first, 8));
     printf("MissingNumber : %d\n", findMissingNumber7(first, 8, 9));
     printf("MissingNumber : %d\n", findMissingNumber6(first, 8)); // modify array
     return 0;
@@ -453,13 +453,13 @@ void missingValues(int arr[], int size) {
     printf("Missing Value is :: ");
     for (int i = minVal; i < maxVal + 1; i++) {
         found = 0;
-		for (int j = 0;j < size; j++) {
-			if (arr[j] == i) {
-				found = 1;
-				break;
-			}
-		}
-		if (!found)
+        for (int j = 0;j < size; j++) {
+            if (arr[j] == i) {
+                found = 1;
+                break;
+            }
+        }
+        if (!found)
             printf("%d ", i);
     }
     printf("\n");
@@ -504,24 +504,24 @@ void missingValues3(int arr[], int size) {
 }
 
 int main6() {
-    int arr[] = { 1, 9, 2, 8, 3, 7, 4, 6 };
-    missingValues(arr, 8);
-    missingValues2(arr, 8);
-    missingValues3(arr, 8);
+    int arr[] = {11, 14, 13, 17, 21, 18, 19, 23, 24};
+    missingValues(arr, 9);
+    missingValues2(arr, 9);
+    missingValues3(arr, 9);
     return 0;
 }
 
 /*
-Missing Value is :: 5 
-Missing Value is :: 5 
-Missing Value is :: 5 
+Missing Value is :: 12 15 16 20 22 
+Missing Value is :: 12 15 16 20 22 
+Missing Value is :: 12 15 16 20 22 
 */
 
 void oddCount(int arr[], int size) {
     int xorSum = 0;
-	for (int i = 0; i < size; i++)
-		xorSum ^= arr[i];
-	
+    for (int i = 0; i < size; i++)
+        xorSum ^= arr[i];
+    
     printf("Odd value: %d\n", xorSum);
 }
 
@@ -550,9 +550,9 @@ void oddCount3(int arr[], int size) {
     int setBit;
     /*
     xor of all elements in arr[]
-	even occurrence will cancel each other.
-	sum will contain sum of two odd elements.
-	*/
+    even occurrence will cancel each other.
+    sum will contain sum of two odd elements.
+    */
     for (int i = 0; i < size; i++)
         xorSum = xorSum ^ arr[i];
 
@@ -561,10 +561,10 @@ void oddCount3(int arr[], int size) {
 
     /*
     Dividing elements in two group: 
-	Elements having setBit bit as 1.
-	Elements having setBit bit as 0.
-	Even elements cancelled themselves if group and we get our numbers.
-	*/
+    Elements having setBit bit as 1.
+    Elements having setBit bit as 0.
+    Even elements cancelled themselves if group and we get our numbers.
+    */
     for (int i = 0; i < size; i++) {
         if (arr[i] & setBit)
             first = first ^ arr[i];
@@ -743,90 +743,90 @@ The pair is : 1, 7
 */
 
 int findPairTwoLists(int arr1[], int size1, int arr2[], int size2, int value) {
-	for (int i = 0; i < size1; i++) {
-		for (int j = 0; j < size2; j++) {
-			if ((arr1[i] + arr2[j]) == value) {
-				printf("The pair is : %d, %d\n", arr1[i], arr2[j]);
-				return 1;
-			}
-		}
-	}
-	return 0;
+    for (int i = 0; i < size1; i++) {
+        for (int j = 0; j < size2; j++) {
+            if ((arr1[i] + arr2[j]) == value) {
+                printf("The pair is : %d, %d\n", arr1[i], arr2[j]);
+                return 1;
+            }
+        }
+    }
+    return 0;
 }
 
 int findPairTwoLists2(int arr1[], int size1, int arr2[], int size2, int value) {
     sort(arr2, size2);
-	for (int i = 0; i < size1; i++) {
-		if (binarySearch(arr2, size2, value - arr1[i])) {
+    for (int i = 0; i < size1; i++) {
+        if (binarySearch(arr2, size2, value - arr1[i])) {
             printf("The pair is : %d, %d\n", arr1[i], (value - arr1[i]));
-		}
-		return 1;
-	}
-	return 0;
+        }
+        return 1;
+    }
+    return 0;
 }
 
 int findPairTwoLists3(int arr1[], int size1, int arr2[], int size2, int value) {
-	int first = 0, second = size2 - 1, curr = 0;
-	sort(arr1, size1);
-	sort(arr2, size2);
-	while (first < size1 && second >= 0) {
-		curr = arr1[first] + arr2[second];
-		if (curr == value) {
+    int first = 0, second = size2 - 1, curr = 0;
+    sort(arr1, size1);
+    sort(arr2, size2);
+    while (first < size1 && second >= 0) {
+        curr = arr1[first] + arr2[second];
+        if (curr == value) {
             printf("The pair is : %d, %d\n", arr1[first], arr2[second]);
-			return 1;
-		} else if (curr < value) {
-			first++;
-		} else {
-			second--;
-		}
-	}
-	return 0;
+            return 1;
+        } else if (curr < value) {
+            first++;
+        } else {
+            second--;
+        }
+    }
+    return 0;
 }
 
 int findPairTwoLists4(int arr1[], int size1, int arr2[], int size2, int value) {
-	Set* st = createSet();
-	for (int i = 0; i < size2; i++) {
-		SetAdd(st, arr2[i]);
-	}
+    Set* st = createSet();
+    for (int i = 0; i < size2; i++) {
+        SetAdd(st, arr2[i]);
+    }
 
-	for (int i = 0; i < size1; i++) {
-		if (SetFind(st, value - arr1[i])) {
+    for (int i = 0; i < size1; i++) {
+        if (SetFind(st, value - arr1[i])) {
             printf("The pair is : %d, %d\n", arr1[i], (value - arr1[i]));
-			return 1;
-		}
-	}
-	return 0;
+            return 1;
+        }
+    }
+    return 0;
 }
 
 int findPairTwoLists5(int arr1[], int size1, int arr2[], int size2, int range, int value) {
     int count[range+1];
     for (int i = 0; i <= range; i++) {
-		count[i] = 0;
-	}
+        count[i] = 0;
+    }
 
-	for (int i = 0; i < size2; i++) {
-		count[arr2[i]] = 1;
-	}
+    for (int i = 0; i < size2; i++) {
+        count[arr2[i]] = 1;
+    }
 
-	for (int i = 0; i < size1; i++) {
-		if (count[value - arr1[i]] != 0) {
+    for (int i = 0; i < size1; i++) {
+        if (count[value - arr1[i]] != 0) {
             printf("The pair is : %d, %d\n", arr1[i], (value - arr1[i]));
-			return 1;
-		}
-	}
-	return 0;
+            return 1;
+        }
+    }
+    return 0;
 }
 
 void main11() {
-	int first[] = {1, 5, 4, 3, 2, 7, 8, 9, 6};
+    int first[] = {1, 5, 4, 3, 2, 7, 8, 9, 6};
     int size1 = 9;
-	int second[] = {1, 5, 4, 3, 2, 7, 8, 9, 6};
-	int size2 = 9;
+    int second[] = {1, 5, 4, 3, 2, 7, 8, 9, 6};
+    int size2 = 9;
     findPairTwoLists(first, size1, second, size2, 8);
-	findPairTwoLists2(first, size1, second, size2, 8);
-	findPairTwoLists3(first, size1, second, size2, 8);
-	findPairTwoLists4(first, size1, second, size2, 8);
-	findPairTwoLists5(first, size1, second, size2, 9, 8);
+    findPairTwoLists2(first, size1, second, size2, 8);
+    findPairTwoLists3(first, size1, second, size2, 8);
+    findPairTwoLists4(first, size1, second, size2, 8);
+    findPairTwoLists5(first, size1, second, size2, 9, 8);
 }
 
 /*
@@ -868,9 +868,9 @@ int findDifference2(int arr[], int size, int value) {
 }
 
 void main12() {
-	int second[] = { 1, 5, 4, 3, 2, 7, 8, 9, 6};
-	findDifference(second, 9, 6);
-	findDifference2(second, 9, 6);
+    int second[] = { 1, 5, 4, 3, 2, 7, 8, 9, 6};
+    findDifference(second, 9, 6);
+    findDifference2(second, 9, 6);
 }
 
 /*
@@ -880,15 +880,15 @@ The pair is:: 1 & 7.
 
 int findMinDiff(int arr[], int size) {
     int diff = 999999;
-	for (int i = 0; i < size; i++) {
-		for (int j = i + 1; j < size; j++) {
-			int value = abs(arr[i] - arr[j]);
-			if (diff > value) {
-				diff = value;
-			}
-		}
-	}
-	return diff;
+    for (int i = 0; i < size; i++) {
+        for (int j = i + 1; j < size; j++) {
+            int value = abs(arr[i] - arr[j]);
+            if (diff > value) {
+                diff = value;
+            }
+        }
+    }
+    return diff;
 }
 
 int findMinDiff2(int arr[], int size) {
@@ -903,34 +903,34 @@ int findMinDiff2(int arr[], int size) {
 }
 
 void main13() {
-	int second[] = {1, 6, 4, 19, 17, 20};
+    int second[] = {1, 6, 4, 19, 17, 20};
     int n = 6;
-	printf("findMinDiff : %d\n", findMinDiff(second, n));
-	printf("findMinDiff : %d\n", findMinDiff2(second, n));
+    printf("findMinDiff : %d\n", findMinDiff(second, n));
+    printf("findMinDiff : %d\n", findMinDiff2(second, n));
 }
 
 /*
-indMinDiff : 1
+findMinDiff : 1
 findMinDiff : 1
 */
 
 int minDiffPair(int arr1[], int size1, int arr2[], int size2) {
-	int diff = 999999;
-	int first = 0;
-	int second = 0;
-	for (int i = 0; i < size1; i++) {
-		for (int j = 0; j < size2; j++) {
-			int value = abs(arr1[i] - arr2[j]);
-			if (diff > value) {
-				diff = value;
-				first = arr1[i];
-				second = arr2[j];
-			}
-		}
-	}
-	printf("The pair is :: %d & %d \n", first, second);
-	printf("Minimum difference is :: %d \n", diff);
-	return diff;
+    int diff = 999999;
+    int first = 0;
+    int second = 0;
+    for (int i = 0; i < size1; i++) {
+        for (int j = 0; j < size2; j++) {
+            int value = abs(arr1[i] - arr2[j]);
+            if (diff > value) {
+                diff = value;
+                first = arr1[i];
+                second = arr2[j];
+            }
+        }
+    }
+    printf("The pair is :: %d & %d \n", first, second);
+    printf("Minimum difference is :: %d \n", diff);
+    return diff;
 }
 
 int minDiffPair2(int arr1[], int size1, int arr2[], int size2) {
@@ -1167,7 +1167,7 @@ void ABCTriplet(int arr[], int size) {
                 }
             }
         }
-	}
+    }
 }
 
 void ABCTriplet2(int arr[], int size) {
@@ -1204,8 +1204,8 @@ ABCTriplet:: -4, 7, 3
 */
 
 void smallerThenTripletCount(int arr[], int size, int value) {
-	int count = 0;
-	for (int i = 0; i < size-1; i++) {
+    int count = 0;
+    for (int i = 0; i < size-1; i++) {
         for (int j = i + 1; j < size; j++) {
             for (int k = j + 1; k < size; k++) {
                 if (arr[i] + arr[j] + arr[k] < value) {
@@ -1213,8 +1213,8 @@ void smallerThenTripletCount(int arr[], int size, int value) {
                 }
             }
         }
-	}
-	printf("smallerThenTripletCount : %d\n", count);
+    }
+    printf("smallerThenTripletCount : %d\n", count);
 }
 
 void smallerThenTripletCount2(int arr[], int size, int value) {
@@ -1536,15 +1536,15 @@ void quickSelectUtil(int arr[], int lower, int upper, int k) {
 }
 
 int getMedian2(int arr[], int size) {
-	quickSelectUtil(arr, 0, size - 1, size / 2);
-	return arr[size / 2];
+    quickSelectUtil(arr, 0, size - 1, size / 2);
+    return arr[size / 2];
 }
 
 void main26() {
-	int first[] = {1, 5, 6, 6, 6, 6, 6, 6, 7, 8, 10, 13, 20, 30};
-	int size = sizeof(first)/sizeof(int);
+    int first[] = {1, 5, 6, 6, 6, 6, 6, 6, 7, 8, 10, 13, 20, 30};
+    int size = sizeof(first)/sizeof(int);
     printf("Median : %d\n", getMedian(first, size));
-	printf("Median : %d\n", getMedian2(first, size));
+    printf("Median : %d\n", getMedian2(first, size));
 }
 
 /*
@@ -1553,13 +1553,13 @@ Median : 6
 */
 
 int searchBitonicArrayMax(int arr[], int size) {
-	for (int i = 0; i < size-2; i++) {
-		if (arr[i] > arr[i + 1]) {
-			return arr[i];
-		}
-	}
-	printf("error not a bitonic array \n");
-	return 0;
+    for (int i = 0; i < size-2; i++) {
+        if (arr[i] > arr[i + 1]) {
+            return arr[i];
+        }
+    }
+    printf("error not a bitonic array \n");
+    return 0;
 }
 
 int searchBitonicArrayMax2(int arr[], int size) {
@@ -1661,11 +1661,11 @@ int searchBitonicArray(int arr[], int size, int key) {
 }
 
 void main27() {
-	int first[] = {1, 5, 10, 13, 20, 30, 8, 7, 6};
+    int first[] = {1, 5, 10, 13, 20, 30, 8, 7, 6};
     int size = sizeof(first)/sizeof(int);
-	printf("%d\n", searchBitonicArrayMax(first, size));
-	printf("%d\n", searchBitonicArrayMax2(first, size));
-	printf("%d\n", searchBitonicArray(first, size, 7));
+    printf("%d\n", searchBitonicArrayMax(first, size));
+    printf("%d\n", searchBitonicArrayMax2(first, size));
+    printf("%d\n", searchBitonicArray(first, size, 7));
     printf("%d\n", first[findBitonicArrayMaxIndex(first, size)]);
 }
 
@@ -1736,18 +1736,18 @@ findKeyCount : 1
 */
 
 int isMajority(int arr[], int size) {
-	int count = 0;
-	int mid = arr[size / 2];
-	for (int i = 0;i < size;i++) {
-		if (arr[i] == mid) {
-			count += 1;
-		}
-	}
+    int count = 0;
+    int mid = arr[size / 2];
+    for (int i = 0;i < size;i++) {
+        if (arr[i] == mid) {
+            count += 1;
+        }
+    }
 
-	if (count > size / 2) {
-		return 1;
-	}
-	return 0;
+    if (count > size / 2) {
+        return 1;
+    }
+    return 0;
 }
 
 /* Using binary search method.*/
@@ -1757,9 +1757,9 @@ int FirstIndex(int arr[], int size, int start, int end, int value) {
         mid = (start + end) / 2;
 
     /*
-		Find first occurrence of value, either it should be the first 
-		element of the array or the value before it is smaller than it.
-		*/
+        Find first occurrence of value, either it should be the first 
+        element of the array or the value before it is smaller than it.
+        */
     if ((mid == 0 || arr[mid - 1] < value) && (arr[mid] == value))
         return mid;
     else if (arr[mid] < value)
@@ -1775,7 +1775,7 @@ int isMajority2(int arr[], int size) {
     i = FirstIndex(arr, size, 0, size - 1, majority);
     /*
     we are using majority element form array so 
-	 we will get some valid index always.
+     we will get some valid index always.
     */
     if (((i + size / 2) <= (size - 1)) && arr[i + size / 2] == majority)
         return 1;
@@ -1797,21 +1797,21 @@ isMajority : 1
 */
 
 int maxProfit(int stocks[], int size) {
-	int maxProfit = 0;
-	int buy = 0, sell = 0;
+    int maxProfit = 0;
+    int buy = 0, sell = 0;
 
-	for (int i = 0;i < size-1;i++) {
-		for (int j = i + 1;j < size ;j++) {
-			if (maxProfit < stocks[j] - stocks[i]) {
-				maxProfit = stocks[j] - stocks[i];
-				buy = i;
-				sell = j;
-			}
-		}
-	}
-	printf("Purchase day is %d at price %d\n", buy, stocks[buy]);
-	printf("Sell day is %d at price %d\n", sell, stocks[sell]);
-	printf("Profit is %d\n", maxProfit);
+    for (int i = 0;i < size-1;i++) {
+        for (int j = i + 1;j < size ;j++) {
+            if (maxProfit < stocks[j] - stocks[i]) {
+                maxProfit = stocks[j] - stocks[i];
+                buy = i;
+                sell = j;
+            }
+        }
+    }
+    printf("Purchase day is %d at price %d\n", buy, stocks[buy]);
+    printf("Sell day is %d at price %d\n", sell, stocks[sell]);
+    printf("Profit is %d\n", maxProfit);
     return maxProfit;
 }
 
@@ -1888,12 +1888,12 @@ findMedian : 6
 */
 
 int search01(int arr[], int size) {
-	for (int i = 0;i < size;i++) {
-		if (arr[i] == 1) {
-			return i;
-		}
-	}
-	return -1;
+    for (int i = 0;i < size;i++) {
+        if (arr[i] == 1) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 int binarySearch01Util(int arr[], int start, int end) {
@@ -1922,7 +1922,7 @@ int binarySearch01(int arr[], int size) {
 int main32() {
     int first[] = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 };
     int size = sizeof(first)/sizeof(int);
-	printf("%d\n", search01(first, size));
+    printf("%d\n", search01(first, size));
     printf("%d\n", binarySearch01(first, size));
     return 0;
 }
@@ -1933,12 +1933,12 @@ int main32() {
 */
 
 int rotationMax(int arr[], int size) {
-	for (int i = 0;i < size-1;i++) {
-		if (arr[i] > arr[i + 1]) {
-			return arr[i];
-		}
-	}
-	return -1;
+    for (int i = 0;i < size-1;i++) {
+        if (arr[i] > arr[i + 1]) {
+            return arr[i];
+        }
+    }
+    return -1;
 }
 
 int rotationMaxUtil(int arr[], int start, int end) {
@@ -1974,12 +1974,12 @@ RotationMax is :: 11
 */
 
 int findRotationMax(int arr[], int size) {
-	for (int i = 0;i < size-1;i++) {
-		if (arr[i] > arr[i + 1]) {
-			return i;
-		}
-	}
-	return -1;
+    for (int i = 0;i < size-1;i++) {
+        if (arr[i] > arr[i + 1]) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 int findRotationMaxUtil(int arr[], int start, int end) {
@@ -2032,12 +2032,12 @@ Rotation count : 3
 */
 
 int searchRotateArray(int arr[], int size, int key) {
-	for (int i = 0;i < size-1;i++) {
-		if (arr[i] == key) {
-			return i;
-		}
-	}
-	return -1;
+    for (int i = 0;i < size-1;i++) {
+        if (arr[i] == key) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 int binarySearchRotateArrayUtil(int arr[], int start, int end, int key) {
@@ -2071,7 +2071,7 @@ int binarySearchRotateArray(int arr[], int size, int key) {
 int main36() {
     int first[] = { 34, 56, 77, 1, 5, 6, 6, 6, 6, 6, 6, 7, 8, 10, 13, 20, 30 };
     int size = sizeof(first)/sizeof(int);
-	printf("%d\n", searchRotateArray(first, size, 20));
+    printf("%d\n", searchRotateArray(first, size, 20));
     printf("%d\n", binarySearchRotateArray(first, size, 20));
     return 0;
 }
@@ -2171,24 +2171,24 @@ int checkPermutation2(char array1[], int size1, char array2[], int size2) {
 }
 
 int checkPermutation3(char array1[], int size1,  char array2[], int size2) {
-	if (size1 != size2) {
-		return 0;
-	}
-	int count[256];
+    if (size1 != size2) {
+        return 0;
+    }
+    int count[256];
     for (int i =0;i<256;i++)
         count[i] = 0;
 
-	for (int i = 0; i < size1; i++) {
-		count[array1[i]]++;
-		count[array2[i]]--;
-	}
+    for (int i = 0; i < size1; i++) {
+        count[array1[i]]++;
+        count[array2[i]]--;
+    }
 
-	for (int i = 0; i < size1; i++) {
-		if (count[i] != 0) {
-			return 0;
-		}
-	}
-	return 1;
+    for (int i = 0; i < size1; i++) {
+        if (count[i] != 0) {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 int main39() {
@@ -2341,9 +2341,9 @@ int findFloor(int arr[], int size, int value) {
     while (start <= stop) {
         mid = (start + stop) / 2;
         /* search value is equal to arr[mid] value..
-		 search value is greater than mid index value and less than mid+1 index value.
-		 value is greater than arr[size-1] then floor is arr[size-1]
-		*/
+         search value is greater than mid index value and less than mid+1 index value.
+         value is greater than arr[size-1] then floor is arr[size-1]
+        */
         if (arr[mid] == value || (arr[mid] < value && (mid == size - 1 || arr[mid + 1] > value)))
             return mid;
         else if (arr[mid] < value)
@@ -2362,24 +2362,24 @@ int findCeil(int arr[], int size, int value) {
     while (start <= stop) {
         mid = (start + stop) / 2;
         /* search value is equal to arr[mid] value..
-		 search value is less than mid index value and greater than mid-1 index value.
-		 value is less than arr[0] then ceil is arr[0]
-		*/
+         search value is less than mid index value and greater than mid-1 index value.
+         value is less than arr[0] then ceil is arr[0]
+        */
         if (arr[mid] == value || (arr[mid] > value && (mid == 0 || arr[mid - 1] < value)))
             return mid;
         else if (arr[mid] < value)
-            start = mid + 1;
+            start = mid;
         else
-            stop = mid - 1;
+            stop = mid;
     }
     return -1;
 }
 
 int main42() {
-    int arr[] = { -7, 1, 2, 3, 6, 8, 10 };
+    int arr[] = { -7, 1, 3, 6, 8, 10 };
     int n = 7;
-    printf("%d\n", findFloor(arr, n, 4));
-    printf("%d\n", findCeil(arr, n, 4));
+    printf("%d\n", findFloor(arr, n, 2));
+    printf("%d\n", findCeil(arr, n, 2));
     return 0;
 }
 
@@ -2422,63 +2422,43 @@ int main43() {
 closestNumber : 8
 */
 
-/*
-int DuplicateKDistance(int arr[], int size, int k) {
-    Set* hs = createSet(); 
-    for (int i = 0; i < size; i++) {
-        if (SetFind(hs, arr[i]) && i - arr[i] <= k) {
-            printf("%d, %d, %d", arr[i], GetCount(hs, arr[i]), i);
-            return 1;
-        } else
-            SetAdd2(hs, arr[i], i);
-    }
-    return 0;
-}
-
-int main44() {
-    int arr[] = { 1, 2, 3, 1, 4, 5 };
-    duplicateKDistance(arr, 3);
-    return 0;
-}
-*/
-
 void frequencyCounts(int arr[], int size) {
-	Counter *ct = createCounter();
-	for (int i = 0; i < size; i++) {
-		CounterAdd(ct, arr[i]);
-	}
-	CounterPrint(ct);
+    Counter *ct = createCounter();
+    for (int i = 0; i < size; i++) {
+        CounterAdd(ct, arr[i]);
+    }
+    CounterPrint(ct);
 }
 
 void frequencyCounts2(int arr[], int size) {
-	sort(arr, size);
-	int count = 1;
-	for (int i = 1; i < size; i++) {
-		if (arr[i] == arr[i - 1]) {
-			count++;
-		} else {
-		    printf("(%d->%d) ", arr[i - 1], count);
-			count = 1;
-		}
-	}
-	printf("(%d->%d)\n", arr[size-1], count);
+    sort(arr, size);
+    int count = 1;
+    for (int i = 1; i < size; i++) {
+        if (arr[i] == arr[i - 1]) {
+            count++;
+        } else {
+            printf("(%d->%d) ", arr[i - 1], count);
+            count = 1;
+        }
+    }
+    printf("(%d->%d)\n", arr[size-1], count);
 }
 
 void frequencyCounts3(int arr[], int size) {
-	int aux[size+1];
+    int aux[size+1];
     for (int i = 0; i < size+1; i++) {
-		aux[i] = 0;
-	}
+        aux[i] = 0;
+    }
 
-	for (int i = 0; i < size; i++) {
-		aux[arr[i]] += 1;
-	}
-	for (int i = 0; i < size+1; i++) {
-		if (aux[i] > 0) {
-			printf("(%d->%d) ", i, aux[i]);
-		}
-	}
-	printf("\n");
+    for (int i = 0; i < size; i++) {
+        aux[arr[i]] += 1;
+    }
+    for (int i = 0; i < size+1; i++) {
+        if (aux[i] > 0) {
+            printf("(%d->%d) ", i, aux[i]);
+        }
+    }
+    printf("\n");
 }
 
 int frequencyCounts4(int arr[], int size) {
@@ -2505,8 +2485,8 @@ int main45() {
     int arr[] = {1, 2, 2, 2, 1};
     int n = 5;
     frequencyCounts(arr, n);
-	frequencyCounts2(arr, n);
-	frequencyCounts3(arr, n);
+    frequencyCounts2(arr, n);
+    frequencyCounts3(arr, n);
     frequencyCounts4(arr, n);
     return 0;
 }
@@ -2699,7 +2679,7 @@ int maxConSubArr2(int A[], int sizeA, int B[], int sizeB) {
 int main50() {
     int arr1[] = {1, 2, 3, 4, 4, 6, 4, 8, 2};
     int size1 = sizeof(arr1)/sizeof(int);
-    int arr2[] = {2,4, 8, 18, 10};
+    int arr2[] = {2,8, 18, 10};
     int size2 = sizeof(arr2)/sizeof(int);
     printf("maxConSubArr %d\n", maxConSubArr(arr1, size1, arr2, size2));
     printf("maxConSubArr %d\n", maxConSubArr2(arr1, size1, arr2, size2));
@@ -2707,8 +2687,8 @@ int main50() {
 }
 
 /*
-maxConSubArr 6
-maxConSubArr 6
+maxConSubArr 21
+maxConSubArr 21
 */
 
 int rainWater(int arr[], int size) {
@@ -2831,7 +2811,7 @@ int SearchBotinicArrayMax(int arr[], int size) {
 }
 
 int main() {
-    main1();
+    /*main1();
     main2();
     main3();
     main4();
@@ -2878,7 +2858,7 @@ int main() {
     main46();
     main47();
     main48();
-    main49();
+    main49();*/
     main50();
     main51();
     main52();

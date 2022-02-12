@@ -25,7 +25,7 @@ int sumRange(int sum[], int i, int j) {
 	return sum[j] - sum[i - 1];
 }
 
-int optCostUtil(int freq[], int i, int j) {
+int optimalBstUtil(int freq[], int i, int j) {
 	if (i > j)
 		return 0;
 
@@ -34,16 +34,16 @@ int optCostUtil(int freq[], int i, int j) {
 
 	int minval = 99999;
 	for (int r = i; r <= j; r++)
-		minval = min(minval, optCostUtil(freq, i, r - 1) + optCostUtil(freq, r + 1, j));
+		minval = min(minval, optimalBstUtil(freq, i, r - 1) + optimalBstUtil(freq, r + 1, j));
 	
 	return minval + sum(freq, i, j);
 }
 
-int optCost(int keys[], int freq[], int n) {
-	return optCostUtil(freq, 0, n - 1);
+int optimalBst(int keys[], int freq[], int n) {
+	return optimalBstUtil(freq, 0, n - 1);
 }
 
-int optCostTDUtil(int freq[], int n, int cost[][n], int i, int j) {
+int optimalBstTDUtil(int freq[], int n, int cost[][n], int i, int j) {
 	if (i > j)
 		return 0;
 
@@ -52,13 +52,13 @@ int optCostTDUtil(int freq[], int n, int cost[][n], int i, int j) {
 
 	int s = sum(freq, i, j);
 	for (int r = i; r <= j; r++) {
-		cost[i][j] = min(cost[i][j], optCostTDUtil(freq, n, cost, i, r - 1) + 
-									optCostTDUtil(freq, n, cost, r + 1, j) + s);
+		cost[i][j] = min(cost[i][j], optimalBstTDUtil(freq, n, cost, i, r - 1) + 
+									optimalBstTDUtil(freq, n, cost, r + 1, j) + s);
 	}
 	return cost[i][j];
 }
 
-int optCostTD(int keys[], int freq[], int n) {
+int optimalBstTD(int keys[], int freq[], int n) {
 	int cost[n][n];
 	for (int i = 0; i < n; i++)
 		for (int j = 0; j < n; j++)
@@ -67,10 +67,10 @@ int optCostTD(int keys[], int freq[], int n) {
 	for (int i = 0; i < n; i++)
 		cost[i][i] = freq[i];
 
-	return optCostTDUtil(freq, n,  cost, 0, n - 1);
+	return optimalBstTDUtil(freq, n,  cost, 0, n - 1);
 }
 
-int optCostBU(int keys[], int freq[], int n) {
+int optimalBstBU(int keys[], int freq[], int n) {
 	int cost[n][n];
 	for (int i = 0; i < n; i++)
 		for (int j = 0; j < n; j++)
@@ -91,7 +91,7 @@ int optCostBU(int keys[], int freq[], int n) {
 	return cost[0][n - 1];
 }
 
-int optCostBU2(int keys[], int freq[], int n) {
+int optimalBstBU2(int keys[], int freq[], int n) {
 	int cost[n][n];
 	for (int i = 0; i < n; i++)
 		for (int j = 0; j < n; j++)
@@ -118,15 +118,15 @@ int main() {
 	int  keys[] = {9, 15, 25};
 	int  freq[] = {30, 10, 40};
 	int size = 3;
-	printf("OBST cost: %d\n", optCost(keys, freq, size));
-	printf("OBST cost: %d\n", optCostTD(keys, freq, size));
-	printf("OBST cost: %d\n", optCostBU(keys, freq, size));
-	printf("OBST cost: %d\n", optCostBU2(keys, freq, size));
+	printf("OBst cost: %d\n", optimalBst(keys, freq, size));
+	printf("OBst cost: %d\n", optimalBstTD(keys, freq, size));
+	printf("OBst cost: %d\n", optimalBstBU(keys, freq, size));
+	printf("OBst cost: %d\n", optimalBstBU2(keys, freq, size));
 }
 
 /*
-OBST cost:130
-OBST cost:130
-OBST cost:130
-OBST cost:130
+OBst cost:130
+OBst cost:130
+OBst cost:130
+OBst cost:130
 */

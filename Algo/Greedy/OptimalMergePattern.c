@@ -1,19 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int greater(int a, int b) // min heap compare function.
-{
+// min heap compare function.
+int greater(int a, int b) {
     return a > b;
 }
 
-int less(int a, int b) // max heap compare function.
-{
+// max heap compare function.
+int less(int a, int b) {
     return a < b;
 }
 
 
-typedef struct Heap_t
-{
+typedef struct Heap_t {
     int capacity;
     int size;
     int *array;

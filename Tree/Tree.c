@@ -127,14 +127,16 @@ void insert(Tree *tree, int value) {
 
 int main2() {
     Tree *t = createBinaryTree();
-    insert(t, 5);
-    insert(t, 3);
-    insert(t, 7);
-    insert(t, 2);
-    insert(t, 1);
-    insert(t, 4);
     insert(t, 6);
+    insert(t, 4);
+    insert(t, 2);
+    insert(t, 5);
+    insert(t, 1);
+    insert(t, 3);
     insert(t, 8);
+    insert(t, 7);
+    insert(t, 9);
+    insert(t, 10);
     printInOrder(t);
     return 0;
 }
@@ -679,10 +681,12 @@ void removeData(Tree *tree, int value) {
 }
 
 int main7() {
-    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    Tree *t = createBinarySearchTree(arr, 10);
+    int arr[] = { 1, 2, 3, 4, 5 };
+    Tree *t = createBinarySearchTree(arr, 5);
+    printf("Before delete operation: ");
     printPreOrder(t);
-    removeData(t, 6);
+    removeData(t, 4);
+    printf("After delete operation: ");
     printPreOrder(t);
     freeTree(t);
     printPreOrder(t);
@@ -691,7 +695,8 @@ int main7() {
 }
 
 /*
-5 2 1 3 4 8 7 9 10 
+Before delete operation: 3 1 2 4 5 
+After delete operation: 3 1 2 5 
 */
 
 int numNodesUtil(TreeNode *root) {
@@ -740,7 +745,6 @@ int numLeafs(Tree *tree) {
 int sumAllBTUtil(TreeNode *root) {
     if (root == NULL)
         return 0;
-
     return root->value + sumAllBTUtil(root->lChild) + sumAllBTUtil(root->rChild);
 }
 
@@ -1005,7 +1009,7 @@ int main10() {
     Tree *t = levelOrderBinaryTree(arr, 10);
     printf("isHeap :: %d\n", isHeap(t));
     printf("isHeap :: %d\n",  isHeap2(t));
-    printf("isCompleteTree :: %d\n",  isCompleteTree(t));    
+    printf("isCompleteTree :: %d\n",  isCompleteTree(t));
     return 0;
 }
 
@@ -1463,14 +1467,14 @@ int pathLength(TreeNode *root, TreeNode *firstPtr, TreeNode *secondPtr) {
 }
 */
 int main() {
-    main1();
-    main2();
-    main3();
-    main4();
-    main5();
-    main6();
+    //main1();
+    //main2();
+    //main3();
+    //main4();
+    //main5();
+    //main6();
     main7();
-    main8();
+    /*main8();
     main9();
     main10();
     main11();
@@ -1478,6 +1482,6 @@ int main() {
     main13();
     main14();
     main16();
-    main17();
+    main17();*/
     return 0;
 }

@@ -29,7 +29,7 @@ int main1() {
 void printArray(int *arr, int size) {
     printf("[ ");
     for (int i = 0; i < size; i++) {
-        printf(" %d  ", arr[i]);
+        printf("%d ", arr[i]);
     }
     printf("]\n");
 }
@@ -50,7 +50,7 @@ void print2DArray(int row, int col, int arr[row][col]) {
     for (int i = 0; i < row; i++)
         for (int j = 0; j < col; j++)
             printf("%d ", arr[i][j]);
-    printf("]");
+    printf("]\n");
 }
 
 int main3() {
@@ -63,7 +63,7 @@ int main3() {
     print2DArray(4, 2, arr);
 }
 
-int SumArray(int arr[], int size) {
+int sumArray(int arr[], int size) {
     int total = 0;
     int index = 0;
     for (index = 0; index < size; index++) {
@@ -72,7 +72,13 @@ int SumArray(int arr[], int size) {
     return total;
 }
 
-int SequentialSearch(int arr[], int size, int value) {
+/* Testing code */
+int main3A() {
+    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    printf("Sum of values in array: %d", sumArray(arr, sizeof(arr) / sizeof(int)));
+}
+
+int sequentialSearch(int arr[], int size, int value) {
     for (int i = 0; i < size; i++) {
         if (value == arr[i])
             return i;
@@ -80,7 +86,7 @@ int SequentialSearch(int arr[], int size, int value) {
     return -1;
 }
 /* Binary Search Algorithm � Iterative Way */
-int BinarySearch(int arr[], int size, int value) {
+int binarySearch(int arr[], int size, int value) {
     int low = 0, mid;
     int high = size - 1;
     while (low <= high) {
@@ -96,14 +102,25 @@ int BinarySearch(int arr[], int size, int value) {
 }
 
 void reverseArray(int *a, int n) {
-    for (int i = 0, j = n - 1; i < j; i++, j--) {
-        a[i] ^= a[j] ^= a[i] ^= a[j];
+	int temp;
+	for (int i = 0, j = n - 1; i < j; i++, j--) {
+        temp = a[i];
+    	a[i] = a[j];
+        a[j] = temp;
     }
 }
-void rotateArray2(int *a, int n, int k) {
+
+void rotateArray(int *a, int n, int k) {
     reverseArray(a, k);
     reverseArray(&a[k], n - k);
     reverseArray(a, n);
+}
+
+/* Testing code */
+int main3B() {
+    int arr[] = { 1, 2, 3, 4, 5, 6 };
+    rotateArray(arr, sizeof(arr) / sizeof(int), 2);
+    printArray(arr, sizeof(arr) / sizeof(int));
 }
 
 int maxSubArraySum(int a[], int size) {
@@ -117,6 +134,12 @@ int maxSubArraySum(int a[], int size) {
             maxSoFar = maxEndingHere;
     }
     return maxSoFar;
+}
+
+/* Testing code */
+int main3C() {
+    int arr[] = { 1, -2, 3, 4, -4, 6, -4, 3, 2 };
+    printf("Max sub array sum : %d", maxSubArraySum(arr, 9));
 }
 
 struct coord {
@@ -211,7 +234,7 @@ int main9() {
     printf("Value of i before increment is : %d \n", i);
 }
 
-void WaveArray2(int arr[], int size) {
+void waveArray2(int arr[], int size) {
     /* Odd elements are lesser then even elements. */
     for (int i = 1; i < size; i += 2) {
         if ((i - 1) >= 0 && arr[i] > arr[i - 1]) {
@@ -259,7 +282,7 @@ int main10() {
     printArray(arr, size);
 }
 
-void WaveArray(int arr[], int size) {
+void waveArray(int arr[], int size) {
     quickSort(arr, size);
     /* Swap adjacent elements in array */
     for (int i = 0; i < size - 1; i += 2) {
@@ -271,7 +294,7 @@ void WaveArray(int arr[], int size) {
 int main11() {
     int arr[] = {8, 1, 2, 3, 4, 5, 6, 4, 2};
     int size = sizeof(arr) / sizeof(int);
-    WaveArray(arr, size);
+    waveArray(arr, size);
     printArray(arr, size);
     return 0;
 }
@@ -314,7 +337,7 @@ int main12() {
     return 0;
 }
 
-void Sort1toN(int arr[], int size) {
+void sort1toN(int arr[], int size) {
     int curr, value, next;
     for (int i = 0; i < size; i++) {
         curr = i;
@@ -329,7 +352,7 @@ void Sort1toN(int arr[], int size) {
     }
 }
 
-void Sort1toN2(int arr[], int size) {
+void sort1toN2(int arr[], int size) {
     int temp;
     for (int i = 0; i < size; i++) {
         while (arr[i] != i + 1 && arr[i] > 1) {
@@ -340,7 +363,20 @@ void Sort1toN2(int arr[], int size) {
     }
 }
 
-int SmallestPositiveMissingNumber(int arr[], int size) {
+/* Testing code */
+int main3D() {
+    int arr[] = { 8, 5, 6, 1, 9, 3, 2, 7, 4, 10 };
+    int size = sizeof(arr) / sizeof(int);
+    sort1toN(arr, size);
+    printArray(arr, size);
+
+    int arr2[] = { 8, 5, 6, 1, 9, 3, 2, 7, 4, 10 };
+    sort1toN2(arr2, size);
+    printArray(arr2, size);
+    return 0;
+}
+
+int smallestPositiveMissingNumber(int arr[], int size) {
     int found;
     for (int i = 1; i < size + 1; 1) {
         found = 0;
@@ -357,7 +393,7 @@ int SmallestPositiveMissingNumber(int arr[], int size) {
     return -1;
 }
 /*
-int SmallestPositiveMissingNumber2(int arr[], int size){
+int smallestPositiveMissingNumber2(int arr[], int size){
 	HashTable hs;
 	for(int i = 0;i< size; i++) {
 		HashAdd(hs, arr[i], 1);
@@ -370,7 +406,7 @@ int SmallestPositiveMissingNumber2(int arr[], int size){
 	return -1;	
 }
 */
-int SmallestPositiveMissingNumber3(int arr[], int size) {
+int smallestPositiveMissingNumber3(int arr[], int size) {
     int *aux = (int *)malloc(size * sizeof(int));
     /* aux = [-1]*size; */
     for (int i = 0; i < size; i++) {
@@ -386,7 +422,7 @@ int SmallestPositiveMissingNumber3(int arr[], int size) {
     return -1;
 }
 
-int SmallestPositiveMissingNumber5(int arr[], int size) {
+int smallestPositiveMissingNumber5(int arr[], int size) {
     int temp;
     for (int i = 0; i < size; i++) {
         while (arr[i] != i + 1 && arr[i] > 0 && arr[i] <= size) {
@@ -403,7 +439,7 @@ int SmallestPositiveMissingNumber5(int arr[], int size) {
     return -1;
 }
 
-void MaxMinArr(int arr[], int size) {
+void maxMinArr(int arr[], int size) {
     int *aux = (int *)malloc(size * sizeof(int));
     for (int i = 0; i < size; i++) {
         aux[i] = arr[i];
@@ -422,37 +458,12 @@ void MaxMinArr(int arr[], int size) {
     }
 }
 
-/*
-arr = [1, 2, 3, 4, 5, 6, 7]
-MaxMinArr(int arr[], int size)
-print arr
-*/
-
-void ReverseArr(int arr[], int start, int stop) {
-    while (start < stop) {
-        swap(arr, start, stop);
-        start += 1;
-        stop -= 1;
-    }
-}
-
-void MaxMinArr2(int arr[], int size) {
-    for (int i = 0; i < (size - 1); i++) {
-        ReverseArr(arr, i, size - 1);
-    }
-}
-
 /* Testing code */
 int main13() {
     int arr[] = {1, 2, 3, 4, 5, 6, 7};
     int size = sizeof(arr) / sizeof(int);
-    MaxMinArr(arr, size);
+    maxMinArr(arr, size);
     printArray(arr, size);
-
-    int arr2[] = {1, 2, 3, 4, 5, 6, 7};
-    int size2 = sizeof(arr) / sizeof(int);
-    MaxMinArr2(arr2, size2);
-    printArray(arr2, size2);
     return 0;
 }
 
@@ -478,10 +489,10 @@ int maxCircularSum(int arr[], int n) {
 /* Testing code */
 int main14() {
     int arr[] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    printf("MaxCirculrSm : %d", maxCircularSum(arr, sizeof(arr) / sizeof(int)));
+    printf("MaxCirculrSm : %d\n", maxCircularSum(arr, sizeof(arr) / sizeof(int)));
 }
 
-int ArrayIndexMaxDiff(int arr[], int size) {
+int arrayIndexMaxDiff(int arr[], int size) {
     int maxDiff = -1;
     int j;
     for (int i = 0; i < size; i++) {
@@ -497,7 +508,7 @@ int ArrayIndexMaxDiff(int arr[], int size) {
     return maxDiff;
 }
 
-int ArrayIndexMaxDiff2(int arr[], int size) {
+int arrayIndexMaxDiff2(int arr[], int size) {
     int *leftMin = (int *)malloc(sizeof(int) * size);
     int *rightMax = (int *)malloc(sizeof(int) * size);
     leftMin[0] = arr[0];
@@ -532,7 +543,7 @@ int ArrayIndexMaxDiff2(int arr[], int size) {
     return maxDiff;
 }
 
-int ArrayIndexMaxDiff3(int arr[], int size) {
+int arrayIndexMaxDiff3(int arr[], int size) {
     int *leftMin = (int *)malloc(sizeof(int) * size);
     int *rightMax = (int *)malloc(sizeof(int) * size);
     int minIndex = 0, maxIndex = 0;
@@ -569,9 +580,9 @@ int ArrayIndexMaxDiff3(int arr[], int size) {
 
 int main15() {
     int arr[] = {33, 9, 10, 3, 2, 60, 30, 33, 1};
-    printf("ArrayIndexMaxDiff : %d", ArrayIndexMaxDiff(arr, sizeof(arr) / sizeof(int)));
-    printf("ArrayIndexMaxDiff : %d", ArrayIndexMaxDiff2(arr, sizeof(arr) / sizeof(int)));
-    printf("ArrayIndexMaxDiff : %d", ArrayIndexMaxDiff3(arr, sizeof(arr) / sizeof(int)));
+    printf("arrayIndexMaxDiff : %d\n", arrayIndexMaxDiff(arr, sizeof(arr) / sizeof(int)));
+    printf("arrayIndexMaxDiff : %d\n", arrayIndexMaxDiff2(arr, sizeof(arr) / sizeof(int)));
+    printf("arrayIndexMaxDiff : %d\n", arrayIndexMaxDiff3(arr, sizeof(arr) / sizeof(int)));
 }
 
 int maxPathSum(int arr1[], int size1, int arr2[], int size2) {
@@ -612,7 +623,7 @@ int maxPathSum(int arr1[], int size1, int arr2[], int size2) {
 int main16() {
     int arr1[] = {12, 13, 18, 20, 22, 26, 70};
     int arr2[] = {11, 15, 18, 19, 20, 26, 30, 31};
-    printf("Max Path Sum :: %d ", maxPathSum(arr1, sizeof(arr1) / sizeof(int), arr2, sizeof(arr2) / sizeof(int)));
+    printf("Max Path Sum :: %d\n", maxPathSum(arr1, sizeof(arr1) / sizeof(int), arr2, sizeof(arr2) / sizeof(int)));
 }
 
 int factorial(unsigned int i) {
@@ -651,7 +662,7 @@ void towerOfHanoi(int num, char src, char dst, char temp) {
         return;
 
     towerOfHanoi(num - 1, src, temp, dst);
-    printf("\nMove disk %d from peg %c to peg %c", num, src, dst);
+    printf("Move disk %d from peg %c to peg %c\n", num, src, dst);
     towerOfHanoi(num - 1, temp, dst, src);
 }
 
@@ -662,12 +673,12 @@ int main17() {
     return 0;
 }
 
-int GCD(int m, int n) {
+int gcd(int m, int n) {
     if (m < n)
-        return (GCD(n, m));
+        return (gcd(n, m));
     if (m % n == 0)
         return (n);
-    return (GCD(n, m % n));
+    return (gcd(n, m % n));
 }
 
 int fibonacci(int n) {
@@ -697,23 +708,23 @@ int fibonacci2(int n)
 }
 
 /* Binary Search Algorithm  Recursive Way */
-int BinarySearchRecursive(int arr[], int low, int high, int value) {
+int binarySearchRecursive(int arr[], int low, int high, int value) {
     if (low > high)
         return -1;
     int mid = (low + high) / 2;
     if (arr[mid] == value)
         return mid;
     else if (arr[mid] < value)
-        return BinarySearchRecursive(arr, mid + 1, high, value);
+        return binarySearchRecursive(arr, mid + 1, high, value);
     else
-        return BinarySearchRecursive(arr, low, mid - 1, value);
+        return binarySearchRecursive(arr, low, mid - 1, value);
 }
 
 /* Testing code */
 int main18() {
     int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    printf(" %d ", BinarySearchRecursive(arr, 0, sizeof(arr) / sizeof(int) - 1, 6));
-    printf(" %d ", BinarySearchRecursive(arr, 0, sizeof(arr) / sizeof(int) - 1, 16));
+    printf(" %d ", binarySearchRecursive(arr, 0, sizeof(arr) / sizeof(int) - 1, 6));
+    printf(" %d ", binarySearchRecursive(arr, 0, sizeof(arr) / sizeof(int) - 1, 16));
     return 0;
 }
 
@@ -721,11 +732,15 @@ int main(){
     main1();
     main2();
     main3();
+    main3A();
+    main3B();
+    main3C();
+    main3D();
     main4();
     main5();
     main6();
     main7();
-    main8();
+    main8(); 
     main9();
     main10();
     main11();
@@ -738,30 +753,3 @@ int main(){
     main18();
     return 0;
 }
-
-
-/*
-void sortedArrayUtil (int first[], int fSize, int fIndex, int second[], int sSize, int sIndex, int arr[], int index, int flag):
-	# print arr # all alternate sorted array. 
-	if flag == 0:
-		for i in range(fIndex, fSize):
-			# first element should be from first.
-			if (len(int arr[], int size == 0 or first[i] > arr[-1]):
-				arr.append(first[i])
-				sortedArrayUtil(first, fSize, i+1, second, sSize, sIndex,arr, index+1, not flag)
-				arr.pop()
-
-	if flag == 1:
-		for i in range(sIndex, sSize):
-			if second[i] > arr[-1]:
-				arr.append(second[i])
-				print arr # last element should be from second.
-				sortedArrayUtil(first, fSize, fIndex, second, sSize, i+1,arr, index+1, not flag)
-				arr.pop()
-
-def sortedArray(first, second):
-	fSize = len(first)
-	sSize = len(second)
-	arr=[]
-	sortedArrayUtil(first, fSize, 0, second, sSize, 0, arr, 0, 0)
-*/

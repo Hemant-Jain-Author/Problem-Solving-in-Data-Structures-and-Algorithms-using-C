@@ -35,8 +35,7 @@ int MatrixChainMulTDUtil(int n, int dp[][n], int p[], int i, int j) {
 
 	for (int k = i; k < j; k++) {
 		dp[i][j] = min(dp[i][j], MatrixChainMulTDUtil(n, dp, p, i, k) + 
-								MatrixChainMulTDUtil(n, dp, p, k + 1, j) + 
-								p[i - 1] * p[k] * p[j]);
+						MatrixChainMulTDUtil(n, dp, p, k+1, j) + p[i-1]*p[k]*p[j]);
 	}
 	return dp[i][j];
 }
@@ -65,7 +64,7 @@ int MatrixChainMulBU(int p[], int n) {
 	for (int l = 1; l < n; l++) { // l is length of range.
 		for (int i = 1,j = i + l ; j < n; i++, j++) {
 			for (int k = i; k < j; k++)
-				dp[i][j] = min(dp[i][j], dp[i][k] + p[i - 1] * p[k] * p[j] + dp[k + 1][j]);
+				dp[i][j] = min(dp[i][j], dp[i][k] + p[i-1]*p[k]*p[j] + dp[k+1][j]);
 		}
 	}
 	return dp[1][n - 1];

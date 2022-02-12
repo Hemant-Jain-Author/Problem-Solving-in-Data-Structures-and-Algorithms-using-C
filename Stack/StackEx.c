@@ -52,18 +52,21 @@ void sortedInsert(Stack *stk, int element) {
     }
 }
 
-int main2()
-{
+int main2() {
     Stack* stk = createStack();
     StackPush(stk, 1);
     StackPush(stk, 2);
     StackPush(stk, 4);
-    StackPush(stk, 5);
     StackPrint(stk);
     sortedInsert(stk, 3);
     StackPrint(stk);
     return 0;
 }
+
+/*
+[4 2 1 ]
+[4 3 2 1 ]
+*/
 
 void sortStack(Stack *stk) {
     int temp;
@@ -87,8 +90,7 @@ void sortStack2(Stack *stk) {
         StackPush(stk, StackPop(stk2));
 }
 
-int main3()
-{
+int main3() {
     Stack* stk = createStack();
     StackPush(stk, 1);
     StackPush(stk, 5);
@@ -109,11 +111,17 @@ int main3()
     return 0;
 }
 
+/*
+[3 4 5 1 ]
+[5 4 3 1 ]
+[3 4 5 1 ]
+[5 4 3 1 ]
+*/
+
 void bottomInsert(Stack *stk, int element) {
-    if (StackIsEmpty(stk))
+    if (StackIsEmpty(stk)) {
         StackPush(stk, element);
-    else
-    {
+    } else {
         int temp = StackPop(stk);
         bottomInsert(stk, element);
         StackPush(stk, temp);
@@ -125,11 +133,15 @@ int main4() {
     StackPush(stk, 1);
     StackPush(stk, 2);
     StackPush(stk, 3);
+    StackPrint(stk);
     bottomInsert(stk, 4);
     StackPrint(stk);
     return 0;
 }
-
+/*
+[3 2 1 ]
+[3 2 1 4 ]
+*/
 
 void reverseStack(Stack *stk) {
     int temp;
@@ -149,8 +161,7 @@ void reverseStack2(Stack *stk) {
         StackPush(stk, QueueRemove(que));
 }
 
-int main5()
-{
+int main5() {
     Stack* stk = createStack();
     StackPush(stk, 1);
     StackPush(stk, 2);
@@ -163,6 +174,11 @@ int main5()
     StackPrint(stk);
     return 0;
 }
+/*
+[4 3 2 1 ]
+[1 2 3 4 ]
+[4 3 2 1 ]
+*/
 
 void reverseKElementInStack(Stack *stk, int k) {
     Queue* que = createQueue();
@@ -175,8 +191,7 @@ void reverseKElementInStack(Stack *stk, int k) {
         StackPush(stk, QueueRemove(que));
 }
 
-int main6()
-{
+int main6() {
     Stack* stk = createStack();
     StackPush(stk, 1);
     StackPush(stk, 2);
@@ -188,6 +203,11 @@ int main6()
     return 0;
 }
 
+/*
+[4 3 2 1 ]
+[3 4 2 1 ]
+*/
+
 void reverseQueue(Queue *que) {
     Stack* stk = createStack();
     while (QueueIsEmpty(que) == 0)
@@ -197,8 +217,7 @@ void reverseQueue(Queue *que) {
         QueueAdd(que, StackPop(stk));
 }
 
-int main7()
-{
+int main7() {
     Queue* que = createQueue();
     QueueAdd(que, 1);
     QueueAdd(que, 2);
@@ -209,6 +228,11 @@ int main7()
     QueuePrint(que);
     return 0;
 }
+
+/*
+[ 1 2 3 4 ]
+[ 4 3 2 1 ]
+*/
 
 void reverseKElementInQueue(Queue *que, int k) {
     Stack* stk = createStack();
@@ -230,8 +254,7 @@ void reverseKElementInQueue(Queue *que, int k) {
     }
 }
 
-int main8()
-{
+int main8() {
     Queue* que = createQueue();
     QueueAdd(que, 1);
     QueueAdd(que, 2);
@@ -242,6 +265,11 @@ int main8()
     QueuePrint(que);
     return 0;
 }
+
+/*
+[ 1 2 3 4 ]
+[ 2 1 3 4 ]
+*/
 
 int isBalancedParenthesis(char *expn, int size) {
     Stack* stk = createStack();
@@ -271,10 +299,13 @@ int main9() {
     char *expn = "{()}[]";
     int size = strlen(expn);
     int value = isBalancedParenthesis(expn, size);
-    printf("Given Expn %s \n", expn);
-    printf("Result after isParenthesisMatched :: %d \n", value);
+    printf("isParenthesisMatched :: %d \n", value);
     return 0;
 }
+
+/*
+isParenthesisMatched :: 1 
+*/
 
 int maxDepthParenthesis(char *expn, int size) {
     Stack* stk = createStack();
@@ -288,8 +319,7 @@ int maxDepthParenthesis(char *expn, int size) {
         if (ch == '(') {
             StackPush(stk, ch);
             depth += 1;
-        }
-        else if (ch == ')') {
+        } else if (ch == ')') {
             StackPop(stk);
             depth -= 1;
         }
@@ -320,13 +350,17 @@ int main10() {
     char *expn = "((((A)))((((BBB()))))()()()())";
     int size = strlen(expn);
     int value = maxDepthParenthesis(expn, size);
-    int value2 = maxDepthParenthesis2(expn, size);
-
-    printf("Given expn %s \n", expn);
     printf("Max depth parenthesis is %d \n", value);
+    
+    int value2 = maxDepthParenthesis2(expn, size);
     printf("Max depth parenthesis is %d \n", value2);
     return 0;
 }
+
+/*
+Max depth parenthesis is 6 
+Max depth parenthesis is 6 
+*/
 
 int longestContBalParen(char *string, int size) {
     Stack* stk = createStack();
@@ -355,6 +389,10 @@ int main11() {
     printf("longestContBalParen %d \n", value);
     return 0;
 }
+
+/*
+longestContBalParen 12 
+*/
 
 int reverseParenthesis(char *expn, int size) {
     Stack* stk = createStack();
@@ -390,10 +428,13 @@ int main12() {
     char *expn2 = ")(())(((";
     int size = strlen(expn2);
     int value = reverseParenthesis(expn2, size);
-    printf("Given expn : %s \n", expn2);
     printf("reverse Parenthesis is : %d \n", value);
     return 0;
 }
+
+/*
+reverse Parenthesis is : 3 
+*/
 
 int findDuplicateParenthesis(char *expn, int size) {
     Stack* stk = createStack();
@@ -410,8 +451,7 @@ int findDuplicateParenthesis(char *expn, int size) {
             }
             if (count <= 1)
                 return 1;
-        }
-        else
+        } else
             StackPush(stk, ch);
     }
     return 0;
@@ -421,12 +461,16 @@ int main13() {
     // expn = "(((a+(b))+(c+d)))"
     // expn = "(b)"
     char *expn = "(((a+b))+c)";
-    printf("Given expn : %s ", expn);
     int size = strlen(expn);
     int value = findDuplicateParenthesis(expn, size);
     printf("Duplicate Found : %d", value);
     return 0;
 }
+
+/*
+Duplicate Found : 1
+*/
+
 
 void printParenthesisNumber(char *expn, int size) {
     char ch;
@@ -440,8 +484,7 @@ void printParenthesisNumber(char *expn, int size) {
             StackPush(stk, count);
             output[outputIndex++] = count;
             count += 1;
-        }
-        else if (ch == ')')
+        } else if (ch == ')')
             output[outputIndex++] = StackPop(stk);
     }
     printf("Parenthesis Count ");
@@ -449,21 +492,30 @@ void printParenthesisNumber(char *expn, int size) {
         printf(" %d", output[i]);
     }
 }
+
+
+
 int main14() {
     char *expn1 = "(((a+(b))+(c+d)))";
-    char *expn2 = "(((a+b))+c)(((";
     int size = strlen(expn1);
-    printf("Given expn %s \n", expn1);
     printParenthesisNumber(expn1, size);
+
+    char *expn2 = "(((a+b))+c)(((";
     size = strlen(expn2);
-    printf("\nGiven expn %s \n", expn2);
     printParenthesisNumber(expn2, size);
     return 0;
 }
 
+/*
+Parenthesis Count  1 2 3 4 4 3 5 5 2 1
+Parenthesis Count  1 2 3 3 2 1 4 5 6
+*/
+
+
+
 void printArray(int *arr, int size) {
     for (int i = 0; i < size; i++) {
-        printf(" %d ", arr[i]);
+        printf("%d ", arr[i]);
     }
     printf("\n");
 }
@@ -540,6 +592,11 @@ int main15() {
     return 0;
 }
 
+/*
+Infix Expn: 10 + ( ( 3 ) ) * 5 / ( 16 - 4 ) 
+Postfix Expn: 10 3 5 * 16 4 - / +  
+*/
+
 void reverseString(char *a) {
     int lower = 0;
     int upper = strlen(a) - 1;
@@ -576,8 +633,8 @@ void infixToPrefix(char *expn, char *output) {
 int main16() {
     char expn[100] = "10 + ( ( 3 ) ) * 5 / ( 16 - 4 )";
     char out[100];
-    infixToPrefix(expn, out);
     printf("Infix Expn: %s \n", expn);
+    infixToPrefix(expn, out);
     printf("Prefix Expn: %s \n", out);
     return 0;
 }
@@ -624,9 +681,11 @@ int postfixEvaluate(char *postfix) {
 int main17() {
     char expn[] = "6 5 2 3 + 8 * + 3 + *";
     int value = postfixEvaluate(expn);
-    printf("Given Postfix Expn: %s \n", expn);
     printf("Result after Evaluation: %d", value);
 }
+/*
+Result after Evaluation: 288
+*/
 
 int *StockSpanRange(int arr[], int size) {
     int *SR = (int *)malloc(sizeof(int) * size);
@@ -679,6 +738,11 @@ int main18() {
     return 0;
 }
 
+/*
+StockSpanRange : 1 1 1 1 1 4 6 8 9 
+StockSpanRange : 1 1 1 1 1 4 6 8 9 
+*/
+
 int GetMaxArea(int arr[], int size) {
     int maxArea = -1;
     int minHeight = 0;
@@ -718,8 +782,7 @@ int GetMaxArea2(int arr[], int size) {
             StackPop(stk);
             if (StackSize(stk) == 0) {
                 topArea = arr[top] * i;
-            }
-            else
+            } else
                 topArea = arr[top] * (i - StackTop(stk) - 1);
 
             if (maxArea < topArea)
@@ -738,6 +801,30 @@ int main19() {
     printf("GetMaxArea :: %d ", value);
     return 0;
 }
+
+/*
+GetMaxArea :: 20 
+GetMaxArea :: 20
+*/
+
+
+void stockAnalystAdd(Stack *stk, int value){
+    while(!StackIsEmpty(stk) && StackTop(stk) <= value)
+        StackPop(stk);
+    StackPush(stk, value);
+}
+
+void main19a() {
+    int arr[] = { 20, 19, 10, 21, 40, 35, 39, 50, 45, 42 };
+    Stack *stk = createStack();
+    for(int i = 9; i>=0; i--)
+        stockAnalystAdd(stk, arr[i]);
+    StackPrint(stk);
+}
+
+/*
+[20 21 40 50 ]
+*/
 
 void nextLargerElement(int arr[], int size) {
     int *output = (int *)malloc(sizeof(int) * size);
@@ -784,11 +871,15 @@ void nextLargerElement2(int arr[], int size) {
 int main20() {
     int arr[] = {13, 21, 3, 6, 20, 3};
     int size = sizeof(arr) / sizeof(int);
-    printArray(arr, size);
     nextLargerElement(arr, size);
     nextLargerElement2(arr, size);
     return 0;
 }
+
+/*
+21 -1 6 20 -1 -1 
+21 -1 6 20 -1 -1 
+*/
 
 void nextSmallerElement(int arr[], int size) {
     Stack* stk = createStack();
@@ -814,10 +905,13 @@ void nextSmallerElement(int arr[], int size) {
 int main21() {
     int arr[] = {13, 21, 3, 6, 20, 3};
     int size = sizeof(arr) / sizeof(int);
-    printArray(arr, size);
     nextSmallerElement(arr, size);
     return 0;
 }
+
+/*
+3 3 -1 3 3 -1 
+*/
 
 void nextLargerElementCircular(int arr[], int size) {
     Stack* stk = createStack();
@@ -847,231 +941,12 @@ int main22() {
     return 0;
 }
 
+/*
+9 9 10 10 15 15 15 -1 9 
+*/
+
 int infi = 99999;
 
-void RottenFruitUtil(int arr[][5], int maxCol, int maxRow,
-                     int currCol, int currRow, int **traversed, int day) { // Range check
-    if (currCol < 0 || currCol >= maxCol || currRow < 0 || currRow >= maxRow)
-        return;
-    // Traversable and rot if not already rotten.
-    if (traversed[currCol][currRow] <= day || arr[currCol][currRow] == 0)
-        return;
-    // Update rot time.
-    traversed[currCol][currRow] = day;
-    // each line corresponding to 4 direction.
-    RottenFruitUtil(arr, maxCol, maxRow, currCol - 1, currRow, traversed, day + 1);
-    RottenFruitUtil(arr, maxCol, maxRow, currCol + 1, currRow, traversed, day + 1);
-    RottenFruitUtil(arr, maxCol, maxRow, currCol, currRow + 1, traversed, day + 1);
-    RottenFruitUtil(arr, maxCol, maxRow, currCol, currRow - 1, traversed, day + 1);
-}
-
-int RottenFruit(int arr[][5], int maxCol, int maxRow) {
-    int **traversed;
-    traversed = (int **)malloc(maxCol * sizeof(int *));
-    for (int i = 0; i < maxCol; i++) {
-        traversed[i] = (int *)malloc(maxRow * sizeof(int));
-        for (int j = 0; j < maxRow; j++) {
-            traversed[i][j] = infi;
-        }
-    }
-
-    for (int i = 0; i < maxCol - 1; i++) {
-        for (int j = 0; j < maxRow - 1; j++) {
-            if (arr[i][j] == 2)
-                RottenFruitUtil(arr, maxCol, maxRow, i, j, traversed, 0);
-        }
-    }
-
-    int maxDay = 0;
-    for (int i = 0; i < maxCol - 1; i++) {
-        for (int j = 0; j < maxRow - 1; j++) {
-            if (arr[i][j] == 1) {
-                if (traversed[i][j] == infi)
-                    return -1;
-                if (maxDay < traversed[i][j])
-                    maxDay = traversed[i][j];
-            }
-        }
-    }
-
-    for (int i = 0; i < maxCol; i++)
-        free(traversed[i]);
-    free(traversed);
-
-    return maxDay;
-}
-
-int main23() {
-    int arr[5][5] = {
-        {1, 0, 1, 1, 0},
-        {2, 1, 0, 1, 0},
-        {0, 0, 0, 2, 1},
-        {0, 2, 0, 0, 1},
-        {1, 1, 0, 0, 1}};
-
-    printf("%d", RottenFruit(arr, 5, 5));
-    return 0;
-}
-
-
-void StepsOfKnightUtil(int size, int currCol, int currRow, int **traversed, int dist) { // Range check
-    if (currCol < 0 || currCol >= size || currRow < 0 || currRow >= size)
-        return;
-
-    // Traversable and rot if not already rotten.
-    if (traversed[currCol][currRow] <= dist)
-        return;
-
-    // Update rot time.
-    traversed[currCol][currRow] = dist;
-    // each line corresponding to 4 direction.
-    StepsOfKnightUtil(size, currCol - 2, currRow - 1, traversed, dist + 1);
-    StepsOfKnightUtil(size, currCol - 2, currRow + 1, traversed, dist + 1);
-    StepsOfKnightUtil(size, currCol + 2, currRow - 1, traversed, dist + 1);
-    StepsOfKnightUtil(size, currCol + 2, currRow + 1, traversed, dist + 1);
-    StepsOfKnightUtil(size, currCol - 1, currRow - 2, traversed, dist + 1);
-    StepsOfKnightUtil(size, currCol + 1, currRow - 2, traversed, dist + 1);
-    StepsOfKnightUtil(size, currCol - 1, currRow + 2, traversed, dist + 1);
-    StepsOfKnightUtil(size, currCol + 1, currRow + 2, traversed, dist + 1);
-}
-
-int StepsOfKnight(int size, int srcX, int srcY, int dstX, int dstY) {
-    int **traversed;
-    traversed = (int **)malloc(size * sizeof(int *));
-    for (int i = 0; i < size; i++) {
-        traversed[i] = (int *)malloc(size * sizeof(int));
-        for (int j = 0; j < size; j++) {
-            traversed[i][j] = infi;
-        }
-    }
-
-    StepsOfKnightUtil(size, srcX - 1, srcY - 1, traversed, 0);
-    int retval = traversed[dstX - 1][dstY - 1];
-
-    for (int i = 0; i < size; i++)
-        free(traversed[i]);
-    free(traversed);
-
-    return retval;
-}
-
-int main24() {
-    printf("stepsOfKnight :: %d ", StepsOfKnight(20, 10, 10, 20, 20));
-    return 0;
-}
-
-void DistNearestFillUtil(int arr[][5], int maxCol, int maxRow, int currCol, int currRow, int **traversed, int dist) { // Range check
-    if (currCol < 0 || currCol >= maxCol || currRow < 0 || currRow >= maxRow)
-        return;
-    // Traversable if their is a better distance.
-    if (traversed[currCol][currRow] <= dist)
-        return;
-    // Update distance.
-    traversed[currCol][currRow] = dist;
-    // each line corresponding to 4 direction.
-    DistNearestFillUtil(arr, maxCol, maxRow, currCol - 1, currRow, traversed, dist + 1);
-    DistNearestFillUtil(arr, maxCol, maxRow, currCol + 1, currRow, traversed, dist + 1);
-    DistNearestFillUtil(arr, maxCol, maxRow, currCol, currRow + 1, traversed, dist + 1);
-    DistNearestFillUtil(arr, maxCol, maxRow, currCol, currRow - 1, traversed, dist + 1);
-}
-
-void DistNearestFill(int arr[][5], int maxCol, int maxRow) {
-    int **traversed;
-    traversed = (int **)malloc(maxCol * sizeof(int *));
-    for (int i = 0; i < maxCol; i++) {
-        traversed[i] = (int *)malloc(maxRow * sizeof(int));
-        for (int j = 0; j < maxRow; j++) {
-            traversed[i][j] = infi;
-        }
-    }
-
-    for (int i = 0; i < maxCol; i++) {
-        for (int j = 0; j < maxRow; j++) {
-            if (arr[i][j] == 1)
-                DistNearestFillUtil(arr, maxCol, maxRow, i, j, traversed, 0);
-        }
-    }
-
-    for (int i = 0; i < maxCol; i++) {
-        for (int j = 0; j < maxRow; j++) {
-            printf("%d ", traversed[i][j]);
-        }
-        printf("\n");
-    }
-
-    for (int i = 0; i < maxCol; i++)
-        free(traversed[i]);
-    free(traversed);
-}
-
-int main25() {
-    int arr[5][5] = {
-        {1, 0, 1, 1, 0},
-        {1, 1, 0, 1, 0},
-        {0, 0, 0, 0, 1},
-        {0, 0, 0, 0, 1},
-        {0, 0, 0, 0, 1}};
-    DistNearestFill(arr, 5, 5);
-    return 0;
-}
-
-int findLargestIslandUtil(int arr[][5], int maxCol, int maxRow, int currCol,
-                          int currRow, int value, int **traversed) {
-    if (currCol < 0 || currCol >= maxCol || currRow < 0 || currRow >= maxRow)
-        return 0;
-    if (traversed[currCol][currRow] == 1 || arr[currCol][currRow] != value)
-        return 0;
-    traversed[currCol][currRow] = 1;
-    // each call corresponding to 8 direction.
-    return 1 +
-           findLargestIslandUtil(arr, maxCol, maxRow, currCol - 1, currRow - 1, value, traversed) +
-           findLargestIslandUtil(arr, maxCol, maxRow, currCol - 1, currRow, value, traversed) +
-           findLargestIslandUtil(arr, maxCol, maxRow, currCol - 1, currRow + 1, value, traversed) +
-           findLargestIslandUtil(arr, maxCol, maxRow, currCol, currRow - 1, value, traversed) +
-           findLargestIslandUtil(arr, maxCol, maxRow, currCol, currRow + 1, value, traversed) +
-           findLargestIslandUtil(arr, maxCol, maxRow, currCol + 1, currRow - 1, value, traversed) +
-           findLargestIslandUtil(arr, maxCol, maxRow, currCol + 1, currRow, value, traversed) +
-           findLargestIslandUtil(arr, maxCol, maxRow, currCol + 1, currRow + 1, value, traversed);
-}
-
-int findLargestIsland(int arr[][5], int maxCol, int maxRow) {
-    int maxVal = 0;
-    int currVal = 0;
-    int **traversed;
-    traversed = (int **)malloc(maxCol * sizeof(int *));
-    for (int i = 0; i < maxCol; i++) {
-        traversed[i] = (int *)malloc(maxRow * sizeof(int));
-        for (int j = 0; j < maxRow; j++) {
-            traversed[i][j] = infi;
-        }
-    }
-
-    for (int i = 0; i < maxCol; i++) {
-        for (int j = 0; j < maxRow; j++) {
-            {
-                currVal = findLargestIslandUtil(arr, maxCol, maxRow, i, j, arr[i][j], traversed);
-                if (currVal > maxVal)
-                    maxVal = currVal;
-            }
-        }
-        return maxVal;
-    }
-
-    for (int i = 0; i < maxCol; i++)
-        free(traversed[i]);
-    free(traversed);
-}
-
-int main26() {
-    int arr[5][5] = {
-        {1, 0, 1, 1, 0},
-        {1, 0, 0, 1, 0},
-        {0, 1, 1, 1, 1},
-        {0, 1, 0, 0, 0},
-        {1, 1, 0, 0, 1}};
-    printf("Largest Island : %d", findLargestIsland(arr, 5, 5));
-    return 0;
-}
 
 int isKnown(int relation[][5], int a, int b) {
     if (relation[a][b] == 1)
@@ -1080,6 +955,21 @@ int isKnown(int relation[][5], int a, int b) {
 }
 
 int findCelebrity(int relation[][5], int count) {
+    for (int i = 0; i < count; i++) {
+        int cel = 1;
+        for (int j = 0; j < count; j++) {
+            if (i != j &&  (!isKnown(relation, j, i) || isKnown(relation, i, j))) {
+                cel = 0;
+                break;
+            }
+        }
+        if(cel == 1)
+            return i;
+    }
+    return -1;
+}
+
+int findCelebrity2(int relation[][5], int count) {
     Stack* stk = createStack();
     int first = 0, second = 0;
     for (int i = 0; i < count; i++) {
@@ -1100,7 +990,7 @@ int findCelebrity(int relation[][5], int count) {
     return first;
 }
 
-int findCelebrity2(int relation[][5], int count) {
+int findCelebrity3(int relation[][5], int count) {
     int first = 0;
     int second = 1;
 
@@ -1128,8 +1018,15 @@ int main27() {
 
     printf("Celebrity : %d ", findCelebrity(arr, 5));
     printf("Celebrity : %d ", findCelebrity2(arr, 5));
+    printf("Celebrity : %d ", findCelebrity3(arr, 5));
     return 0;
 }
+
+/*
+Celebrity : 3 
+Celebrity : 3
+Celebrity : 3
+*/
 
 int IsMinHeap(int arr[], int size) {
     for (int i = 0; i <= (size - 2) / 2; i++) {
@@ -1159,11 +1056,12 @@ int IsMaxHeap(int arr[], int size) {
     return 1;
 }
 
-int main()
-{
+int main() {
+    /*
     main1();
     main2();
     main3();
+    
     main4();
     main5();
     main6();  
@@ -1180,9 +1078,11 @@ int main()
     main17();
     main18();
     main19();
+    main19a();
     main20();
     main21();
     main22();
+    */
     main23();
     main24();
     main25();

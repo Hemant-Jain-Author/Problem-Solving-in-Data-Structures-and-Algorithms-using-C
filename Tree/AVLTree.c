@@ -30,17 +30,17 @@ AVLTree*  createAVLTree() {
 	return tree;
 }
 
-void insertData(AVLTree* tree, int data);
-Node* insertDataUtil(Node* node, int data);
-void deleteData(AVLTree* tree, int data);
-Node* deleteDataUtil(Node* node, int data);
+void insert(AVLTree* tree, int data);
+Node* insertUtil(Node* node, int data);
+void delete(AVLTree* tree, int data);
+Node* deleteUtil(Node* node, int data);
 void printTree(AVLTree* tree);
 void printTreeUtil(Node* node, char* indent, int isLeft);
 int max(int a, int b);
-Node* rightRotate(Node* x); // Function to right rotate subtree rooted with x
-Node* leftRotate(Node* x); // Function to left rotate subtree rooted with x
-Node* rightLeftRotate(Node* x); // Function to right then left rotate subtree rooted with x
-Node* leftRightRotate(Node* x); // Function to left then right rotate subtree rooted with x
+Node* rightRotate(Node* x); 
+Node* leftRotate(Node* x); 
+Node* rightLeftRotate(Node* x); 
+Node* leftRightRotate(Node* x);
 Node* findMin(Node* curr);
 int height(Node* n);
 int getBalance(Node* node);
@@ -56,18 +56,18 @@ int getBalance(Node* node) {
 	return (node == NULL) ? 0 : height(node->left) - height(node->right);
 }
 
-void insertData(AVLTree* tree, int data) {
-	tree->root = insertDataUtil(tree->root, data);
+void insert(AVLTree* tree, int data) {
+	tree->root = insertUtil(tree->root, data);
 }
 
-Node* insertDataUtil(Node* node, int data) {
+Node* insertUtil(Node* node, int data) {
 	if (node == NULL)
 		return createNode(data, NULL, NULL);
 
 	if (node->data > data)
-		node->left = insertDataUtil(node->left, data);
+		node->left = insertUtil(node->left, data);
 	else if (node->data < data)
-		node->right = insertDataUtil(node->right, data);
+		node->right = insertUtil(node->right, data);
 	else
 		return node; // Duplicate data not allowed
 
@@ -92,6 +92,7 @@ Node* insertDataUtil(Node* node, int data) {
 	return node;
 }
 
+// Function to right rotate subtree rooted with x
 Node* rightRotate(Node* x) {
 	Node* y = x->left;
 	Node* T = y->right;
@@ -108,6 +109,7 @@ Node* rightRotate(Node* x) {
 	return y;
 }
 
+// Function to left rotate subtree rooted with x
 Node* leftRotate(Node* x) {
 	Node* y = x->right;
 	Node* T = y->left;
@@ -124,21 +126,23 @@ Node* leftRotate(Node* x) {
 	return y;
 }
 
+// Function to right then left rotate subtree rooted with x
 Node* rightLeftRotate(Node* x) {
 	x->right = rightRotate(x->right);
 	return leftRotate(x);
 }
 
+// Function to left then right rotate subtree rooted with x
 Node* leftRightRotate(Node* x) {
 	x->left = leftRotate(x->left);
 	return rightRotate(x);
 }
 
-void deleteData(AVLTree* tree, int data) {
-	tree->root = deleteDataUtil(tree->root, data);
+void delete(AVLTree* tree, int data) {
+	tree->root = deleteUtil(tree->root, data);
 }
 
-Node* deleteDataUtil(Node* node, int data) {
+Node* deleteUtil(Node* node, int data) {
 	if (node == NULL)
 		return NULL;
 
@@ -153,15 +157,15 @@ Node* deleteDataUtil(Node* node, int data) {
 		{
 			Node* minNode = findMin(node->right);
 			node->data = minNode->data;
-			node->right = deleteDataUtil(node->right, minNode->data);
+			node->right = deleteUtil(node->right, minNode->data);
 		}
 	}
 	else
 	{
 		if (node->data > data)
-			node->left = deleteDataUtil(node->left, data);
+			node->left = deleteUtil(node->left, data);
 		else
-			node->right = deleteDataUtil(node->right, data);
+			node->right = deleteUtil(node->right, data);
 	}
 
 	node->height = max(height(node->left), height(node->right)) + 1;
@@ -228,23 +232,23 @@ int max(int a, int b) {
 
 int main() {
 	AVLTree *tree = createAVLTree();
-	insertData(tree, 1);
-	insertData(tree, 2);
-	insertData(tree, 3);
-	insertData(tree, 4);
-	insertData(tree, 5);
-	insertData(tree, 6);
-	insertData(tree, 7);
-	insertData(tree, 8);
+	insert(tree, 1);
+	insert(tree, 2);
+	insert(tree, 3);
+	insert(tree, 4);
+	insert(tree, 5);
+	insert(tree, 6);
+	insert(tree, 7);
+	insert(tree, 8);
 	printTree(tree);
 
-	deleteData(tree, 5);
+	delete(tree, 5);
 	printTree(tree);
 
-	deleteData(tree, 1);
+	delete(tree, 1);
 	printTree(tree);
 
-	deleteData(tree, 2);
+	delete(tree, 2);
 	printTree(tree);
 }
 

@@ -24,8 +24,7 @@ void sort(int arr[], int size, int (*comp)(int p1, int p2)) {
     }
 }
 
-int minCoins(int coins[], int n, int val) // Greedy may be wrong.
-{
+int minCoins(int coins[], int n, int val) {// Greedy may be wrong.
 	if (val <= 0)
 		return 0;
 
@@ -35,9 +34,7 @@ int minCoins(int coins[], int n, int val) // Greedy may be wrong.
 		if (coins[i] <= val) {
 			count++;
 			val -= coins[i];
-		}
-		else
-		{
+		} else {
 			i--;
 		}
 	}
@@ -53,8 +50,7 @@ int minCoins2(int coins[], int n, int val) // Brute force.
 	for (int i = 0; i < n ; i++) {
 		if (coins[i] <= val) {
 			int subCount = minCoins2(coins, n, val - coins[i]);
-			if (subCount >= 0)
-			{
+			if (subCount >= 0) {
 				count = min(count, subCount + 1);
 			}
 		}
@@ -70,8 +66,7 @@ int minCoinsTDUtil(int dp[], int coins[], int n, int val) {
 	for (int i = 0; i < n; i++) {
 		if (coins[i] <= val) { // check validity of a sub-problem
 			int subCount = minCoinsTDUtil(dp, coins, n, val - coins[i]);
-			if (subCount != INFI )
-			{
+			if (subCount != INFI ) {
 				dp[val] = min(dp[val], subCount + 1);
 			}
 		}
@@ -85,13 +80,11 @@ int minCoinsTD(int coins[], int n, int val) {
 		dp[i] = INFI ;
 
 	dp[0] = 0; // zero val need zero coins.
-	
 	return minCoinsTDUtil(dp, coins, n, val);
 }
 
 int minCoinsBU(int coins[], int n, int val) { // DP bottom up approach.
 	int dp[val + 1];
-
 	for(int i = 0; i< val + 1; i++)
 		dp[i] = INFI ;
 
@@ -100,10 +93,8 @@ int minCoinsBU(int coins[], int n, int val) { // DP bottom up approach.
 	for (int i = 1; i <= val; i++) {
 		for (int j = 0; j < n; j++) {
 			// For all coins smaller than or equal to i.
-			if (coins[j] <= i)
-			{
-				if (dp[i - coins[j]] != INFI )
-				{
+			if (coins[j] <= i) {
+				if (dp[i - coins[j]] != INFI ) {
 					dp[i] = min(dp[i], dp[i - coins[j]] + 1);
 				}
 			}

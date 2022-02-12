@@ -2,16 +2,15 @@
 
 #include "Heap.c"
 
-void printArray(int *array, int size) {
-    for (int i = 0; i < size; i++)
-        printf("%d ", array[i]);
-    printf("\n");
-}
-
 int main1() {
     int a[10] = {4, 5, 3, 2, 6, 7, 10, 8, 9, 1};
     Heap* hp = createHeap2(a, 10, greater);//min heap
     printHeap(hp);
+
+    while (!isEmpty(hp)) {
+    	printf("%d ", heapRemove(hp));
+    }
+    
 
     printf("Top value removed : %d\n", heapRemove(hp));
     printHeap(hp);
@@ -23,10 +22,10 @@ int main1() {
     printHeap(hp);
 
     int b[10] = {4, 5, 3, 2, 6, 7, 10, 8, 9, 1};
-    sort(b, 10, 1); // increasing
+    heapSort(b, 10, 1); // increasing
     printArray(b, 10);
     
-    sort(b, 10, 0); // decreasing
+    heapSort(b, 10, 0); // decreasing
     printArray(b, 10);
     return 0;
 }
@@ -42,7 +41,7 @@ Top value 1
 */
 
 int KthSmallest(int arr[], int size, int k) {
-    sort(arr, size, 1);
+    heapSort(arr, size, 1);
     return arr[k - 1];
 }
 
@@ -56,6 +55,22 @@ int KthSmallest2(int arr[], int size, int k) {
     }
     return value;
 }
+
+int KthSmallest3(int arr[], int size, int k) {
+    Heap* hp = createHeap(less);
+    for (int i = 0; i < size; i++) {
+        if(i < k) {
+            heapAdd(hp, arr[i]);
+        } else {
+            if (heapTop(hp) > arr[i]) {
+                heapAdd(hp, arr[i]);
+                heapRemove(hp);
+            }
+        }
+    }
+    return heapTop(hp);
+}
+
 
 int isMinHeap(int arr[], int size) {
     int lchild, rchild;
@@ -89,10 +104,12 @@ int main2() {
     int arr2[] = {8, 7, 6, 5, 7, 5, 2, 1};
     printf("Kth Smallest :: %d\n", KthSmallest2(arr2, 8, 3));
     int arr3[] = {8, 7, 6, 5, 7, 5, 2, 1};
-    printf("isMaxHeap :: %d\n", isMaxHeap(arr3, sizeof(arr) / sizeof(int)));
+    printf("Kth Smallest :: %d\n", KthSmallest3(arr3, 8, 3));
     int arr4[] = {8, 7, 6, 5, 7, 5, 2, 1};
-    sort(arr4, sizeof(arr) / sizeof(int), 1);
-    printf("isMinHeap :: %d\n", isMinHeap(arr4, sizeof(arr) / sizeof(int)));
+    printf("isMaxHeap :: %d\n", isMaxHeap(arr4, sizeof(arr) / sizeof(int)));
+    int arr5[] = {8, 7, 6, 5, 7, 5, 2, 1};
+    heapSort(arr5, sizeof(arr) / sizeof(int), 1);
+    printf("isMinHeap :: %d\n", isMinHeap(arr5, sizeof(arr) / sizeof(int)));
     return 0;
 }
 
@@ -104,7 +121,7 @@ isMinHeap :: 1
 */
 
 int KSmallestProduct(int arr[], int size, int k) {
-    sort(arr, size, 1);
+    heapSort(arr, size, 1);
     int product = 1;
     for (int i = 0; i < k; i++)
         product *= arr[i];
@@ -164,6 +181,25 @@ int KSmallestProduct2(int arr[], int size, int k) {
     return product;
 }
 
+int KSmallestProduct4(int arr[], int size, int k) {
+    Heap* hp = createHeap(less);
+    for (int i = 0; i < size; i++) {
+        if(i < k)
+            heapAdd(hp, arr[i]);
+        else {
+            if (heapTop(hp) > arr[i]) {
+                heapAdd(hp, arr[i]);
+                heapRemove(hp);
+            }
+        }
+    }    
+    int product = 1;
+    for (int i = 0; i < k; i++) {
+        product *= heapRemove(hp);
+    }
+    return product;
+}
+
 int main3() {
     int arr[] = {8, 7, 6, 5, 7, 5, 2, 1};
     printf("Kth Smallest product:: %d\n", KSmallestProduct(arr, 8, 3));
@@ -171,6 +207,8 @@ int main3() {
     printf("Kth Smallest product:: %d\n", KSmallestProduct2(arr2, 8, 3));
     int arr3[8] = {8, 7, 6, 5, 7, 5, 2, 1};
     printf("Kth Smallest product:: %d\n", KSmallestProduct3(arr3, 8, 3));
+    int arr4[8] = {8, 7, 6, 5, 7, 5, 2, 1};
+    printf("Kth Smallest product:: %d\n", KSmallestProduct4(arr4, 8, 3));
     return 0;
 }
 
@@ -181,7 +219,7 @@ Kth Smallest product:: 10
 */
 
 void PrintLargerHalf(int arr[], int size) {
-    sort(arr, size, 1);
+    heapSort(arr, size, 1);
     for (int i = size / 2; i < size; i++)
         printf("%d ", arr[i]);
     printf("\n");
@@ -248,7 +286,7 @@ int main5() {
 //1 4 5 9 10 50 
 
 int JoinRopes(int ropes[], int size) {
-    sort(ropes, size, 0); // decreasing
+    heapSort(ropes, size, 0); // decreasing
     int total = 0;
     int value = 0;
     int temp, index;
@@ -391,13 +429,14 @@ Median after insertion of 1 is 4
 */
 
 int main() {
-    main1();     
-    main2();
+    //main1();     
+    //main2();
     main3();
-    main4();
+    /*main4();
     main5();
     main6();
     main7();
     main8();
-    return 0;
+    */
+   return 0;
 }

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include<stdlib.h>
 
-int diffWaysBU(int n) {
+int stairUniqueWaysBU(int n) {
 	if (n <= 2)
 		return n;
 
@@ -15,7 +15,7 @@ int diffWaysBU(int n) {
 	return temp;
 }
 
-int diffWaysBU2(int n) {
+int stairUniqueWaysBU2(int n) {
 	if (n < 2)
 		return n;
 
@@ -30,8 +30,8 @@ int diffWaysBU2(int n) {
 }
 
 int main() {
-	printf("Unique way to reach top:: %d\n" , diffWaysBU(4));
-	printf("Unique way to reach top:: %d\n" , diffWaysBU2(4));
+	printf("Unique way to reach top:: %d\n" , stairUniqueWaysBU(4));
+	printf("Unique way to reach top:: %d\n" , stairUniqueWaysBU2(4));
 }
 
 /*

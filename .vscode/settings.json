@@ -13,7 +13,8 @@
         "system_error": "c",
         "xfunctional": "c",
         "xstddef": "c",
-        "xtr1common": "c"
+        "xtr1common": "c",
+        "cmath": "c"
     },
     "cSpell.words": [
         "DCLL",

@@ -19,11 +19,13 @@ void addUndirectedEdge(Graph *gph, int src, int dst, int cost) {
     addDirectedEdge(gph, dst, src, cost);
 }
 
-void graphPrint(Graph *gph) {
+void printGraph(Graph *gph) {
     int count = gph->count;
     for (int i = 0; i < count; i++) {
+        printf("Vertex %d is connected to ::", i);
         for (int j = 0; j < count; j++) {
-            printf("%d ", gph->adj[i][j]);
+            if (gph->adj[i][j] != 0)
+                printf(" %d(%d) ", j, gph->adj[i][j]);
         }
         printf("\n");
     }
@@ -35,14 +37,15 @@ int main1() {
     addUndirectedEdge(graph, 0, 2, 1);
     addUndirectedEdge(graph, 1, 2, 1);
     addUndirectedEdge(graph, 2, 3, 1);
-    graphPrint(graph);
+    printGraph(graph);
     return 0;
 }
+
 /*
-Vertex  0  is connected to   1 2
-Vertex  1  is connected to   0 2
-Vertex  2  is connected to   0 1 3
-Vertex  3  is connected to   2
+Vertex 0 is connected to :: 1(1)  2(1) 
+Vertex 1 is connected to :: 0(1)  2(1) 
+Vertex 2 is connected to :: 0(1)  1(1)  3(1) 
+Vertex 3 is connected to :: 2(1) 
 */
 
 int HamiltonianCycleUtil(Graph *graph, int path[], int pSize, int added[]) {
@@ -77,7 +80,7 @@ int HamiltonianCycle(Graph *graph) {
     if (HamiltonianCycleUtil(graph, path, 0, added)) {
         printf("Hamiltonian Cycle found :: ");
         for (int i = 0; i <= graph->count; i++)
-            printf("[%d]", path[i]);
+            printf("%d ", path[i]);
         return 1;
     }
     printf("Hamiltonian Cycle not found");
@@ -111,7 +114,7 @@ int HamiltonianPath(Graph *graph) {
     if (HamiltonianPathUtil(graph, path, 0, added)) {
         printf("Hamiltonian Path found :: ");
         for (int i = 0; i < graph->count; i++)
-            printf("[%d]", path[i]);
+            printf("%d ", path[i]);
 
         return 1;
     }
@@ -120,38 +123,42 @@ int HamiltonianPath(Graph *graph) {
     return 0;
 }
 
-int main2() {
-    int count = 5;
-    int adj[5][5] = {{0, 1, 0, 1, 0},
-                     {1, 0, 1, 1, 0},
-                     {0, 1, 0, 0, 1},
-                     {1, 1, 0, 0, 1},
-                     {0, 1, 1, 1, 0}};
-
-    Graph* graph = createGraph(count);
-    for (int i = 0; i < count; i++)
-        for (int j = 0; j < count; j++)
-            if (adj[i][j])
-                addDirectedEdge(graph, i, j, 1);
-    printf("\nHamiltonianPath : %d \n", HamiltonianPath(graph));
-    printf("\nHamiltonianCycle : %d \n", HamiltonianCycle(graph));
-
-    int adj2[5][5] = {{0, 1, 0, 1, 0},
-                      {1, 0, 1, 1, 0},
-                      {0, 1, 0, 0, 1},
-                      {1, 1, 0, 0, 0},
-                      {0, 1, 1, 0, 0}};
-    Graph* graph2 = createGraph(count);
-
-    for (int i = 0; i < count; i++)
-        for (int j = 0; j < count; j++)
-            if (adj2[i][j])
-                addDirectedEdge(graph2, i, j, 1);
-
-    printf("\nHamiltonianPath : %d \n", HamiltonianPath(graph2));
-    printf("\nHamiltonianCycle : %d \n", HamiltonianCycle(graph2));
-    return 0;
-}
+	int main2() {
+		int count = 5;
+		int adj[5][5] = {{0, 1, 0, 1, 0},
+						 {1, 0, 1, 1, 0},
+						 {0, 1, 0, 0, 1},
+						 {1, 1, 0, 0, 1},
+						 {0, 1, 1, 1, 0}};
+	
+		Graph* graph = createGraph(count);
+		for (int i = 0; i < count; i++)
+			for (int j = 0; j < count; j++)
+				if (adj[i][j])
+					addDirectedEdge(graph, i, j, 1);
+		int retval = HamiltonianPath(graph);
+		printf("\nHamiltonianPath : %d \n", retval);
+		retval = HamiltonianCycle(graph);
+		printf("\nHamiltonianCycle : %d \n", retval);
+	
+		int adj2[5][5] = {{0, 1, 0, 1, 0},
+						  {1, 0, 1, 1, 0},
+						  {0, 1, 0, 0, 1},
+						  {1, 1, 0, 0, 0},
+						  {0, 1, 1, 0, 0}};
+		Graph* graph2 = createGraph(count);
+	
+		for (int i = 0; i < count; i++)
+			for (int j = 0; j < count; j++)
+				if (adj2[i][j])
+					addDirectedEdge(graph2, i, j, 1);
+	
+		retval = HamiltonianPath(graph2);
+		printf("\nHamiltonianPath : %d \n", retval);
+		retval = HamiltonianCycle(graph2);
+		printf("\nHamiltonianCycle : %d \n", retval);
+		return 0;
+	}
 
 int INFINITE = 99999;
 
@@ -196,7 +203,7 @@ int dijkstra(Graph *gph, int source) {
     }
 }
 
-int Prims(Graph *gph) {
+int PrimsMST(Graph *gph) {
     int count = gph->count;
     int previous[count];
     int dist[count];
@@ -260,7 +267,7 @@ int main3() {
     addUndirectedEdge(graph, 6, 8, 6);
     addUndirectedEdge(graph, 7, 8, 7);
     dijkstra(graph, 0);
-    Prims(graph);
+    PrimsMST(graph);
 }
 
 int main() {

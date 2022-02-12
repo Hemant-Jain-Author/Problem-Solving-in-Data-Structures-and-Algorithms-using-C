@@ -2,16 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct Node_t 
-{
+typedef struct Node_t {
 	char c;
 	int freq;
 	struct Node_t *left;
 	struct Node_t *right;
 } Node;
 
-typedef struct Heap_t
-{
+typedef struct Heap_t {
     int capacity;
     int size;
     Node**array;
@@ -50,11 +48,6 @@ void proclateUp(Node* arr[], int position, int(* compare)(Node* , Node*)) {
     }
 }
 
-void heapify(Node* arr[], int size, int(* compare)(Node* , Node*)) {
-    for (int i = size/2; i >= 0; i--)
-        proclateDown(arr, i, size, compare);
-}
-
 Node* heapRemove(Heap *hp) {
     Node* value = hp->array[0];
     hp->array[0] = hp->array[hp->size - 1];
@@ -71,15 +64,6 @@ void heapAdd(Heap *hp, Node* value) {
     proclateUp(hp->array, hp->size - 1, hp->compare);
 }
 
-Heap* createHeap2(Node* arr[], int size, int(* compare)(Node* , Node*)) {
-    Heap* hp = (Heap*)malloc(sizeof(Heap));
-    hp->size = hp->capacity = size;
-    hp->array = arr;
-    hp->compare = compare;
-    heapify(arr, size, compare);
-    return hp;
-}
-
 Heap* createHeap(int(* compare)(Node* , Node*)) {
     Heap* hp = (Heap*)malloc(sizeof(Heap));
     hp->size = 0;
@@ -93,10 +77,14 @@ int heapSize(Heap *hp) {
     return hp->size;
 }
 
-typedef struct HuffmanTree_t
-{
+int greater(Node *n1, Node *n2){
+	return n1->freq > n2->freq;
+}
+
+
+typedef struct HuffmanTree_t {
 	Node *root;
-}HuffmanTree;
+} HuffmanTree ;
 
 Node* createNode(char ch, int fr, Node *l, Node *r) {
 	Node *nd = (Node*)malloc(sizeof(Node));
@@ -104,10 +92,6 @@ Node* createNode(char ch, int fr, Node *l, Node *r) {
 	nd->freq = fr;
 	nd->left = l;
 	nd->right = r;
-}
-
-int greater(Node *n1, Node *n2){
-	return n1->freq > n2->freq;
 }
 
 HuffmanTree* createHuffmanTree(char arr[], int freq[], int n) {

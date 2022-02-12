@@ -2,32 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-int matchExpUtil(char *exp, char *str, int i, int j) {
-    if (i == strlen(exp) && j == strlen(str))
-        return 1;
-
-    if ((i == strlen(exp) && j != strlen(str)) || (i != strlen(exp) && j == strlen(str)))
-        return 0;
-
-    if (exp[i] == '?' || exp[i] == str[j])
-        return matchExpUtil(exp, str, i + 1, j + 1);
-
-    if (exp[i] == '*')
-        return matchExpUtil(exp, str, i + 1, j) || matchExpUtil(exp, str, i, j + 1) || matchExpUtil(exp, str, i + 1, j + 1);
-    return 0;
-}
-
-int matchExp(char *exp, char *str) {
-    return matchExpUtil(exp, str, 0, 0);
-}
-
-int main1() {
-    char *exp = "*hello*?world";
-    char *text = "hello  world";
-    printf("matchExp :: %d ", matchExp(exp, text));
-    return 0;
-}
-
 int matchPattern(char *text, char *pattern) {
     int iText = 0;
     int iPattern = 0;
@@ -52,6 +26,10 @@ int main2() {
     return 0;
 }
 
+/*
+matchPattern :: 1
+*/
+
 int myAtoi(const char *str) {
     int value = 0;
     while (*str) {
@@ -66,6 +44,10 @@ int main3() {
     printf(" %d ", myAtoi(st));
     return 0;
 }
+
+/*
+100
+*/
 
 int isUniqueChar(char *s) {
     int bitarr = 0;
@@ -94,11 +76,19 @@ int isUniqueChar(char *s) {
 
 int main4() {
     char *st = "APLE";
-    printf(" %d ", isUniqueChar(st));
+    printf("Duplicate detected : %d ", isUniqueChar(st));
     st = "APPLE";
-    printf(" %d ", isUniqueChar(st));
+    printf("Duplicate detected : %d ", isUniqueChar(st));
     return 0;
 }
+
+/*
+No duplicate detected.
+Duplicate detected : 1 
+Duplicate detected.
+Duplicate detected : 0
+*/
+
 
 char ToUpper(char s) {
     if (s >= 97 && s <= (97 + 25))
@@ -117,7 +107,6 @@ int isPermutation(char *s1, char *s2) {
 
     int length = strlen(s1);
     if (strlen(s2) != length) {
-        printf("is permutation return 0\n");
         return 0;
     }
     for (int i = 0; i < 256; i++) {
@@ -133,11 +122,9 @@ int isPermutation(char *s1, char *s2) {
 
     for (int i = 0; i < 256; i++) {
         if (count[i]) {
-            printf("is permutation return false\n");
             return 0;
         }
     }
-    printf("is permutation return true\n");
     return 1;
 }
 
@@ -149,6 +136,11 @@ int main5() {
     printf("IsPermutation %d ", isPermutation(st, st3));
     return 0;
 }
+
+/*
+IsPermutation 1
+IsPermutation 0
+*/
 
 int isPalindrome(char *str) {
     int i = 0, j = strlen(str) - 1;
@@ -175,6 +167,15 @@ int main6() {
     return 0;
 }
 
+/*
+String is a Palindrome.
+isPalindrome 1 
+String is a Palindrome.
+isPalindrome 1 
+String is not a Palindrome.
+isPalindrome 0 
+*/
+
 void myItoa(char *buffer, int value) {
     static int index = -1;
     int remender = value % 10;
@@ -183,16 +184,6 @@ void myItoa(char *buffer, int value) {
         myItoa(buffer, value);
     buffer[++index] = '0' + remender;
     buffer[index + 1] = '\0';
-}
-
-int main7() {
-    char *st = "HELLOLLEH";
-    printf("isPalindrome %d \n", isPalindrome(st));
-    st = "HELLOOLLEH";
-    printf("isPalindrome %d \n", isPalindrome(st));
-    st = "HELLOOLLEHA";
-    printf("isPalindrome %d \n", isPalindrome(st));
-    return 0;
 }
 
 float MyAtof(char *str) {
@@ -249,6 +240,10 @@ int main8() {
     return 0;
 }
 
+/*
+10000
+*/
+
 int myStrcmp(char *a, char *b) {
     while ((*a) == (*b)) {
         if (*a == '\0')
@@ -271,6 +266,12 @@ int main9() {
     return 0;
 }
 
+/*
+-7
+9
+0
+*/
+
 char *mySubstr(char *src, char *dst, int n) {
     char *ptr = dst;
     int i = 0;
@@ -287,6 +288,10 @@ int main10() {
     return 0;
 }
 
+/*
+apple
+*/
+
 char *myStrdup(char *src) {
     char *dst = (char *)malloc((strlen(src) + 1) * sizeof(char));
     char *ptr = dst;
@@ -299,6 +304,10 @@ int main11() {
     printf("%s\n", myStrdup("applebanana"));
     return 0;
 }
+
+/*
+applebanana
+*/
 
 void mymemcpy(void *destPtr, const void *srcPtr, int size) {
     char *destTemp = (char *)destPtr;
@@ -325,6 +334,10 @@ int main12() {
     printf("%s\n", ch);
     return 0;
 }
+
+/*
+olleH
+*/
 
 void mymemmove(void *from, void *to, int size) {
     char *destTemp = (char *)to;
@@ -360,6 +373,10 @@ int main13() {
     return 0;
 }
 
+/*
+5
+*/
+
 char *Strcat(char *s1, char *s2) {
     char *ptr = s1;
     while (*s1 != '\0')
@@ -374,6 +391,10 @@ int main14() {
     printf("%s\n", Strcat(ch, ", World!"));
     return 0;
 }
+
+/*
+Hello, World!
+*/
 
 void reverseString2(char *a, int n) {
     int lower = 0;
@@ -406,6 +427,10 @@ int main15() {
     return 0;
 }
 
+/*
+!dlroW ,olleH
+*/
+
 void reverseWords(char *a) {
     int length = strlen(a);
     int lower, upper = -1;
@@ -429,16 +454,17 @@ int main16() {
     return 0;
 }
 
-void printAnagramUtil(char arr[], int i, int length)
-{
-	if (length == i)
-	{
+/*
+World! Hello,
+*/
+
+void printAnagramUtil(char arr[], int i, int length) {
+	if (length == i) {
 		printf("%s\n", arr);
 		return;
 	}
     char temp;
-	for (int j = i; j < length; j++)
-	{
+	for (int j = i; j < length; j++) {
         temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
@@ -462,6 +488,14 @@ int main17() {
     printAnagram(ch);
     return 0;
 }
+
+/*
+12345
+12354
+....
+51243
+51234
+*/
 
 void shuffle(char ar[], int n) {
     int count = 0;
@@ -489,6 +523,10 @@ int main18() {
     printf("%s\n", ch);
     return 0;
 }
+
+/*
+abababab
+*/
 
 char *addBinary(char *first, char *second) {
     int size1 = strlen(first);
@@ -551,6 +589,10 @@ int main19() {
     printf("%s\n", ch);
     return 0;
 }
+
+/*
+aaaabbbb.
+*/
 
 int main()
 {

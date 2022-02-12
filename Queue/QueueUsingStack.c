@@ -15,8 +15,7 @@ int max(int a, int b) {
 	return a < b ? b : a;
 }
 
-typedef struct Stack
-{
+typedef struct Stack {
     int top;
     int *data;
     int capacity;
@@ -108,8 +107,6 @@ int main() {
 	QueueAdd(que, 2);
 	QueueAdd(que, 3);
     QueueAdd(que, 4);
-	QueueAdd(que, 5);
-	QueueAdd(que, 6);
 	while(QueueSize(que) > 0)
 		printf("%d  ", QueueRemove(que));
 

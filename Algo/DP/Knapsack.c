@@ -6,7 +6,7 @@ int max(int a, int b){
 	return (a > b)? a : b;
 }
 
-int getMaxCost01Util(int wt[], int cost[], int n, int capacity) {
+int maxCost01KnapsackUtil(int wt[], int cost[], int n, int capacity) {
 	// Base Case
 	if (n == 0 || capacity == 0)
 		return 0;
@@ -16,17 +16,17 @@ int getMaxCost01Util(int wt[], int cost[], int n, int capacity) {
 	// (2) nth item is not included
 	int first = 0;
 	if (wt[n - 1] <= capacity)
-		first = cost[n - 1] + getMaxCost01Util(wt, cost, n - 1, capacity - wt[n - 1]);
+		first = cost[n - 1] + maxCost01KnapsackUtil(wt, cost, n - 1, capacity - wt[n - 1]);
 
-	int second = getMaxCost01Util(wt, cost, n - 1, capacity);
+	int second = maxCost01KnapsackUtil(wt, cost, n - 1, capacity);
 	return max(first, second);
 }
 
-int getMaxCost01(int wt[], int cost[], int n, int capacity) {
-	return getMaxCost01Util(wt, cost, n, capacity);
+int maxCost01Knapsack(int wt[], int cost[], int n, int capacity) {
+	return maxCost01KnapsackUtil(wt, cost, n, capacity);
 }
 
-int getMaxCost01TDUtil(int n, int dp[][n+1], int wt[], int cost[], int i, int w) {
+int maxCost01KnapsackTDUtil(int n, int dp[][n+1], int wt[], int cost[], int i, int w) {
 	if (w == 0 || i == 0)
 		return 0;
 
@@ -38,19 +38,19 @@ int getMaxCost01TDUtil(int n, int dp[][n+1], int wt[], int cost[], int i, int w)
 	// (2) ith item is not included
 	int first = 0;
 	if (wt[i - 1] <= w)
-		first = getMaxCost01TDUtil(n, dp, wt, cost, i - 1, w - wt[i - 1]) + cost[i - 1];
+		first = maxCost01KnapsackTDUtil(n, dp, wt, cost, i - 1, w - wt[i - 1]) + cost[i - 1];
 
-	int second = getMaxCost01TDUtil(n, dp, wt, cost, i - 1, w);
+	int second = maxCost01KnapsackTDUtil(n, dp, wt, cost, i - 1, w);
 	return dp[w][i] = max(first,second);
 }
 
-int getMaxCost01TD(int wt[], int cost[], int n, int capacity) {
+int maxCost01KnapsackTD(int wt[], int cost[], int n, int capacity) {
 	int dp[capacity + 1][n + 1];
 	memset(dp, 0, sizeof(dp));
-	return getMaxCost01TDUtil(n, dp, wt, cost, n, capacity);
+	return maxCost01KnapsackTDUtil(n, dp, wt, cost, n, capacity);
 }
 
-int getMaxCost01BU(int wt[], int cost[], int n, int capacity) {
+int maxCost01KnapsackBU(int wt[], int cost[], int n, int capacity) {
 	int dp[capacity + 1][n + 1] ;
 	memset(dp, 0, sizeof(dp));
 	// Build table dp[][] in bottom up approach.
@@ -96,11 +96,11 @@ int main() {
 	int n = 4;
 	double maxCost = KS01UnboundBU(wt, cost, n, capacity);
 	printf("Maximum cost obtained = %f\n" , maxCost );
-	maxCost = getMaxCost01(wt, cost, n, capacity);
+	maxCost = maxCost01Knapsack(wt, cost, n, capacity);
 	printf("Maximum cost obtained = %f\n" , maxCost );
-	maxCost = getMaxCost01BU(wt, cost, n, capacity);
+	maxCost = maxCost01KnapsackBU(wt, cost, n, capacity);
 	printf("Maximum cost obtained = %f\n" , maxCost );
-	maxCost = getMaxCost01TD(wt, cost, n, capacity);
+	maxCost = maxCost01KnapsackTD(wt, cost, n, capacity);
 	printf("Maximum cost obtained = %f\n" , maxCost );
 	return 0;
 }

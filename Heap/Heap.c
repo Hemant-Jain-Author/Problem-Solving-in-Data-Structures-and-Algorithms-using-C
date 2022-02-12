@@ -102,6 +102,9 @@ int heapSize(Heap *hp) {
     return hp->size;
 }
 
+int isEmpty(Heap *hp) {
+    return hp->size == 0;
+}
 
 void printHeap(Heap *hp) {
     for (int i = 0; i < hp->size; i++)
@@ -109,7 +112,7 @@ void printHeap(Heap *hp) {
     printf("\n");
 }
 
-void sort(int arr[], int size, int inc) {
+void heapSort(int arr[], int size, int inc) {
     int(* comp )(int , int);
     if(inc)
         comp = less; // max heap for increasing.
@@ -120,3 +123,50 @@ void sort(int arr[], int size, int inc) {
     for (int i = size-1; i >=0; i--)
         arr[i] = heapRemove(hp);
 }
+
+int heapDelete(Heap *hp, int value) {
+    for (int i = 0; i < hp->size; i++) {
+        if(hp->array[i] == value){
+            hp->array[i] = hp->array[hp->size-1];
+            hp->size -= 1;
+            proclateDown(hp->array, i, hp->size, hp->compare);
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int mainA() {
+    int a[10] = {4, 5, 3, 2, 6, 7, 10, 8, 9, 1};
+    Heap* hp = createHeap2(a, 10, greater);//min heap
+    printHeap(hp);
+    while (!isEmpty(hp))
+    	printf("%d ", heapRemove(hp));
+    return 0;
+}
+
+/*
+1 2 3 4 5 7 10 8 9 6 
+1 2 3 4 5 6 7 8 9 10
+*/
+
+void printArray(int *array, int size) {
+    for (int i = 0; i < size; i++)
+        printf("%d ", array[i]);
+    printf("\n");
+}
+
+int mainB() {
+    int b[10] = {4, 5, 3, 2, 6, 7, 10, 8, 9, 1};
+    heapSort(b, 10, 1); // increasing
+    printArray(b, 10);
+    
+    heapSort(b, 10, 0); // decreasing
+    printArray(b, 10);
+    return 0;
+}
+
+/*
+1 2 3 4 5 6 7 8 9 10 
+10 9 8 7 6 5 4 3 2 1 
+*/

@@ -4,10 +4,8 @@
 #define TABLE_SIZE 517
 #define TABLE_BITS 9
 
-unsigned int Hash(int key, int tableSize) { //division method
-	unsigned int hashValue = 0;
-	hashValue = key;
-	return hashValue % tableSize;
+int Hash(int key, int tableSize) { //division method
+	return key % tableSize;
 }
 
 typedef struct HTNode {

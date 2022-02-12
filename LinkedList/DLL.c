@@ -2,14 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node
-{
+typedef struct Node {
     int value;
     struct Node *next;
     struct Node *prev;
 } Node;
 
-Node* createNode(int value, Node* next, Node* prev){
+Node* createNode(int value, Node* next, Node* prev) {
     Node *node = (Node*)malloc(sizeof(Node));
     node->value = value;
     node->next = next;
@@ -17,13 +16,12 @@ Node* createNode(int value, Node* next, Node* prev){
     return node;
 }
 
-typedef struct DLL
-{
+typedef struct DLL {
     Node *head;
     Node *tail;
 } DLL;
 
-DLL *createDLL(){
+DLL *createDLL() {
     DLL *list = (DLL*)malloc(sizeof(DLL));
     list->head = NULL;
     list->tail = NULL;
@@ -52,7 +50,7 @@ void sortedInsert(DLL *list, int value) {
         return;
     }
 
-    if (curr->value <= value) /*at the begining*/
+    if (curr->value >= value) /*at the begining*/
     {
         temp->next = curr;
         curr->prev = temp;
@@ -60,7 +58,7 @@ void sortedInsert(DLL *list, int value) {
         return;
     }
 
-    while (curr->next && curr->next->value > value) /*traversal*/
+    while (curr->next && curr->next->value < value) /*traversal*/
     {
         curr = curr->next;
     }
@@ -281,35 +279,104 @@ int compareList2(DLL* list1, DLL* list2) {
     return 0;
 }
 
-int main() {
+int main1() {
+    DLL* list = createDLL();
+    insertNode(list, 1);
+    insertNode(list, 2);
+    insertNode(list, 3);
+    printList(list);
+    deleteFirstNode(list);
+    printList(list);
+    return 0;
+}
+
+int main2() {
     DLL* list = createDLL();
     sortedInsert(list, 1);
-    sortedInsert(list, 7);
     sortedInsert(list, 3);
-    sortedInsert(list, 4);
-    sortedInsert(list, 6);
-    sortedInsert(list, 5);
     sortedInsert(list, 2);
-    sortedInsert(list, 1);
-    sortedInsert(list, 7);
-    sortedInsert(list, 3);
     sortedInsert(list, 4);
-    sortedInsert(list, 6);
-    sortedInsert(list, 5);
-    sortedInsert(list, 2);
     printList(list);
-    reverseList(list);
+    return 0;
+}
+/*
+1  2  3  4  
+*/
+int main3() {
+    DLL* list = createDLL();
+    insertNode(list, 1);
+    insertNode(list, 2);
+    insertNode(list, 3);
+    printList(list);
+    deleteNode(list, 2);
+    printList(list);
+    return 0;
+}
+/*
+3  2  1  
+3  1  
+*/
+
+int main4() {
+    DLL* list = createDLL();
+    sortedInsert(list, 1);
+    sortedInsert(list, 2);
+    sortedInsert(list, 3);
+    sortedInsert(list, 1);
+    sortedInsert(list, 2);
+    sortedInsert(list, 3);
     printList(list);
     removeDuplicates(list);
     printList(list);
-    
-    DLL* list2 = copyList(list);
-    printList(list2);
-    printf("comparision result %d\n", compareList2(list, list2));
-    DLL* list3 = copyListReversed(list);
-    printList(list3);
+    return 0;
+}
+/*
+1  1  2  2  3  3  
+1  2  3 
+*/
 
-    deleteList(list3);
+int main5() {
+    DLL* list = createDLL();
+    insertNode(list, 1);
+    insertNode(list, 2);
+    insertNode(list, 3);
+    printList(list);
+    reverseList(list);
+    printList(list);
+	return 0;
+}
+/*
+3  2  1  
+1  2  3  
+*/
+
+int main6() {
+    DLL* list = createDLL();
+    insertNode(list, 1);
+    insertNode(list, 2);
+    insertNode(list, 3);
+    printList(list);
+    DLL* list2 = (list);
+    printList(list2);
+    DLL* list3 = copyList(list);
     printList(list3);
+	return 0;
+}
+/*
+3  2  1  
+1  2  3 
+3  2  1 
+*/
+
+int main() {
+    /*
+    main1();
+    main2();
+    main3();
+    main4();
+    main5();
+    */
+	
+    main6();
     return 0;
 }

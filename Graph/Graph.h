@@ -4,16 +4,14 @@
 #include "../Stack/Stack.c"
 #include "../Queue/Queue.c"
 
-typedef struct GraphEdge_t
-{
+typedef struct graphEdge {
     int src;
     int dest;
     int cost;
-    struct GraphEdge_t *next;
+    struct graphEdge *next;
 } GraphEdge;
 
-typedef struct graph
-{
+typedef struct graph {
     int count;
     GraphEdge **adj;
 } Graph;
@@ -26,7 +24,7 @@ int max(int first, int second) {
     return (first > second) ? first : second;
 }
 
-#define MAX_CAPACITY 100
+#define CAPACITY 100
 #define ERROR_VALUE -999
 
 #define INFINITE 9999999

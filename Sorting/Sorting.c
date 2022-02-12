@@ -273,6 +273,53 @@ void bucketSort(int arr[], int size, int maxValue) {
 	}
 }
 
+int getMax(int arr[], int n)
+{
+    int max = arr[0];
+    for (int i = 1; i < n; i++)
+        if (max < arr[i])
+            max = arr[i];
+    return max;
+}
+
+void countSort2(int arr[], int n, int dividend)
+{
+    int temp[n];
+    for (int i = 0; i < n; i++)
+        temp[i] = arr[i];
+    
+    int count[10];
+    for (int i = 0; i < 10; i++)
+        count[i] = 0;
+    
+    // Store count of occurrences in count array.
+    // (number / dividend) % 10 is used to find the working digit.
+    for (int i = 0; i < n; i++)
+        count[(temp[i] / dividend) % 10]++;
+
+    // Change count[i] so that count[i] contains 
+    // number of elements till index i in output.
+    for (int i = 1; i < 10; i++)
+        count[i] += count[i - 1];
+    
+    // Copy content to input arr.
+    for (int i = n - 1; i >= 0; i--) {
+        int index = (temp[i] / dividend) % 10;
+        arr[count[index]-1] = temp[i];
+        count[index]--;
+    }
+}
+
+void radixSort(int *arr, int n) {
+    int m = getMax(arr, n);
+
+    // Counting sort for every digit.
+    // The dividend passed is used to calculate current working digit.
+    for (int div = 1; m / div > 0; div *= 10) {    
+        countSort2(arr, n, div);
+    }
+}
+
 /* Testing code */
 int main1() {
     int arr[] = {4, 5, 3, 2, 6, 7, 1, 8, 9, 10};
@@ -317,6 +364,12 @@ int main1() {
     int arr10[] = {1, 34, 7, 99, 5, 23, 45, 88, 77, 19, 91, 100};
     bucketSort(arr10, sizeof(arr10) / sizeof(int), 100);
     printArray(arr10, sizeof(arr10) / sizeof(int));
+
+    int arr11[] = { 100, 49, 65, 91, 702, 29, 4, 55 };
+    radixSort(arr11, sizeof(arr11) / sizeof(int));
+    printArray(arr11, sizeof(arr11) / sizeof(int));
+
+
 }
 
 /*

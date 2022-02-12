@@ -4,16 +4,17 @@
 #define MAX_SIZE 50
 #define ERROR_VALUE 999999
 
-typedef struct stack
-{
+typedef struct stack {
     int top1;
     int top2;
     int data[MAX_SIZE];
 } Stack;
 
-void StackInitialize(Stack *stk) {
+Stack* createStack() {
+    Stack *stk = (Stack*)malloc(sizeof(Stack));
     stk->top1 = -1;
     stk->top2 = MAX_SIZE;
+    return stk;
 }
 
 void StackPush1(Stack *stk, int data) {
@@ -35,10 +36,9 @@ void StackPush2(Stack *stk, int data) {
 int StackPop1(Stack *stk) {
     if (stk->top1 >= 0) {
         int value = stk->data[stk->top1--];
-        printf("%d is being popped from Stack 1\n", value);
         return value;
     } else {
-        printf("Stack Empty! Cannot Pop\n");
+        printf("Stack Empty!\n");
     }
     return ERROR_VALUE;
 }
@@ -46,23 +46,28 @@ int StackPop1(Stack *stk) {
 int StackPop2(Stack *stk) {
     if (stk->top2 < MAX_SIZE) {
         int value = stk->data[stk->top2++];
-        printf("%d is being popped from Stack 2\n", value);
         return value;
     } else {
-        printf("Stack Empty! Cannot Pop\n");
+        printf("Stack Empty!\n");
     }
     return ERROR_VALUE;
 }
 
 int main() {
-    Stack stk;
-    StackInitialize(&stk);
-    for (int i = 0; i < 20; i++) {
-        StackPush1(&stk, i);
-        StackPush2(&stk, i + 10);
-    }
-    for (int i = 0; i < 21; i++) {
-        StackPop1(&stk);
-        StackPop2(&stk);
-    }
+    Stack* stk = createStack();
+    StackPush1(stk, 1);       
+    StackPush1(stk, 2);
+    StackPush2(stk, 3);
+    StackPush2(stk, 4);
+    printf("%d \n",StackPop1(stk));
+    printf("%d \n",StackPop1(stk));
+    printf("%d \n",StackPop2(stk));
+    printf("%d \n",StackPop2(stk));
 }
+
+/*
+2 
+1 
+4 
+3 
+*/

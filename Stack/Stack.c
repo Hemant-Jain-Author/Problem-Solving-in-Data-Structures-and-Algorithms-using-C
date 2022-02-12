@@ -6,8 +6,7 @@
 #define ERROR_VALUE -999
 #define MAX_CAPACITY 100
 
-typedef struct Stack
-{
+typedef struct Stack {
     int top;
     int *data;
     int capacity;
@@ -22,7 +21,7 @@ Stack* createStack() {
 }
 
 void StackPush(Stack *stk, int value) {
-    if (stk->top + 1 == stk->capacity){
+    if (stk->top + 1 == stk->capacity) {
         printf("Stack is full.\n");
         return;
     }
@@ -63,6 +62,22 @@ void StackPrint(Stack *stk) {
 }
 
 int mainA() {
+    Stack* stk = createStack();
+    StackPush(stk, 1);       
+    StackPush(stk, 2);
+    StackPush(stk, 3);
+    StackPrint(stk);
+    printf("%d ",StackPop(stk));
+    printf("%d ",StackPop(stk));
+    return 0;
+}
+
+/*
+[3 2 1 ]
+3 2
+*/
+
+int mainB() {
     Stack* stk = createStack();
     for (int i = 0; i < 20; i++)
         StackPush(stk, i);

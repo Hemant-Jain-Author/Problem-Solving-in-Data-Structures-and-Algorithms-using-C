@@ -17,15 +17,14 @@ int minCost(int days[], int n, int costs[]) {
 
 	int j = 0;
 	for (int i = 1; i <= maxVal; i++) {
-		if (days[j] == i) // That days is definitely travelled.
-		{
+		if (days[j] == i) { // That days is definitely travelled.
 			j++;
 			dp[i] = dp[i - 1] + costs[0];
 			dp[i] = min(dp[i], dp[max(0, i - 7)] + costs[1]);
 			dp[i] = min(dp[i], dp[max(0, i - 30)] + costs[2]);
-		}
-		else
+		} else {
 			dp[i] = dp[i - 1]; // day may be ignored.
+		}
 	}
 	return dp[maxVal];
 }

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Counter.c"
+#include "HashLP.c"
 
 int isAnagram(char *str1, char *str2) {
     int size1 = strlen(str1);
@@ -10,29 +10,27 @@ int isAnagram(char *str1, char *str2) {
     if (size1 != size2)
         return 0;
     
-    Counter* cm = createCounter();
+    HashTable* ht = createHashTable(100);
 
     for (int i = 0; i < size1; i++)
-        CounterAdd(cm, str1[i]);
+        HashAdd(ht, str1[i]);
 
     for (int i = 0; i < size2; i++) {
-        if (GetCount(cm, str2[i]) == 0)
+        if (HashRemove(ht, str2[i]) == 0)
             return 0;
-        else
-            CounterRemove(cm, str2[i]);
     }
     return 1;
 }
 
 char *removeDuplicate(char *str, int size) {
-    Counter* hs = createCounter();
+    HashTable* hs = createHashTable(100);
     char *ret = (char *)malloc(sizeof(char) * size);
     int retIndex = 0;
     for (int i = 0; i < size; i++) {
-        if (GetCount(hs, str[i]) == 0) {
+        if (HashFind(hs, str[i]) == 0) {
             ret[retIndex] = str[i];
             retIndex += 1;
-            CounterAdd(hs, str[i]);
+            HashAdd(hs, str[i]);
         }
     }
     ret[retIndex] = '\0';
@@ -40,69 +38,66 @@ char *removeDuplicate(char *str, int size) {
 }
 
 int findMissing(int arr[], int size, int start, int end) {
-    Counter* cm = createCounter();
+    HashTable* ht = createHashTable(100);
 
     for (int i = 0; i < size; i++)
-        CounterAdd(cm, arr[i]);
+        HashAdd(ht, arr[i]);
 
-    int curr = start;
-    while (curr <= end) {
-        if (GetCount(cm, curr) == 0)
-            return curr;
-        curr += 1;
+    for (int i = start; i <= end; i++) {
+        if (HashFind(ht, i) == 0)
+            return i;
     }
     return -99999;
 }
 
 void printRepeating(int arr[], int size) {
-    Counter* cm = createCounter();
-    int val;
+    HashTable* ht = createHashTable(100);    
     printf("Repeating elements are: ");
     for (int i = 0; i < size; i++) {
-        val = arr[i];
-        if (GetCount(cm, val))
-            printf("%d ", val);
+        if (HashFind(ht, arr[i]))
+            printf("%d ", arr[i]);
         else
-            CounterAdd(cm, val);
+            HashAdd(ht, arr[i]);
     }
     printf("\n");
 }
 
 int printFirstRepeating(int arr[], int size) {
-    Counter* cm = createCounter();
-    int i = 0;
-    for (i = 0; i < size; i++) {
-        CounterAdd(cm, arr[i]);
-    }
-    for (i = 0; i < size; i++) {
-        if (GetCount(cm, arr[i]) > 1) {
-            printf("First Repeating number is : %d\n", arr[i]);
-            return arr[i];
+    HashTable* ht = createHashTable(100);    
+    int firstRepeating = -99999;
+    
+    for (int i = size - 1; i >= 0; i--) {
+        if (HashFind(ht, arr[i])) {
+            firstRepeating = arr[i];
+        } else {
+            HashAdd(ht, arr[i]);
         }
     }
+    if(firstRepeating != -99999)
+        printf("First Repeating number is : %d\n", firstRepeating);
+    else
+        printf("No Repeating number\n");
+
+    return firstRepeating;
 }
 
 void PrintSortByOrder(int arr[], int size, int arr2[], int size2) {
-    int i, key, count;
-    Counter* cm = createCounter();
+    int i;
+    HashTable* ht = createHashTable(100);
     for (i = 0; i < size; i++) {
-        CounterAdd(cm, arr[i]);
+        HashAdd(ht, arr[i]);
     }
-
-    for (i = 0; i < size2; i++) {
-        key = arr2[i];
-        count = GetCount(cm, key);
-        for (int j = 0; j < count; j++) {
-            printf("%d ", key);
-            CounterRemove(cm, key);
+    i = 0;
+    while (i < size2) {
+        if (HashRemove(ht, arr2[i]) == 1) {
+            printf("%d ", arr2[i]);
+            continue;
         }
+        i++;
     }
     for (i = 0; i < size; i++) {
-        key = arr[i];
-        if (GetCount(cm, key)) {
-            printf("%d ", key);
-            CounterRemove(cm, key);
-        }
+        if (HashRemove(ht, arr[i]) == 1)
+            printf("%d ", arr[i]);
     }
 }
 

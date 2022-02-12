@@ -2,8 +2,7 @@
 #include<stdlib.h>
 #include <string.h>
 
-typedef struct Job_t
-{
+typedef struct Job_t {
 	int start;
 	int stop;
 	int value;
