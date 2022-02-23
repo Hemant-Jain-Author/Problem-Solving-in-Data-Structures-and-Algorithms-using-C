@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <math.h>
 
+#ifndef ERROR_VALUE
+#define ERROR_VALUE -99999
+#endif 
+
 // min heap compare function.
 int greater(int a, int b) {
     return a > b;
@@ -79,6 +83,8 @@ Heap* createHeap(int(* compare)(int , int)) {
 }
 
 int heapRemove(Heap *hp) {
+    if (hp->size == 0)
+        return ERROR_VALUE;
     int value = hp->array[0];
     hp->array[0] = hp->array[hp->size - 1];
     hp->size--;
@@ -136,7 +142,7 @@ int heapDelete(Heap *hp, int value) {
     return 0;
 }
 
-int mainA() {
+int main() {
     int a[10] = {4, 5, 3, 2, 6, 7, 10, 8, 9, 1};
     Heap* hp = createHeap2(a, 10, greater);//min heap
     printHeap(hp);

@@ -11,7 +11,6 @@ int main1() {
     	printf("%d ", heapRemove(hp));
     }
     
-
     printf("Top value removed : %d\n", heapRemove(hp));
     printHeap(hp);
 
@@ -106,15 +105,10 @@ int main2() {
     int arr3[] = {8, 7, 6, 5, 7, 5, 2, 1};
     printf("Kth Smallest :: %d\n", KthSmallest3(arr3, 8, 3));
     int arr4[] = {8, 7, 6, 5, 7, 5, 2, 1};
-<<<<<<< HEAD
     printf("isMaxHeap :: %d\n", isMaxHeap(arr4, sizeof(arr) / sizeof(int)));
     int arr5[] = {8, 7, 6, 5, 7, 5, 2, 1};
     heapSort(arr5, sizeof(arr) / sizeof(int), 1);
     printf("isMinHeap :: %d\n", isMinHeap(arr5, sizeof(arr) / sizeof(int)));
-=======
-    heapSort(arr4, sizeof(arr) / sizeof(int), 1);
-    printf("isMinHeap :: %d\n", isMinHeap(arr4, sizeof(arr) / sizeof(int)));
->>>>>>> 79fd0c710c076cec7823e04ef40e71bf8202f03a
     return 0;
 }
 
@@ -434,14 +428,13 @@ Median after insertion of 1 is 4
 */
 
 int main() {
-    //main1();     
-    //main2();
+    main1();     
+    main2();
     main3();
-    /*main4();
+    main4();
     main5();
     main6();
     main7();
     main8();
-    */
-   return 0;
+    return 0;
 }

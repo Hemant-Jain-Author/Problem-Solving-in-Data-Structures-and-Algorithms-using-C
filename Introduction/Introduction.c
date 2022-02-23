@@ -673,11 +673,11 @@ int main17() {
     return 0;
 }
 
-int gcd(int m, int n) {
-    if (m < n)
-        return (gcd(n, m));
-    if (m % n == 0)
-        return (n);
+int gcd(int m, int n) {   
+    if (n == 0)
+        return m;
+    if (m == 0)
+        return n;
     return (gcd(n, m % n));
 }
 
@@ -728,6 +728,20 @@ int main18() {
     return 0;
 }
 
+int main19() {
+    printf("\n%d", gcd(5, 2));
+    printf("\n%d", gcd(2, 5));
+    printf("\n%d", gcd(9, 6));
+    printf("\n%d", gcd(6, 9));
+    return 0;
+}
+
+int main20() {
+    printf("%d ", fibonacci(i));
+    return 0;
+}
+
+
 int main() {
     main1();
     main2();
@@ -751,5 +765,7 @@ int main() {
     main16();
     main17();
     main18();
+    main19();
+    main20();
     return 0;
 }
