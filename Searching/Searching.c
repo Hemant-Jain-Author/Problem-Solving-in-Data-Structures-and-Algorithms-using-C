@@ -1943,11 +1943,10 @@ int rotationMax(int arr[], int size) {
 }
 
 int rotationMaxUtil(int arr[], int start, int end) {
-    int mid;
     if (end <= start) {
         return arr[start];
     }
-    mid = (start + end) / 2;
+    int mid = (start + end) / 2;
     if (arr[mid] > arr[mid + 1])
         return arr[mid];
 
@@ -1985,11 +1984,10 @@ int findRotationMax(int arr[], int size) {
 
 int findRotationMaxUtil(int arr[], int start, int end) {
     /* single element case.*/
-    int mid;
     if (end <= start)
         return start;
 
-    mid = (start + end) / 2;
+    int mid = (start + end) / 2;
     if (arr[mid] > arr[mid + 1])
         return mid;
 
@@ -2042,11 +2040,10 @@ int searchRotateArray(int arr[], int size, int key) {
 }
 
 int binarySearchRotateArrayUtil(int arr[], int start, int end, int key) {
-    int mid;
     if (end < start)
         return -1;
 
-    mid = (start + end) / 2;
+    int mid = (start + end) / 2;
     if (key == arr[mid])
         return mid;
 
@@ -2155,18 +2152,21 @@ int checkPermutation(char arr1[], int size1, char arr2[], int size2) {
     return 1;
 }
 
+
+
 int checkPermutation2(char array1[], int size1, char array2[], int size2) {
     if (size1 != size2)
         return 0;
 
-    Set* hs = createSet();
+    Counter* ctr = createCounter();
 
     for (int i = 0; i < size1; i++)
-        SetAdd(hs, array1[i]);
+        CounterAdd(ctr, array1[i]);
 
     for (int i = 0; i < size2; i++) {
-        if (!SetFind(hs, array2[i]))
+        if (!GetCount(ctr, array2[i]))
             return 0;
+        CounterRemove(ctr, array2[i]);
     }
     return 1;
 }
@@ -2178,13 +2178,14 @@ int checkPermutation3(char array1[], int size1,  char array2[], int size2) {
     int count[256];
     for (int i =0;i<256;i++)
         count[i] = 0;
-
+    
+    
     for (int i = 0; i < size1; i++) {
         count[array1[i]]++;
         count[array2[i]]--;
     }
 
-    for (int i = 0; i < size1; i++) {
+    for (int i = 0; i < 256; i++) {
         if (count[i] != 0) {
             return 0;
         }
@@ -2195,7 +2196,8 @@ int checkPermutation3(char array1[], int size1,  char array2[], int size2) {
 int main39() {
     char str1[] = "aaaabbbb";
     int n1 = strlen(str1);
-    char str2[] = "bbaaaabb";
+    //char str2[] = "bbaaaabb";
+    char str2[] = "bbaaabbb";
     int n2 = strlen(str2);
     printf("checkPermutation : %d\n", checkPermutation(str1, n1, str2, n2));
     printf("checkPermutation : %d\n", checkPermutation2(str1, n1, str2, n2));
@@ -2316,10 +2318,10 @@ int findBalancedPoint(int arr[], int size) {
         if (first == second) {
             return i;
         }
-        if (i < size - 1)
+        if (i < size - 1) {
             first += arr[i];
-
-        second -= arr[i + 1];
+            second -= arr[i + 1];
+        }
     }
     return -1;
 }
@@ -2850,8 +2852,9 @@ int main() {
     main36();
     main37();
     main38();
+    */
     main39();
-    main40();
+    /*main40();
     main41();
     main42();
     main43();
@@ -2859,9 +2862,9 @@ int main() {
     main46();
     main47();
     main48();
-    main49();*/
+    main49();
     main50();
     main51();
-    main52();
+    main52();*/
     return 0;
 }

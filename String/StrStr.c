@@ -36,9 +36,9 @@ int RobinKarp(char *text, char *pattern) {
         TextHash = ((TextHash << 1) + text[i]) % prime;
     }
 
-    int j;
     for (int i = 0; i <= (n - m); i++) {
         if (TextHash == PatternHash) {
+            int j;
             for (j = 0; j < m; j++) {
                 if (text[i + j] != pattern[j])
                     break;
@@ -47,7 +47,9 @@ int RobinKarp(char *text, char *pattern) {
             if (j == m)
                 return i;
         }
-        TextHash = (((TextHash - text[i] * powm) << 1) + text[i + m]) % prime;
+
+        if(i < (n - m)) 
+            TextHash = (((TextHash - text[i] * powm) << 1) + text[i + m]) % prime;
 
         if (TextHash < 0)
             TextHash = (TextHash + prime);
@@ -113,9 +115,9 @@ int KMPFindCount(char *text, char *pattern) {
 int main1() {
     char *text = "hello, world!";
     char *pattern = "world";
-    printf("BruteForceSearch : %d \n", BruteForceSearch(text, pattern));
-    printf("RobinKarp : %d \n", RobinKarp(text, pattern));
-    printf("KMP : %d \n", KMP(text, pattern));
+    printf("BruteForceSearch returns: %d \n", BruteForceSearch(text, pattern));
+    printf("RobinKarp returns: %d \n", RobinKarp(text, pattern));
+    printf("KMP returns: %d \n", KMP(text, pattern));
     return 0;
 }
 
