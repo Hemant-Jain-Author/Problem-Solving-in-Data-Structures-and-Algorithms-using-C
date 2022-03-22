@@ -107,6 +107,7 @@ int HamiltonianPathUtil(Graph *graph, int path[], int pSize, int added[]) {
     }
     return 0;
 }
+
 int HamiltonianPath(Graph *graph) {
     int *path = (int *)calloc(graph->count, sizeof(int));
     int *added = (int *)calloc(graph->count, sizeof(int));
@@ -123,44 +124,79 @@ int HamiltonianPath(Graph *graph) {
     return 0;
 }
 
-	int main2() {
-		int count = 5;
-		int adj[5][5] = {{0, 1, 0, 1, 0},
-						 {1, 0, 1, 1, 0},
-						 {0, 1, 0, 0, 1},
-						 {1, 1, 0, 0, 1},
-						 {0, 1, 1, 1, 0}};
-	
-		Graph* graph = createGraph(count);
-		for (int i = 0; i < count; i++)
-			for (int j = 0; j < count; j++)
-				if (adj[i][j])
-					addDirectedEdge(graph, i, j, 1);
-		int retval = HamiltonianPath(graph);
-		printf("\nHamiltonianPath : %d \n", retval);
-		retval = HamiltonianCycle(graph);
-		printf("\nHamiltonianCycle : %d \n", retval);
-	
-		int adj2[5][5] = {{0, 1, 0, 1, 0},
-						  {1, 0, 1, 1, 0},
-						  {0, 1, 0, 0, 1},
-						  {1, 1, 0, 0, 0},
-						  {0, 1, 1, 0, 0}};
-		Graph* graph2 = createGraph(count);
-	
-		for (int i = 0; i < count; i++)
-			for (int j = 0; j < count; j++)
-				if (adj2[i][j])
-					addDirectedEdge(graph2, i, j, 1);
-	
-		retval = HamiltonianPath(graph2);
-		printf("\nHamiltonianPath : %d \n", retval);
-		retval = HamiltonianCycle(graph2);
-		printf("\nHamiltonianCycle : %d \n", retval);
-		return 0;
-	}
+int main2() {
+    int count = 5;
+    int adj[5][5] = {{0, 1, 0, 1, 0},
+                        {1, 0, 1, 1, 0},
+                        {0, 1, 0, 0, 1},
+                        {1, 1, 0, 0, 1},
+                        {0, 1, 1, 1, 0}};
+
+    Graph* graph = createGraph(count);
+    for (int i = 0; i < count; i++)
+        for (int j = 0; j < count; j++)
+            if (adj[i][j])
+                addDirectedEdge(graph, i, j, 1);
+    int retval = HamiltonianPath(graph);
+    printf("\nHamiltonianPath : %d \n", retval);
+    retval = HamiltonianCycle(graph);
+    printf("\nHamiltonianCycle : %d \n", retval);
+
+    int adj2[5][5] = {{0, 1, 0, 1, 0},
+                        {1, 0, 1, 1, 0},
+                        {0, 1, 0, 0, 1},
+                        {1, 1, 0, 0, 0},
+                        {0, 1, 1, 0, 0}};
+    Graph* graph2 = createGraph(count);
+
+    for (int i = 0; i < count; i++)
+        for (int j = 0; j < count; j++)
+            if (adj2[i][j])
+                addDirectedEdge(graph2, i, j, 1);
+
+    retval = HamiltonianPath(graph2);
+    printf("\nHamiltonianPath : %d \n", retval);
+    retval = HamiltonianCycle(graph2);
+    printf("\nHamiltonianCycle : %d \n", retval);
+    return 0;
+}
+
+/*
+Hamiltonian Path found :: 0 1 2 4 3 
+HamiltonianPath : 1 
+Hamiltonian Cycle found :: 0 1 2 4 3 0 
+HamiltonianCycle : 1 
+
+Hamiltonian Path found :: 0 3 1 2 4 
+HamiltonianPath : 1 
+Hamiltonian Cycle not found
+HamiltonianCycle : 0 
+*/
 
 int INFINITE = 99999;
+
+void printPathUtil(int previous[], int source, int dest) {
+    if (dest == source)
+            printf("%d", source);
+    else {
+        printPathUtil(previous, source, previous[dest]);
+        printf("->%d", dest);
+    }
+}
+
+void printPath(int previous[], int dist[], int count, int source) {
+    printf("Shortest Paths: ");
+    for (int i = 0; i < count; i++) {
+        if (dist[i] == INFINITE)
+            printf("(%d->%d @ Unreachable) ", source, i);
+        else if(i != previous[i]) {
+            printf("(");
+            printPathUtil(previous, source, i);
+            printf(" @ %d) ", dist[i]);
+        }
+    }
+    printf("\n");
+}
 
 int dijkstra(Graph *gph, int source) {
     int count = gph->count;
@@ -174,33 +210,31 @@ int dijkstra(Graph *gph, int source) {
     }
 
     dist[source] = 0;
+    previous[source] = source;
 
     Heap* pq = createHeap(greater);
     GraphEdge *edge = createGraphEdge(source, source, 0);
     heapAdd(pq, edge);
+    int curr;
 
     while (heapSize(pq) != 0) {
         edge = heapRemove(pq);
-        source = edge->dest;
-        visited[source] = 1;
+        curr = edge->dest;
+        visited[curr] = 1;
 
         for (int dest = 0; dest < count; dest++) {
-            int alt = gph->adj[source][dest] + dist[source];
-            if (gph->adj[source][dest] > 0 && 
+            int alt = gph->adj[curr][dest] + dist[curr];
+            if (gph->adj[curr][dest] > 0 && 
             alt < dist[dest] && visited[dest] == 0) {
                 dist[dest] = alt;
-                previous[dest] = source;
-                edge = createGraphEdge(source, dest, alt);
+                previous[dest] = curr;
+                edge = createGraphEdge(curr, dest, alt);
                 heapAdd(pq, edge);
             }
         }
     }
-    for (int i = 0; i < gph->count; i++) {
-        if (dist[i] == INFINITE)
-            printf("node id %d prev %d cost : Unreachable", i, previous[i]);
-        else
-            printf("node id %d prev %d cost : %d\n", i, previous[i], dist[i]);
-    }
+
+    printPath(previous, dist, gph->count, source);
 }
 
 int PrimsMST(Graph *gph) {
@@ -215,6 +249,7 @@ int PrimsMST(Graph *gph) {
     }
     int source = 0;
     dist[source] = 0;
+    previous[source] = source;
 
     Heap* pq = createHeap(greater);
     GraphEdge *edge = createGraphEdge(source, source, 0);
@@ -237,12 +272,12 @@ int PrimsMST(Graph *gph) {
         }
     }
     int total = 0;
-    printf("Edges are ");
+    printf("Edges are : ");
     for (int i = 0; i < gph->count; i++) {
         if (dist[i] == INFINITE)
             printf("(%d is unreachable.)", i);
-        else if(previous[i] != -1) {
-            printf("(%d, %d, %d) ", previous[i], i, dist[i]);
+        else if(previous[i] != i) {
+            printf("(%d->%d @ %d) ", previous[i], i, dist[i]);
             total += dist[i];
         }
     }
@@ -269,6 +304,13 @@ int main3() {
     dijkstra(graph, 0);
     PrimsMST(graph);
 }
+
+/*
+Shortest Paths: (0->1 @ 4) (0->1->2 @ 12) (0->1->2->3 @ 19) (0->7->6->5->4 @ 21) (0->7->6->5 @ 11) (0->7->6 @ 9) (0->7 @ 8) (0->1->2->8 @ 14) 
+
+Edges are : (0->1 @ 4) (5->2 @ 4) (2->3 @ 7) (3->4 @ 9) (6->5 @ 2) (7->6 @ 1) (0->7 @ 8) (2->8 @ 2) 
+Total MST cost: 37
+*/
 
 int main() {
     main1();

@@ -335,6 +335,16 @@ int rootVertex(Graph *gph) {
             retVal = i;
         }
     }
+    for (int i = 0; i < count; i++)
+        visited[i] = 0;
+
+    dfsUtil(gph, retVal, visited);
+    for (int i = 0; i < count; i++){
+        if (visited[i] == 0) {
+            printf("Disconnected graph!");
+            return -1;
+        }
+    }
     printf("Root vertex is :: %d ", retVal);
     return retVal;
 }
@@ -857,6 +867,7 @@ void primsMST(Graph *gph) {
     
     int source = 0;
     dist[source] = 0;
+    previous[source] = source;
 
     Heap* pq = createHeap(greater);
     GraphEdge *edge = createGraphEdge(source, source, 0);
@@ -882,17 +893,40 @@ void primsMST(Graph *gph) {
     }
         
     int total = 0;
-    printf("Edges are ");
+    printf("Edges are : ");
     for (int i = 0; i < gph->count; i++) {
         if (dist[i] == INFINITE)
             printf("(%d is unreachable.)", i);
-        else if(previous[i] != -1) {
-            printf("(%d, %d, %d) ", previous[i], i, dist[i]);
+        else if(previous[i] != i) {
+            printf("(%d->%d @ %d) ", previous[i], i, dist[i]);
             total += dist[i];
         }
     }
     printf("\nTotal MST cost: %d\n", total);
 
+}
+
+void printPathUtil(int previous[], int source, int dest) {
+    if (dest == source)
+            printf("%d", source);
+    else {
+        printPathUtil(previous, source, previous[dest]);
+        printf("->%d", dest);
+    }
+}
+
+void printPath(int previous[], int dist[], int count, int source) {
+    printf("Shortest Paths: ");
+    for (int i = 0; i < count; i++) {
+        if (dist[i] == INFINITE)
+            printf("(%d->%d @ Unreachable) ", source, i);
+        else if(i != previous[i]) {
+            printf("(");
+            printPathUtil(previous, source, i);
+            printf(" @ %d) ", dist[i]);
+        }
+    }
+    printf("\n");
 }
 
 void dijkstra(Graph *gph, int source) {
@@ -906,37 +940,33 @@ void dijkstra(Graph *gph, int source) {
     }
 
     dist[source] = 0;
+    previous[source] = source;
+    
     Heap* pq = createHeap(greater);
     GraphEdge *edge = createGraphEdge(source, source, 0);
     heapAdd(pq, edge);
     GraphEdge *head;
+    int curr;
 
     while (heapSize(pq) != 0) {
         edge = heapRemove(pq);
-        source = edge->dest;
-        visited[source] = 1;
-        head = gph->adj[source];
+        curr = edge->dest;
+        visited[curr] = 1;
+        head = gph->adj[curr];
         while (head) {
             int dest = head->dest;
-            int alt = head->cost + dist[source];
+            int alt = head->cost + dist[curr];
 
             if (alt < dist[dest] && visited[dest] == 0) {
                 dist[dest] = alt;
-                previous[dest] = source;
-                edge = createGraphEdge(source, dest, alt);
+                previous[dest] = curr;
+                edge = createGraphEdge(curr, dest, alt);
                 heapAdd(pq, edge);
             }
             head = head->next;
         }
     }
-    for (int i = 0; i < gph->count; i++) {
-        if (dist[i] == INFINITE)
-            printf("node id %d prev %d cost : Unreachable",
-                   i, previous[i]);
-        else
-            printf("node id %d prev %d cost : %d\n",
-                   i, previous[i], dist[i]);
-    }
+    printPath(previous, dist, gph->count, source);
 }
 
 typedef struct Set_t {
@@ -970,11 +1000,7 @@ void unionSets(Set* sets[], int x, int y) {
 		sets[y]->rank++;
 	}
 }
-/*
-int greater(GraphEdge *e1, GraphEdge *e2) {
-    return (e1->cost > e2->cost);
-}
-*/
+
 void sort(GraphEdge* arr[], int size, int (*comp)(GraphEdge* p1, GraphEdge* p2)) {
     int i, j;
 	GraphEdge* temp;
@@ -999,7 +1025,7 @@ void kruskalMST(Graph *gph) {
 
 	// Edges are added to array and sorted.
 	int E = 0;
-	GraphEdge* edge[100];/////
+	GraphEdge* edge[100];
     GraphEdge *head;
 	for (int i = 0; i < count; i++) {
 		head = gph->adj[i];
@@ -1010,12 +1036,12 @@ void kruskalMST(Graph *gph) {
 	}
 	sort(edge, E, greater);
 	int sum = 0;
-	printf("Edges are ");
+	printf("Edges are : ");
     for (int i = 0; i < E; i++) {
 		int x = findSetRoot(sets, edge[i]->src);
 		int y = findSetRoot(sets, edge[i]->dest);
 		if (x != y) {
-			printf("(%d, %d, %d) ", edge[i]->src, edge[i]->dest, edge[i]->cost);
+			printf("(%d->%d @ %d) ", edge[i]->src, edge[i]->dest, edge[i]->cost);
 			sum += edge[i]->cost;
 			unionSets(sets, x, y);
 		}
@@ -1046,50 +1072,49 @@ int main16() {
 }
 
 /*
-Edges are (6, 7, 1) (2, 8, 2) (5, 6, 2) (0, 1, 4) (2, 5, 4) (2, 3, 7) (0, 7, 8) (3, 4, 9) 
+//Kruskal
+Edges are : (6->7 @ 1) (2->8 @ 2) (5->6 @ 2) (0->1 @ 4) (2->5 @ 4) (2->3 @ 7) (0->7 @ 8) (3->4 @ 9) 
 Total MST cost: 37
 
-Edges are (0, 1, 4) (5, 2, 4) (2, 3, 7) (3, 4, 9) (6, 5, 2) (7, 6, 1) (0, 7, 8) (2, 8, 2) 
+//Prims
+Edges are : (0->1 @ 4) (5->2 @ 4) (2->3 @ 7) (3->4 @ 9) (6->5 @ 2) (7->6 @ 1) (0->7 @ 8) (2->8 @ 2) 
 Total MST cost: 37
 
-node id 0 prev -1 cost : 0
-node id 1 prev 0 cost : 4
-node id 2 prev 1 cost : 12
-node id 3 prev 2 cost : 19
-node id 4 prev 5 cost : 21
-node id 5 prev 6 cost : 11
-node id 6 prev 7 cost : 9
-node id 7 prev 0 cost : 8
-node id 8 prev 2 cost : 14
+//dijkstra
+Shortest Paths: (0->1 @ 4) (0->1->2 @ 12) (0->1->2->3 @ 19) (0->7->6->5->4 @ 21) 
+                (0->7->6->5 @ 11) (0->7->6 @ 9) (0->7 @ 8) (0->1->2->8 @ 14) 
+
 */
 
 void shortestPath(Graph *gph, int source) {
     int count = gph->count;
-    int *cost = (int *)calloc(count, sizeof(int));
-    int *path = (int *)calloc(count, sizeof(int));
+    int *dist = (int *)calloc(count, sizeof(int));
+    int *previous = (int *)calloc(count, sizeof(int));
     int curr, destination;
     for (int i = 0; i < count; i++) {
-        cost[i] = -1;
-        path[i] = -1;
+        dist[i] = -1;
+        previous[i] = -1;
     }
     Queue* que = createQueue();
     queueAdd(que, source);
-    cost[source] = 0;
+    dist[source] = 0;
+    previous[source] = source;
+
     while (queueSize(que) != 0) {
         curr = queueRemove(que);
         GraphEdge *head = gph->adj[curr];
         while (head) {
             destination = head->dest;
-            if (cost[destination] == -1) {
-                cost[destination] = cost[curr] + 1;
-                path[destination] = curr;
+            if (dist[destination] == -1) {
+                dist[destination] = dist[curr] + 1;
+                previous[destination] = curr;
                 queueAdd(que, destination);
             }
             head = head->next;
         }
     }
-    for (int i = 0; i < count; i++)
-        printf("%d to %d cost %d \n", path[i], i, cost[i]);
+
+    printPath(previous, dist, gph->count, source);
 }
 
 int main17() {
@@ -1113,15 +1138,9 @@ int main17() {
 }
 
 /*
--1 to 0 cost 0 
-0 to 1 cost 1 
-1 to 2 cost 2 
-2 to 3 cost 3 
-5 to 4 cost 4 
-6 to 5 cost 3 
-7 to 6 cost 2 
-0 to 7 cost 1 
-7 to 8 cost 2 
+Shortest Paths: (0->1 @ 1) (0->1->2 @ 2) (0->1->2->3 @ 3) (0->7->6->5->4 @ 4) 
+               (0->7->6->5 @ 3) (0->7->6 @ 2) (0->7 @ 1) (0->7->8 @ 2) 
+
 */
 
 void bellmanFordshortestPath(Graph *gph, int source) {
@@ -1135,6 +1154,7 @@ void bellmanFordshortestPath(Graph *gph, int source) {
         visited[i] = 0;
     }
     dist[source] = 0;
+    previous[source] = source;
     /* Outer loop will run (V-1) number of times.
 	Inner for loop and while loop runs combined will
 	run for Edges number of times.
@@ -1154,8 +1174,7 @@ void bellmanFordshortestPath(Graph *gph, int source) {
             }
         }
     }
-    for (int i = 0; i < count; i++)
-        printf("%d to %d weight %d\n", previous[i], i, dist[i]);
+    printPath(previous, dist, gph->count, source);
 }
 
 int main18() {
@@ -1166,17 +1185,12 @@ int main18() {
     addDirectedEdge(gph, 2, 3, 1);
     addDirectedEdge(gph, 4, 1, -2);
     addDirectedEdge(gph, 4, 3, 1);
-    //printGraph(gph);
     bellmanFordshortestPath(gph, 0);
     return 0;
 }
 
 /*
--1 to 0 weight 0
-4 to 1 weight 0
-1 to 2 weight 1
-2 to 3 weight 2
-0 to 4 weight 2
+Shortest Paths: (0->4->1 @ 0) (0->4->1->2 @ 1) (0->4->1->2->3 @ 2) (0->4 @ 2) 
 */
 
 int isEulerian(Graph *graph) {

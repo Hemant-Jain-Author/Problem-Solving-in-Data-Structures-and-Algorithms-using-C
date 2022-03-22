@@ -28,7 +28,7 @@ DLL *createDLL() {
     return list;
 }
 
-void insertNode(DLL *list, int value) {
+void insertAtHead(DLL *list, int value) {
     Node *temp = createNode(value, NULL, NULL);
     Node *head = list->head;
     if (!head) {
@@ -134,18 +134,15 @@ void deleteList(DLL *list) {
 }
 
 void deleteFirstNode(DLL *list) {
-    Node *head = list->head;
-    if(head == NULL)
+    if(list->head == NULL)
         return;
     
-    Node *deleteMe = head;
-    head = head->next;
-    list->head = head;
-    if(head == NULL)
+    Node *deleteMe = list->head;
+    list->head = list->head->next;
+    if(list->head != NULL)
+        list->head->prev = NULL;
+    else
         list->tail = NULL;
-
-    if (head != NULL)
-        head->prev = NULL;
 
     free(deleteMe);
 }
@@ -170,15 +167,16 @@ void deleteNode(DLL *list, int value) {
         free(deleteMe);
         return;
     }
-    next = curr->next;
-    while (next != NULL) {
-        if (next->value == value) {
-            curr->next = next->next;
+
+    while (curr->next != NULL) {
+        if (curr->next->value == value) {
+            deleteMe = curr->next;
+            curr->next = curr->next->next;
             if (curr->next)
                 curr->next->prev = curr;
-            if(next == list->tail)
+            else
                 list->tail = curr;
-            free(next);
+            free(deleteMe);
             return;
         }
         curr = next;
@@ -187,21 +185,57 @@ void deleteNode(DLL *list, int value) {
 }
 
 void removeDuplicates(DLL *list) {
-    Node *head = list->head;
+    Node *curr = list->head;
     Node *deleteMe;
-    while (head) {
-        if ((head->next) && head->value == head->next->value) {
-            deleteMe = head->next;
-            head->next = deleteMe->next;
-            if(head->next)
-                head->next->prev = head;
+    while (curr) {
+        if ((curr->next) && curr->value == curr->next->value) {
+            deleteMe = curr->next;
+            curr->next = deleteMe->next;
+            if(curr->next)
+                curr->next->prev = curr;
+            else
+                list->tail = curr; 
             free(deleteMe);
         } else {
-            head = head->next;
+            curr = curr->next;
         }
     }
 }
 
+DLL *copyListReversed(DLL *list) {
+    DLL *list2 = createDLL();
+    Node *head = list->head;
+    while (head) {
+        insertAtHead(list2, head->value);
+        head = head->next;
+    }
+    return list2;
+}
+
+
+void insertAtTail(DLL *list, int value) {
+    Node *temp = createNode(value, NULL, NULL);
+    Node *tail = list->tail;
+    if (!tail) {
+        list->head = temp;
+        list->tail = temp;
+    } else {
+        temp->prev = list->tail;
+        list->tail->next = temp;
+        list->tail = temp;
+    }
+}
+
+DLL *copyList(DLL *list) {
+    DLL *list2 = createDLL();
+    Node *head = list->head;
+    while (head) {
+        insertAtTail(list2, head->value);
+        head = head->next;
+    }
+    return list2;
+}
+/*
 DLL *copyListReversed(DLL *list) {
     DLL *list2 = createDLL();
     Node *head = list->head;
@@ -251,7 +285,7 @@ DLL *copyList(DLL *list) {
     list2->tail = tail2;
     return list2;
 }
-
+*/
 int compareListUtil(Node *head1, Node *head2) {
     if (head1 == NULL && head2 == NULL)
         return 1;
@@ -281,14 +315,18 @@ int compareList2(DLL* list1, DLL* list2) {
 
 int main1() {
     DLL* list = createDLL();
-    insertNode(list, 1);
-    insertNode(list, 2);
-    insertNode(list, 3);
+    insertAtHead(list, 1);
+    insertAtHead(list, 2);
+    insertAtHead(list, 3);
     printList(list);
     deleteFirstNode(list);
     printList(list);
     return 0;
 }
+/*
+3  2  1  
+2  1  
+*/
 
 int main2() {
     DLL* list = createDLL();
@@ -304,9 +342,9 @@ int main2() {
 */
 int main3() {
     DLL* list = createDLL();
-    insertNode(list, 1);
-    insertNode(list, 2);
-    insertNode(list, 3);
+    insertAtHead(list, 1);
+    insertAtHead(list, 2);
+    insertAtHead(list, 3);
     printList(list);
     deleteNode(list, 2);
     printList(list);
@@ -337,9 +375,9 @@ int main4() {
 
 int main5() {
     DLL* list = createDLL();
-    insertNode(list, 1);
-    insertNode(list, 2);
-    insertNode(list, 3);
+    insertAtHead(list, 1);
+    insertAtHead(list, 2);
+    insertAtHead(list, 3);
     printList(list);
     reverseList(list);
     printList(list);
@@ -352,11 +390,11 @@ int main5() {
 
 int main6() {
     DLL* list = createDLL();
-    insertNode(list, 1);
-    insertNode(list, 2);
-    insertNode(list, 3);
+    insertAtHead(list, 1);
+    insertAtHead(list, 2);
+    insertAtHead(list, 3);
     printList(list);
-    DLL* list2 = (list);
+    DLL* list2 = copyListReversed(list);
     printList(list2);
     DLL* list3 = copyList(list);
     printList(list3);
@@ -369,14 +407,11 @@ int main6() {
 */
 
 int main() {
-    /*
     main1();
     main2();
     main3();
     main4();
     main5();
-    */
-	
     main6();
     return 0;
 }
