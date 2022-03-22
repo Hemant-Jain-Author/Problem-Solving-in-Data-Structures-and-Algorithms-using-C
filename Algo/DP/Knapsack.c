@@ -50,6 +50,20 @@ int maxCost01KnapsackTD(int wt[], int cost[], int n, int capacity) {
 	return maxCost01KnapsackTDUtil(n, dp, wt, cost, n, capacity);
 }
 
+
+void printItems(int n, int dp[][n+1], int wt[], int cost[], int capacity) {
+    int totalProfit = dp[capacity][n];
+    printf("Selected items are: ");
+    for (int i = n-1; i > -1; i--) {
+        if (totalProfit != dp[capacity][i - 1]) {
+            printf("(wt:%d, cost:%d) ", wt[i] ,cost[i]);
+            capacity -= wt[i];
+            totalProfit -= cost[i];
+		}
+	}
+	printf("\n");
+}
+
 int maxCost01KnapsackBU(int wt[], int cost[], int n, int capacity) {
 	int dp[capacity + 1][n + 1] ;
 	memset(dp, 0, sizeof(dp));
@@ -68,6 +82,7 @@ int maxCost01KnapsackBU(int wt[], int cost[], int n, int capacity) {
 			dp[w][i] = max(first,second);
 		}
 	}
+	printItems(n, dp, wt, cost, capacity);
 	return dp[capacity][n]; // Number of weights considered and final capacity.
 }
 
@@ -108,6 +123,7 @@ int main() {
 /*
 Maximum cost obtained = 300.000000
 Maximum cost obtained = 210.000000
+Selected items are: (wt:30, cost:120) (wt:20, cost:90) (wt:10, cost:60) 
 Maximum cost obtained = 210.000000
 Maximum cost obtained = 210.000000
 */

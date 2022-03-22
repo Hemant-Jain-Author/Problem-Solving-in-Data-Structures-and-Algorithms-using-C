@@ -309,8 +309,7 @@ int JoinRopes(int ropes[], int size) {
 
 int JoinRopes2(int ropes[], int size) {
     Heap* hp = createHeap2(ropes, size, greater);
-    int total = 0;
-    int value = 0;
+    int total = 0, value = 0;
     while (heapSize(hp) > 1) {
         value = heapRemove(hp);
         value += heapRemove(hp);

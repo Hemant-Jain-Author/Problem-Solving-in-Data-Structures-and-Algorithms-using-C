@@ -269,8 +269,8 @@ int rottenFruit(int arr[][5], int maxCol, int maxRow) {
         }
     }
 
-    for (int i = 0; i < maxCol - 1; i++) {
-        for (int j = 0; j < maxRow - 1; j++) {
+    for (int i = 0; i < maxCol; i++) {
+        for (int j = 0; j < maxRow; j++) {
             if (arr[i][j] == 2) {
 				traversed[i][j] = 0;
                 rottenFruitUtil(arr, maxCol, maxRow, i, j, traversed, 0);
@@ -279,8 +279,8 @@ int rottenFruit(int arr[][5], int maxCol, int maxRow) {
     }
 
     int maxDay = 0;
-    for (int i = 0; i < maxCol - 1; i++) {
-        for (int j = 0; j < maxRow - 1; j++) {
+    for (int i = 0; i < maxCol; i++) {
+        for (int j = 0; j < maxRow; j++) {
             if (arr[i][j] == 1) {
                 if (traversed[i][j] == 9999)
                     return -1;
@@ -357,8 +357,8 @@ int main8() {
         {0, 2, 0, 0, 1},
         {1, 1, 0, 0, 1}};
 
-    printf("%d\n", rottenFruit(arr, 5, 5));
-	printf("%d\n", rottenFruit2(arr, 5, 5));
+    printf("rottenFruit : %d\n", rottenFruit(arr, 5, 5));
+	printf("rottenFruit : %d\n", rottenFruit2(arr, 5, 5));
     return 0;
 }
 
@@ -386,7 +386,7 @@ int stepsOfKnight(int size, int srcX, int srcY, int dstX, int dstY) {
     for (int i = 0; i < size; i++) {
         traversed[i] = (int *)malloc(size * sizeof(int));
         for (int j = 0; j < size; j++) {
-            traversed[i][j] = 999;
+            traversed[i][j] = 9999;
         }
     }
 	traversed[srcX - 1][srcY - 1] = 0;
@@ -453,6 +453,7 @@ int main9() {
 /*
 stepsOfKnight :: 8
 */
+
 
 void distNearestFillUtil(int arr[][5], int maxCol, int maxRow, int currCol, int currRow,
     int** traversed, int dist) { // Range check
@@ -549,7 +550,6 @@ void distNearestFill2(int arr[][5], int maxCol, int maxRow) {
     free(traversed);
 }
 
-
 int main10() {
     int arr[5][5] = {
         {1, 0, 1, 1, 0},
@@ -601,18 +601,19 @@ int findLargestIsland(int arr[][5], int maxCol, int maxRow) {
 
     for (int i = 0; i < maxCol; i++) {
         for (int j = 0; j < maxRow; j++) {
+			if (traversed[i][j] == 1)
+				continue;
+
             traversed[i][j] = 1;
             currVal = findLargestIslandUtil(arr, maxCol, maxRow, i, j, traversed);
             if (currVal > maxVal)
                 maxVal = currVal;
         }
-        return maxVal;
     }
-
     for (int i = 0; i < maxCol; i++)
         free(traversed[i]);
-    
     free(traversed);
+	return maxVal;
 }
 
 int main11() {
@@ -622,7 +623,7 @@ int main11() {
         {0, 1, 1, 1, 1},
         {0, 1, 0, 0, 0},
         {1, 1, 0, 0, 1}};
-    printf("Largest Island : %d", findLargestIsland(arr, 5, 5));
+    printf("Largest Island : %d\n", findLargestIsland(arr, 5, 5));
     return 0;
 }
 

@@ -2,8 +2,8 @@
 #include<stdlib.h>
 
 int fibonacci(int n) {
-	if (n <= 2)
-		return n - 1;
+	if (n < 2)
+		return n;
 	return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
@@ -13,75 +13,49 @@ void fibonacciSeries(int n) {
 }
 
 int fibonacciBU(int n) {
-	if (n <= 2)
-		return n - 1;
+    if (n < 2)
+        return n;
 
-	int first = 0, second = 1, temp = 0;
+    int dp[n+1];
+    dp[0] = 0;
+    dp[1] = 1;
+    
+    for (int i = 2; i <= n; i++) {
+        dp[i] = dp[i-1] + dp[i-2];
+    }
 
-	for (int i = 2; i < n; i++) {
-		temp = first + second;
-		first = second;
-		second = temp;
-	}
-	return temp;
+    return dp[n];
 }
 
-void fibonacciSeriesBU(int n) {
-	if (n < 1)
-		return;
+int fibonacciTDUtil(int n, int dp[]) {
+    if (n < 2) {
+        dp[n] = n;
+        return n;
+    }
 
-	int dp[n];
-	dp[0] = 0;
-	if(n > 1)
-		dp[1] = 1;
-
-	for (int i = 2; i < n; i++)
-		dp[i] = dp[i - 2] + dp[i - 1];
-
-	for (int i = 0; i < n; i++)
-		printf("%d ", dp[i]);
+    if (dp[n] == 0)
+        dp[n] = fibonacciTDUtil(n-1, dp) + fibonacciTDUtil(n-2, dp);    
+    
+    return dp[n];
 }
 
-int fibonacciSeriesTDUtil(int n, int dp[]) {
-	if (dp[n] == 0)
-		dp[n] = fibonacciSeriesTDUtil(n - 1, dp) + fibonacciSeriesTDUtil(n - 2, dp);	
-	return dp[n];
-}
-
-void fibonacciSeriesTD(int n) {
-	if (n < 1)
-		return;
-
-	int dp[n];
-	dp[0] = 0;
-	if(n > 1)
-		dp[1] = 1;
-
-	fibonacciSeriesTDUtil(n - 1, dp);
-
-	for (int i = 0;i < n;i++)
-		printf("%d ", dp[i]);
+int fibonacciTD(int n) {
+    int dp[n+1];
+    for (int i = 0; i <= n; i++)
+		dp[i] = 0;
+    return fibonacciTDUtil(n, dp);
 }
 
 int main() {
-	fibonacciSeries(6);
-	printf("\n");
+	printf("%d \n", fibonacci(10));
+	printf("%d \n", fibonacciBU(10));
+	printf("%d \n", fibonacciTD(10));
 
-	fibonacciSeriesBU(6);
-	printf("\n");
-
-	fibonacciSeriesTD(6);
-	printf("\n");
-	
-	printf("%d \n", fibonacci(6));
-	printf("%d \n", fibonacciBU(6));
 	return 0;
 }
 
 /*
-0 1 1 2 3 5 
-0 1 1 2 3 5 
-0 1 1 2 3 5 
-5
-5
+55
+55
+55
 */

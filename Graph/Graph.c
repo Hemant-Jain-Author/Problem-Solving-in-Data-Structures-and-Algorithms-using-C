@@ -122,48 +122,6 @@ int BFS(Graph *gph, int source, int target) {
     return visited[target];
 }
 
-int bestFirstSearchPQ(Graph *gph, int source, int destination) {
-    int count = gph->count;
-    int previous[count];
-    int dist[count];
-    int visited[count];
-    for(int i = 0;i<count;i++) {
-        previous[i] = -1;
-        dist[i] = 99999;
-        visited[i] = 0;
-    }
-    dist[source] = 0;
-
-    Heap* pq = createHeap(greater);
-    GraphEdge *edge = createGraphEdge(source, source, 0);
-    heapAdd(pq, edge);
-
-	while (heapSize(pq) != 0) {
-		edge = heapRemove(pq);
-		if (edge->dest == destination)
-			return 1;
-
-		source = edge->dest;
-		visited[source] = 1;
-
-		GraphEdge *head = gph->adj[source];
-		while (head) {
-			int curr = head->dest;
-			int cost = head->cost;
-			int alt = cost + dist[source];
-			if (alt < dist[curr] && visited[curr] == 0)
-			{
-				dist[curr] = alt;
-				previous[curr] = source;
-                edge = createGraphEdge(source, curr, 0);
-				heapAdd(pq, edge);
-			}
-			head = head->next;
-		}
-	}
-	return 0;
-}
-
 int main2() {
     Graph* gph = createGraph(5);
     addDirectedEdge(gph, 0, 1, 3);
@@ -172,18 +130,16 @@ int main2() {
     addDirectedEdge(gph, 2, 3, 1);
     addDirectedEdge(gph, 4, 1, 2);
     addDirectedEdge(gph, 4, 3, 1);
-    printf("Path between 0 & 6 : %d\n", DFS(gph, 0, 2));
-    printf("Path between 0 & 6 : %d\n", DFSStack(gph, 0, 2));
-    printf("Path between 0 & 6 : %d\n", BFS(gph, 0, 2));
-    printf("Path between 0 & 6 : %d\n", bestFirstSearchPQ(gph, 0, 2));
+    printf("Path between 0 & 3 : %d\n", DFS(gph, 0, 3));
+    printf("Path between 0 & 3 : %d\n", DFSStack(gph, 0, 3));
+    printf("Path between 0 & 3 : %d\n", BFS(gph, 0, 3));
     return 0;
 }
 
 /*
-Path between 0 & 6 : 1
-Path between 0 & 6 : 1
-Path between 0 & 6 : 1
-Path between 0 & 6 : 1
+Path between 0 & 3 : 1
+Path between 0 & 3 : 1
+Path between 0 & 3 : 1
 */
 
 void dfsUtil2(Graph *gph, int index, int *visited, Stack *stk) {
@@ -363,7 +319,6 @@ void transitiveClosureUtil(Graph *gph, int source, int index, int **tc) {
 
     tc[source][index] = 1;
     GraphEdge *head = gph->adj[index];
-    
     while (head) {
         transitiveClosureUtil(gph, source, head->dest, tc);
         head = head->next;
@@ -653,7 +608,7 @@ int main12() {
     addUndirectedEdge(gph, 3, 4, 1);
     addUndirectedEdge(gph, 4, 2, 1);
     addUndirectedEdge(gph, 2, 5, 1);
-    //addDirectedEdge(gph, 4, 1, 1);
+    //addUnDirectedEdge(gph, 4, 1, 1);
     printf("isConnectedUndirected :: %d", isConnectedUndirected(gph));
     return 0;
 }
@@ -718,9 +673,10 @@ void stronglyConnectedComponent(Graph *gph) {
         if (visited[i] == 0)
             DFSRec2(gph, i, visited, stk);
 
-    Graph *gReversed = TransposeGraph(gph);
     for (int i = 0; i < count; i++)
         visited[i] = 0;
+
+    Graph *gReversed = TransposeGraph(gph);
     
     while (stackSize(stk) != 0) {
         index = stackPop(stk);
@@ -857,6 +813,7 @@ void primsMST(Graph *gph) {
     
     int source = 0;
     dist[source] = 0;
+    previous[source] = 0;
 
     Heap* pq = createHeap(greater);
     GraphEdge *edge = createGraphEdge(source, source, 0);
@@ -906,6 +863,8 @@ void dijkstra(Graph *gph, int source) {
     }
 
     dist[source] = 0;
+    previous[source] = source;
+
     Heap* pq = createHeap(greater);
     GraphEdge *edge = createGraphEdge(source, source, 0);
     heapAdd(pq, edge);
@@ -915,6 +874,7 @@ void dijkstra(Graph *gph, int source) {
         edge = heapRemove(pq);
         source = edge->dest;
         visited[source] = 1;
+        
         head = gph->adj[source];
         while (head) {
             int dest = head->dest;
@@ -1321,6 +1281,7 @@ void DFSRec(Graph *gph, int index, int *visited) {
 }
 
 int main() {
+    /*
     main1();
     main2();
     main3();
@@ -1334,12 +1295,15 @@ int main() {
     main11();
     main12();
     main13();
+    */
     main14();
+    /*
     main15();
     main16();
     main17();
     main18();
     main19();
     main20();
+   */
    return 0;
 }
