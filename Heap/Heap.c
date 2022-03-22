@@ -135,6 +135,7 @@ int heapDelete(Heap *hp, int value) {
         if(hp->array[i] == value){
             hp->array[i] = hp->array[hp->size-1];
             hp->size -= 1;
+            proclateUp(hp->array, i, hp->compare);
             proclateDown(hp->array, i, hp->size, hp->compare);
             return 1;
         }

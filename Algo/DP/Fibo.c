@@ -8,7 +8,7 @@ int fibonacci(int n) {
 }
 
 void fibonacciSeries(int n) {
-	for (int i = 1;i <= n;i++)
+	for (int i = 0;i < n;i++)
 		printf("%d ", fibonacci(i));
 }
 
@@ -50,7 +50,6 @@ int main() {
 	printf("%d \n", fibonacci(10));
 	printf("%d \n", fibonacciBU(10));
 	printf("%d \n", fibonacciTD(10));
-
 	return 0;
 }
 

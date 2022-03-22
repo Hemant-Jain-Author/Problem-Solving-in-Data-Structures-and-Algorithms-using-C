@@ -1775,7 +1775,7 @@ int isMajority2(int arr[], int size) {
     int majority = arr[size / 2];
     i = FirstIndex(arr, size, 0, size - 1, majority);
     /*
-    we are using majority element form array so 
+     we are using majority element form array so 
      we will get some valid index always.
     */
     if (((i + size / 2) <= (size - 1)) && arr[i + size / 2] == majority)

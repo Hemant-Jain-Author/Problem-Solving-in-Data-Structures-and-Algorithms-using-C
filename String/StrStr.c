@@ -23,7 +23,7 @@ int RobinKarp(char *text, char *pattern) {
     const int m = strlen(pattern);
     int prime = 101;
     int powm = 1;
-    int TextHash = 0, PatternHash = 0;
+    int textHash = 0, patternHash = 0;
 
     if (m == 0 || m > n)
         return -1;
@@ -32,12 +32,12 @@ int RobinKarp(char *text, char *pattern) {
         powm = (powm << 1) % prime;
 
     for (int i = 0; i < m; i++) {
-        PatternHash = ((PatternHash << 1) + pattern[i]) % prime;
-        TextHash = ((TextHash << 1) + text[i]) % prime;
+        patternHash = ((patternHash << 1) + pattern[i]) % prime;
+        textHash = ((textHash << 1) + text[i]) % prime;
     }
 
     for (int i = 0; i <= (n - m); i++) {
-        if (TextHash == PatternHash) {
+        if (textHash == patternHash) {
             int j;
             for (j = 0; j < m; j++) {
                 if (text[i + j] != pattern[j])
@@ -49,10 +49,10 @@ int RobinKarp(char *text, char *pattern) {
         }
 
         if(i < (n - m)) 
-            TextHash = (((TextHash - text[i] * powm) << 1) + text[i + m]) % prime;
+            textHash = (((textHash - text[i] * powm) << 1) + text[i + m]) % prime;
 
-        if (TextHash < 0)
-            TextHash = (TextHash + prime);
+        if (textHash < 0)
+            textHash = (textHash + prime);
     }
     return -1;
 }

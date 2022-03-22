@@ -830,20 +830,16 @@ void main19a() {
 
 void nextLargerElement(int arr[], int size) {
     int *output = (int *)malloc(sizeof(int) * size);
-    int outIndex = 0;
-    int next;
-
     for (int i = 0; i < size; i++) {
-        next = -1;
+        output[i] = -1;
         for (int j = i + 1; j < size; j++) {
             if (arr[i] < arr[j]) {
-                next = arr[j];
+                output[i] = arr[j];
                 break;
             }
         }
-        output[outIndex++] = next;
     }
-    printArray(output, outIndex);
+    printArray(output, size);
 }
 
 void nextLargerElement2(int arr[], int size) {
@@ -884,6 +880,21 @@ int main20() {
 */
 
 void nextSmallerElement(int arr[], int size) {
+    int *output = (int *)malloc(sizeof(int) * size);
+
+    for (int i = 0; i < size; i++) {
+        output[i] = -1;
+        for(int j = i+1;j<size;j++){
+            if(arr[j] < arr[i]){
+                output[i] = arr[j];
+                break;
+            }
+        }
+    }
+    printArray(output, size);
+}
+
+void nextSmallerElement2(int arr[], int size) {
     Stack* stk = createStack();
     int *output = (int *)malloc(sizeof(int) * size);
     int curr, index;
@@ -908,14 +919,31 @@ int main21() {
     int arr[] = {13, 21, 3, 6, 20, 3};
     int size = sizeof(arr) / sizeof(int);
     nextSmallerElement(arr, size);
+    nextSmallerElement2(arr, size);
     return 0;
 }
 
 /*
 3 3 -1 3 3 -1 
+3 3 -1 3 3 -1 
 */
 
 void nextLargerElementCircular(int arr[], int size) {
+    int *output = (int *)malloc(sizeof(int) * size);
+    for (int i = 0; i < size; i++) {
+        output[i] = -1;
+        for(int j = 1;j<size;j++){
+            if(arr[i] < arr[(i+j)%size]){
+                output[i] = arr[(i+j)%size];
+                break;
+            }
+        }
+
+    }
+    printArray(output, size);
+}
+
+void nextLargerElementCircular2(int arr[], int size) {
     Stack* stk = createStack();
     int curr, index;
     int *output = (int *)malloc(sizeof(int) * size);
@@ -940,10 +968,12 @@ int main22() {
     int arr[] = {6, 3, 9, 8, 10, 2, 1, 15, 7};
     int size = sizeof(arr) / sizeof(int);
     nextLargerElementCircular(arr, size);
+    nextLargerElementCircular2(arr, size);
     return 0;
 }
 
 /*
+9 9 10 10 15 15 15 -1 9 
 9 9 10 10 15 15 15 -1 9 
 */
 
@@ -1058,6 +1088,7 @@ int IsMaxHeap(int arr[], int size) {
 }
 
 int main() {
+    /*
     main1();
     main2();
     main3();
@@ -1078,6 +1109,7 @@ int main() {
     main18();
     main19();
     main19a();
+    */
     main20();
     main21();
     main22();
