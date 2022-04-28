@@ -28,20 +28,20 @@ void proclateDown(int arr[], int position, int size, int(* compare)(int , int)) 
     int lChild = 2 * position + 1;
     int rChild = lChild + 1;
 
-    int small = -1;
+    int child = -1;
     int temp;
 
     if (lChild < size)
-        small = lChild;
+        child = lChild;
 
     if (rChild < size && compare(arr[lChild], arr[rChild]))
-        small = rChild;
+        child = rChild;
 
-    if (small != -1 && compare(arr[position], arr[small])) {
+    if (child != -1 && compare(arr[position], arr[child])) {
         temp = arr[position];
-        arr[position] = arr[small];
-        arr[small] = temp;
-        proclateDown(arr, small, size, compare);
+        arr[position] = arr[child];
+        arr[child] = temp;
+        proclateDown(arr, child, size, compare);
     }
 }
 
@@ -49,13 +49,11 @@ void proclateUp(int arr[], int position, int(* compare)(int , int)) {
     int parent = (position - 1) / 2;
     int temp;
 
-    if (parent >= 0) {
-        if (compare(arr[parent], arr[position])) {
-            temp = arr[position];
-            arr[position] = arr[parent];
-            arr[parent] = temp;
-            proclateUp(arr, parent, compare);
-        }
+    if (parent >= 0 && compare(arr[parent], arr[position])) {
+        temp = arr[position];
+        arr[position] = arr[parent];
+        arr[parent] = temp;
+        proclateUp(arr, parent, compare);
     }
 }
 
@@ -143,7 +141,7 @@ int heapDelete(Heap *hp, int value) {
     return 0;
 }
 
-int main() {
+int main0() {
     int a[10] = {4, 5, 3, 2, 6, 7, 10, 8, 9, 1};
     Heap* hp = createHeap2(a, 10, greater);//min heap
     printHeap(hp);

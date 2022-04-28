@@ -476,14 +476,16 @@ int main9() {
     addUndirectedEdge(gph, 1, 2, 1);
     addUndirectedEdge(gph, 3, 4, 1);
     addUndirectedEdge(gph, 4, 2, 1);
-    addUndirectedEdge(gph, 2, 5, 1);
-    // addUndirectedEdge(gph, 4, 1, 1);
+    addUndirectedEdge(gph, 2, 5, 1); 
+    printf("isCyclePresentUndirected : %d\n", isCyclePresentUndirected(gph));
+    addUndirectedEdge(gph, 4, 1, 1);
     printf("isCyclePresentUndirected : %d\n", isCyclePresentUndirected(gph));
     return 0;
 }
 
 /*
 isCyclePresentUndirected : 0
+isCyclePresentUndirected : 1
 */
 
 int isCyclePresentDFS(Graph *graph, int index, int *visited, int *marked) {
@@ -554,6 +556,8 @@ int main10() {
     addDirectedEdge(gph, 2, 3, 1);
     addDirectedEdge(gph, 1, 3, 1);
     addDirectedEdge(gph, 3, 4, 1);
+    printf("isCyclePresent : %d\n", isCyclePresent(gph));
+    printf("isCyclePresent : %d\n", isCyclePresentColor(gph));
     addDirectedEdge(gph, 4, 1, 1);
     printf("isCyclePresent : %d\n", isCyclePresent(gph));
     printf("isCyclePresent : %d\n", isCyclePresentColor(gph));
@@ -561,6 +565,8 @@ int main10() {
 }
 
 /*
+isCyclePresent : 0
+isCyclePresent : 0
 isCyclePresent : 1
 isCyclePresent : 1
 */
@@ -1196,12 +1202,16 @@ int main19() {
     addDirectedEdge(gph, 0, 3, 1);
     addDirectedEdge(gph, 3, 4, 1);
     printf("isEulerian %d\n", isEulerian(gph));
+    addDirectedEdge(gph, 4, 0, 1);
+    printf("isEulerian %d\n", isEulerian(gph));
     return 0;
 }
 
 /*
 graph is Semi-Eulerian.
 isEulerian 1
+graph is Eulerian.
+isEulerian 2
 */
 
 int isStronglyConnected2(Graph *graph) {
@@ -1290,8 +1300,143 @@ void DFSRec(Graph *gph, int index, int *visited) {
     }
 }
 
+
+void printPath2(int V, int previous[][V], int u, int v) {
+	if (previous[u][v] == u) {
+		printf("%d->%d", u, v);
+		return;
+	}
+	printPath2(V, previous, u, previous[u][v]);
+	printf("->%d", v);
+}
+
+void printSolution(int V, int distance[][V], int previous[][V]) {
+	printf("Shortest Paths : ");
+	for (int u = 0; u < V; u++) {
+		for (int v = 0; v < V; v++) {
+			if (u != v && previous[u][v] != -1) {
+				printf("(");
+				printPath2(V, previous, u, v);
+				printf(" @ %d ) ", distance[u][v]);
+			}
+		}
+	}
+	printf("\n");
+}
+
+void floydWarshall(Graph *gph) {
+	int V = gph->count;
+    int dist[V][V], path[V][V];
+    for (int i = 0; i < V; i++) {
+		for (int j = 0; j < V; j++) {
+            if (i == j) {
+                dist[i][j] = 0;
+				path[i][j] = i;
+			} else {
+                dist[i][j] = 99999;
+				path[i][j] = -1;
+            }
+        }
+    }
+
+	for (int i = 0; i < V; i++) {
+        GraphEdge *head = gph->adj[i];
+        while (head) {
+            path[i][head->dest] = head->src;
+			dist[i][head->dest] = head->cost;
+            head = head->next;
+        }
+    }
+
+	for (int k = 0; k < V; k++) { // Pick intermediate vertices. 
+		for (int i = 0; i < V; i++) { // Pick source vertices one by one.
+			for (int j = 0; j < V; j++) { // Pick destination vertices.
+				// If we have a shorter path from i to j via k.
+				// then update dist[i][j] and  and path[i][j]
+				if (dist[i][k] + dist[k][j] < dist[i][j]) {
+					dist[i][j] = dist[i][k] + dist[k][j];
+					path[i][j] = path[k][j];
+				}
+			}
+			// dist[i][i] is 0 in the start.
+			// If there is a better path from i to i and is better path then we have -ve cycle.                //
+			if (dist[i][i] < 0) {
+				printf("Negative-weight cycle found.\n");
+				return;
+			}
+		}
+	}
+	printSolution(V, dist, path);
+}
+
+void main21() {
+	Graph* gph = createGraph(5);
+	addDirectedEdge(gph, 0, 0, 0);
+	addDirectedEdge(gph, 1, 1, 0);
+	addDirectedEdge(gph, 2, 2, 0);
+	addDirectedEdge(gph, 3, 3, 0);
+	addDirectedEdge(gph, 0, 1, 5);
+	addDirectedEdge(gph, 0, 3, 10);
+	addDirectedEdge(gph, 1, 2, 3);
+	addDirectedEdge(gph, 2, 3, 1);
+	floydWarshall(gph);
+}
+
+/*
+Shortest Paths : (0->1 @ 5 ) (0->1->2 @ 8 ) (0->1->2->3 @ 9 ) (1->2 @ 3 ) (1->2->3 @ 4 ) (2->3 @ 1 ) 
+*/
+
+void floydWarshall2(int V, int graph[V][V]) {
+	int dist[V][V], path[V][V];
+    for (int i = 0; i < V; i++) { 
+		for (int j = 0; j < V; j++) {
+            dist[i][j] = graph[i][j]; // Direct path.
+            if (graph[i][j] == INFINITE)
+                path[i][j] = -1;
+            else
+                path[i][j] = i;
+        }
+    }
+	for (int k = 0; k < V; k++) { // Pick intermediate vertices. 
+		for (int i = 0; i < V; i++) { // Pick source vertices one by one.
+			for (int j = 0; j < V; j++) { // Pick destination vertices.
+				// If we have a shorter path from i to j via k.
+				// then update dist[i][j] and  and path[i][j]
+				if (dist[i][k] + dist[k][j] < dist[i][j]) {
+					dist[i][j] = dist[i][k] + dist[k][j];
+					path[i][j] = path[k][j];
+				}
+			}
+			// dist[i][i] is 0 in the start.
+			// If there is a better path from i to i and is better path then we have -ve cycle.                //
+			if (dist[i][i] < 0) {
+				printf("Negative-weight cycle found.\n");
+				return;
+			}
+		}
+	}
+	printSolution(V, dist, path);
+}
+
+int main22() {
+	int graph[7][7] =
+	{
+		{0, 2, 4, INFINITE, INFINITE, INFINITE, INFINITE},
+		{2, 0, 4, 1, INFINITE, INFINITE, INFINITE},
+		{4, 4, 0, 2, 8, 4, INFINITE},
+		{INFINITE, 1, 2, 0, 3, INFINITE, 6},
+		{INFINITE, INFINITE, 6, 4, 0, 3, 1},
+		{INFINITE, INFINITE, 4, INFINITE, 4, 0, 2},
+		{INFINITE, INFINITE, INFINITE, 4, 2, 3, 0}
+	};
+	floydWarshall2(7, graph);
+    return 0;
+}
+
+/*
+Shortest Paths : (0->1 @ 2 ) (0->2 @ 4 ) (0->1->3 @ 3 ) (0->1->3->4 @ 6 ) (0->2->5 @ 8 ) (0->1->3->4->6 @ 7 ) (1->0 @ 2 ) (1->3->2 @ 3 ) (1->3 @ 1 ) (1->3->4 @ 4 ) (1->3->2->5 @ 7 ) (1->3->4->6 @ 5 ) (2->0 @ 4 ) (2->3->1 @ 3 ) (2->3 @ 2 ) (2->3->4 @ 5 ) (2->5 @ 4 ) (2->3->4->6 @ 6 ) (3->1->0 @ 3 ) (3->1 @ 1 ) (3->2 @ 2 ) (3->4 @ 3 ) (3->2->5 @ 6 ) (3->4->6 @ 4 ) (4->3->1->0 @ 7 ) (4->3->1 @ 5 ) (4->2 @ 6 ) (4->3 @ 4 ) (4->5 @ 3 ) (4->6 @ 1 ) (5->2->0 @ 8 ) (5->2->3->1 @ 7 ) (5->2 @ 4 ) (5->2->3 @ 6 ) (5->4 @ 4 ) (5->6 @ 2 ) (6->3->1->0 @ 7 ) (6->3->1 @ 5 ) (6->3->2 @ 6 ) (6->3 @ 4 ) (6->4 @ 2 ) (6->5 @ 3 ) 
+*/
 int main() {
-    /*
     main1();
     main2();
     main3();
@@ -1305,15 +1450,14 @@ int main() {
     main11();
     main12();
     main13();
-    */
     main14();
-    /*
     main15();
     main16();
     main17();
     main18();
     main19();
     main20();
-   */
-   return 0;
+    main21();
+    main22();
+    return 0;
 }

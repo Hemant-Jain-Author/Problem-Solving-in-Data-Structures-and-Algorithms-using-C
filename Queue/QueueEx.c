@@ -631,7 +631,7 @@ int main11() {
 Largest Island : 12
 */
 
-int Josephus(int n, int k) {
+int josephus(int n, int k) {
 	Queue* que = createQueue();	
 
 	for(int i=0;i<n;i++)
@@ -647,7 +647,7 @@ int Josephus(int n, int k) {
 }
 
 int main12(){
-	printf("Position : %d", Josephus(11, 5));
+	printf("Position : %d", josephus(11, 5));
 }
 /*
 Position : 8

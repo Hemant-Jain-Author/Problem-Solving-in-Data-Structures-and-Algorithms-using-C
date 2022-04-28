@@ -361,8 +361,6 @@ int main7() {
     return 0;
 }
 
-#define ERROR_VALUE 999999
-
 typedef struct medianHeap {
     Heap* minHeap;
     Heap* maxHeap;
@@ -427,7 +425,8 @@ Median after insertion of 1 is 4
 */
 
 int main() {
-    main1();     
+    main0();  
+    main1();    
     main2();
     main3();
     main4();

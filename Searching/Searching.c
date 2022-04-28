@@ -2348,7 +2348,7 @@ int findFloor(int arr[], int size, int value) {
          value is greater than arr[size-1] then floor is arr[size-1]
         */
         if (arr[mid] == value || (arr[mid] < value && (mid == size - 1 || arr[mid + 1] > value)))
-            return mid;
+            return arr[mid];
         else if (arr[mid] < value)
             start = mid + 1;
         else
@@ -2369,7 +2369,7 @@ int findCeil(int arr[], int size, int value) {
          value is less than arr[0] then ceil is arr[0]
         */
         if (arr[mid] == value || (arr[mid] > value && (mid == 0 || arr[mid - 1] < value)))
-            return mid;
+            return arr[mid];
         else if (arr[mid] < value)
             start = mid;
         else
@@ -2381,14 +2381,14 @@ int findCeil(int arr[], int size, int value) {
 int main42() {
     int arr[] = { -7, 1, 3, 6, 8, 10 };
     int n = 7;
-    printf("%d\n", findFloor(arr, n, 2));
-    printf("%d\n", findCeil(arr, n, 2));
+    printf("Floor : %d\n", findFloor(arr, n, 2));
+    printf("Ceil : %d\n", findCeil(arr, n, 2));
     return 0;
 }
 
 /*
-3
-4
+Floor : 1
+Ceil : 3
 */
 
 int closestNumber(int arr[], int size, int num) {
@@ -2854,9 +2854,10 @@ int main() {
     main38();
     */
     main39();
-    /*main40();
+    main40();
     main41();
     main42();
+    /*
     main43();
     main45();
     main46();

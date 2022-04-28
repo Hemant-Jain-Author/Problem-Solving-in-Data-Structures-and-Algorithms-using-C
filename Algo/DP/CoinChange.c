@@ -98,7 +98,8 @@ int minCoinsBU(int d[], int n, int val) { // DP bottom up approach.
 		for (int j = 0; j < n; j++) {
 			// For all coins smaller than or equal to i.
 
-			if (d[j] <= i && coins[i - d[j]] != INFINITE ) {
+			if (d[j] <= i && 
+			coins[i - d[j]] != INFINITE ) {
 				coins[i] = min(coins[i], coins[i - d[j]] + 1);
 			}
 		}

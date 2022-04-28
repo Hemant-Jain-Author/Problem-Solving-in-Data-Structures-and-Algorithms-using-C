@@ -11,7 +11,6 @@ typedef struct TreeNode {
 
 TreeNode *createTreeNode(char* value, TreeNode *left, TreeNode *right) {
     TreeNode *node = (TreeNode*) malloc(sizeof(TreeNode));
-    node->value = value;
     node->value = (char *)malloc((1 + strlen(value)) * sizeof(char));
     strcpy(node->value, value);
     node->count = 1;

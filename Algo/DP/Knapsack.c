@@ -52,9 +52,9 @@ int maxCost01KnapsackTD(int wt[], int cost[], int n, int capacity) {
 
 
 void printItems(int n, int dp[][n+1], int wt[], int cost[], int capacity) {
-    int totalProfit = dp[capacity][n];
+	int totalProfit = dp[capacity][n];
     printf("Selected items are: ");
-    for (int i = n-1; i > -1; i--) {
+	for (int i = n-1; i > -1 && totalProfit > 0; i--) {
         if (totalProfit != dp[capacity][i - 1]) {
             printf("(wt:%d, cost:%d) ", wt[i] ,cost[i]);
             capacity -= wt[i];
@@ -123,7 +123,7 @@ int main() {
 /*
 Maximum cost obtained = 300.000000
 Maximum cost obtained = 210.000000
-Selected items are: (wt:30, cost:120) (wt:20, cost:90) (wt:10, cost:60) 
+Selected items are: (wt:30, cost:120) (wt:20, cost:90) 
 Maximum cost obtained = 210.000000
 Maximum cost obtained = 210.000000
 */

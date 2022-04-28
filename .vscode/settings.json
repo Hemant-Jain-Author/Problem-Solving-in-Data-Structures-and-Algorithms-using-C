@@ -14,7 +14,8 @@
         "xfunctional": "c",
         "xstddef": "c",
         "xtr1common": "c",
-        "cmath": "c"
+        "cmath": "c",
+        "ostream": "cpp"
     },
     "cSpell.words": [
         "APLE",

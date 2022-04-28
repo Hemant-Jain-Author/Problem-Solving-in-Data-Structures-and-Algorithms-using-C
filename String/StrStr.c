@@ -74,7 +74,6 @@ int KMP(char *text, char *pattern) {
     int i = 0, j = 0, count = 0;
     const int n = strlen(text);
     const int m = strlen(pattern);
-
     int *ShiftArr = (int *)calloc(m + 1, sizeof(int));
 
     KMPPreprocess(pattern, ShiftArr);
