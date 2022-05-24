@@ -166,7 +166,7 @@ int minOfMaxSlidingWindows(int arr[], int size, int k) {
 			queueRemove(que);
 		//Remove smaller values at left.
 		while (queueSize(que) && arr[queueBack(que)] <= arr[i])
-			queueRemove(que);
+			queueRemoveBack(que);
 		queueAdd(que, i);
 		//window of size k
 		if (i >= (k - 1) && minVal > arr[queueFront(que)])
@@ -196,7 +196,7 @@ void maxOfMinSlidingWindows(int arr[], int size, int k) {
 			queueRemove(que);
 		//Remove smaller values at left.
 		while (queueSize(que) && arr[queueBack(que)] >= arr[i])
-			queueRemove(que);
+			queueRemoveBack(que);
 		queueAdd(que, i);
 		//window of size k
 		if (i >= (k - 1) && maxVal < arr[queueFront(que)])
