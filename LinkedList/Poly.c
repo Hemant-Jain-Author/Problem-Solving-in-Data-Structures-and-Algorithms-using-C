@@ -34,7 +34,7 @@ Polynomial* add(Polynomial* poly1, Polynomial* poly2) {
     Node* p2=poly2->head;
 
     while (p1 != NULL || p2 != NULL) {
-        if (p1 == NULL || p1->pow < p2->pow) {
+        if (p1 == NULL || (p2 != NULL && p1->pow < p2->pow)) {
             temp = createNode(p2->coeff, p2->pow);
             p2 = p2->next;
         } else if (p2 == NULL || p1->pow > p2->pow) {
