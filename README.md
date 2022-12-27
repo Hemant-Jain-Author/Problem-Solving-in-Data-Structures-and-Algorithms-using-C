@@ -1,6 +1,6 @@
 # Problem-Solving-in-Data-Structures-and-Algorithms-using-C
 
-**This is the code repository for Problem Solving in Data Structures & Algorithms Using C.**
+**This is the code repository of book "Problem Solving in Data Structures & Algorithms Using C".**
 
 **About The Book**
 - This textbook provides in depth coverage of various Data Structures and Algorithms.
